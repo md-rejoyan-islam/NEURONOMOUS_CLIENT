@@ -25,7 +25,6 @@ import NoticeType from "./bulk-operation/notice-type";
 
 const BulkOperationModel = ({
   devices,
-  refetch,
   setFilteredDevices,
 }: {
   devices: IDevice[];

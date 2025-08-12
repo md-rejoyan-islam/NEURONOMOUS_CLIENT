@@ -157,6 +157,7 @@ export default function SingleDevice({ id }: { id: string }) {
     return () => {
       socket.off(`device:${device.id}:status`, handler);
     };
+    // eslint-disable-next-line
   }, [device?.id]);
 
   // useEffect(() => {
@@ -306,7 +307,7 @@ export default function SingleDevice({ id }: { id: string }) {
       toast.success("Scheduled Notice Cancelled", {
         description: "The scheduled notice has been cancelled successfully.",
       });
-      // refetch();
+      // eslint-disable-next-line
     } catch (error: any) {
       toast.error("Cancellation Failed", {
         description:

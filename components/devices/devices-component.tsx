@@ -60,7 +60,7 @@ export default function DevicesComponent() {
     return () => {
       socket.off("device:status", handler);
     };
-  }, []);
+  }, [refetch]);
 
   if (isLoading) {
     return <SmallLoading />;
