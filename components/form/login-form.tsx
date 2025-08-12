@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { socketManager } from "@/lib/socket";
 import { LoginInput, loginSchema } from "@/lib/validations";
 import { useLoginMutation } from "@/queries/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +27,14 @@ const LoginForm = () => {
       const result = await login(data).unwrap();
 
       if (result?.success) {
+        const socket = socketManager.connect();
+
+        if (socket && socketManager.isConnected()) {
+          console.log("Socket connected successfully.");
+
+          socket.emit("auth:login", { userId: result.data.user._id });
+        }
+
         toast.success("Login Successful", {
           description: `Welcome back, ${
             result.data.user.first_name + " " + result.data.user.last_name

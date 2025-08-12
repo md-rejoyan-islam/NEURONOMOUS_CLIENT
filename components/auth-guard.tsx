@@ -8,7 +8,7 @@ export function AuthGuard({
 }: {
   readonly children: React.ReactNode;
 }) {
-  const { isLoading } = useProfileQuery();
+  const { isLoading, error, data } = useProfileQuery();
 
   if (isLoading) {
     return (

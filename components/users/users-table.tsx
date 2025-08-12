@@ -66,7 +66,7 @@ const UsersTable = ({
 
   // RTK Query hooks
   // const { data: users = [], isLoading, error } = useGetUsersQuery();
-  console.log(users);
+  // console.log(users);
 
   const [deleteUser] = useDeleteUserMutation();
   const [banUserById] = useBanUserByIdMutation();
@@ -90,6 +90,9 @@ const UsersTable = ({
         }.`,
       });
       refetch?.();
+      setFilteredUsers((prev) =>
+        prev.map((u) => (u._id === userId ? { ...u, status: newStatus } : u))
+      );
       // eslint-disable-next-line
     } catch (error: any) {
       toast.error("Update Failed", {

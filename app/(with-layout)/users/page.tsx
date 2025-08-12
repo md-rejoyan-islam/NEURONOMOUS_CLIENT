@@ -36,8 +36,6 @@ export default function UsersPage() {
   // RTK Query hooks
   const { data: users, isLoading, error } = useGetUsersQuery();
 
-  console.log(users);
-
   useEffect(() => {
     // Load current user
     const userData = localStorage.getItem("user");

@@ -11,6 +11,7 @@ export interface LoginResponse {
   success: boolean;
   data: {
     user: {
+      _id: string;
       first_name: string;
       last_name: string;
       email: string;
@@ -44,52 +45,18 @@ export interface ResetPasswordRequest {
   newPassword: string;
 }
 
-// Mock users database
-const mockUsers = [
-  {
-    id: "1",
-    email: "super@demo.com",
-    firstName: "Super",
-    lastName: "Admin",
-    role: "superAdmin",
-    status: "active",
-    deviceAccess: ["all"],
-    password: "password",
-  },
-  {
-    id: "2",
-    email: "admin@demo.com",
-    firstName: "Admin",
-    lastName: "User",
-    role: "admin",
-    status: "active",
-    deviceAccess: ["device-001", "device-002", "device-003"],
-    password: "password",
-  },
-  {
-    id: "3",
-    email: "user@demo.com",
-    firstName: "Regular",
-    lastName: "User",
-    role: "user",
-    status: "active",
-    deviceAccess: ["device-001"],
-    password: "password",
-  },
-];
-
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/proxy",
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
+    responseHandler: async (response) => {
+      if (response.status === 301) {
+        window.location.reload();
       }
-      return headers;
+      return response.json();
     },
   }),
+  keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
   tagTypes,
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({

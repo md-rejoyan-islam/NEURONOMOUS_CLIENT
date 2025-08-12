@@ -94,7 +94,14 @@ export const usersApi = createApi({
   reducerPath: "usersApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/proxy",
+    responseHandler: async (response) => {
+      if (response.status === 301) {
+        window.location.reload();
+      }
+      return response.json();
+    },
   }),
+  keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
   tagTypes: ["User", "Users"],
   endpoints: (builder) => ({
     getUsers: builder.query<IUser[], void>({
@@ -127,6 +134,7 @@ export const usersApi = createApi({
       },
       invalidatesTags: ["User"],
     }),
+
     banUserById: builder.mutation<void, string>({
       query: (userId) => ({
         url: `/users/${userId}/ban`,

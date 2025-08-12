@@ -40,7 +40,6 @@ const AddDeviceModal = ({ groupId }: { groupId: string }) => {
     try {
       setSaving(true);
       const response = await addDevice({ id: groupId, payload: data }).unwrap();
-      console.log(response);
 
       if (response.success) {
         toast.success("Device Added", {

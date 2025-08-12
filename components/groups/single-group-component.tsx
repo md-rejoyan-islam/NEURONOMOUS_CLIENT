@@ -28,7 +28,11 @@ import SmallLoading from "../loading/small-loading";
 import BulkOperationModel from "./bulk-operation-model";
 
 const SingleGroupComponent = ({ _id }: { _id: string }) => {
-  const { data: group, isLoading } = useGetGroupdByIdQuery(_id as string);
+  const {
+    data: group,
+    isLoading,
+    refetch: refetchGroup,
+  } = useGetGroupdByIdQuery(_id as string);
 
   const [filteredDevices, setFilteredDevices] = useState<IDevice[]>([]);
 
@@ -150,7 +154,11 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
                 All Devices
               </CardTitle>
               <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                <BulkOperationModel devices={group?.devices ?? []} />
+                <BulkOperationModel
+                  devices={group?.devices ?? []}
+                  refetch={refetchGroup}
+                  setFilteredDevices={setFilteredDevices}
+                />
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
@@ -258,7 +266,7 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
                       </div>
                     </div>
 
-                    <Link href={`/devices/${device.id}`}>
+                    <Link href={`/devices/${device._id}`}>
                       <Button className="w-full">View Details</Button>
                     </Link>
                   </CardContent>

@@ -20,7 +20,7 @@ const DeviceSelect = ({
     if (selectedDevices.length === devices.length) {
       setSelectedDevices([]);
     } else {
-      setSelectedDevices(devices.map((d) => d.id));
+      setSelectedDevices(devices.map((d) => d._id));
     }
   };
   return (
@@ -41,12 +41,12 @@ const DeviceSelect = ({
             className="flex items-center space-x-3 p-2 hover:bg-muted/50 rounded"
           >
             <Checkbox
-              id={device.id}
-              checked={selectedDevices.includes(device.id)}
-              onCheckedChange={() => handleDeviceToggle(device.id)}
+              id={device._id}
+              checked={selectedDevices.includes(device._id)}
+              onCheckedChange={() => handleDeviceToggle(device._id)}
             />
             <Label
-              htmlFor={device.id}
+              htmlFor={device._id}
               className="flex-1 cursor-pointer flex items-center justify-between"
             >
               <div>

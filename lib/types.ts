@@ -39,6 +39,7 @@ export interface IDevice {
   }[];
   font?: string;
   time_format?: string;
+  group?: string;
 }
 
 export interface IScheduledNotice {

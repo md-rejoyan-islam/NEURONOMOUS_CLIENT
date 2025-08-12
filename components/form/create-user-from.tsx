@@ -44,7 +44,7 @@ const CreateUserFrom = () => {
     useState<IGroupWithPopulatedData | null>(null);
 
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
-  const [creating, setCreating] = useState(false);
+  const [creating] = useState(false);
   const router = useRouter();
 
   const handleGroupSelect = (id: string) => {

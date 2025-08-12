@@ -1,7 +1,6 @@
 "use client";
 
 import { io, Socket } from "socket.io-client";
-import { API_CONFIG } from "./config";
 
 class SocketManager {
   private socket: Socket | null = null;
@@ -28,7 +27,7 @@ class SocketManager {
       this.connectionAttempts++;
 
       try {
-        this.socket = io(API_CONFIG.SOCKET_URL, {
+        this.socket = io("http://localhost:5050", {
           autoConnect: true,
           reconnection: false, // Disable automatic reconnection
           timeout: 5000, // 5 second timeout
@@ -42,9 +41,22 @@ class SocketManager {
         });
 
         this.socket.on("disconnect", (reason) => {
-          console.log("Socket disconnected:", reason);
+          console.log("Socket disconnectedd:", reason);
           this.isConnecting = false;
         });
+
+        this.socket.on("session:invalidate", () => {
+          console.log("Session invalidated due to new login. Reloading...");
+          window.location.reload();
+          window.location.href = "/login"; // Redirect to login page
+          // this.disconnect();
+        });
+
+        // this.socket.on("session:invalidate-broadcast", (payload) => {
+        //   // Fallback: if user matches, reload
+        //   void payload;
+        //   window.location.reload();
+        // });
 
         this.socket.on("connect_error", (error) => {
           console.warn(
@@ -79,6 +91,10 @@ class SocketManager {
     return this.socket;
   }
 
+  isConnected(): boolean {
+    return this.socket?.connected || false;
+  }
+
   disconnect(): void {
     if (this.socket) {
       this.socket.disconnect();
@@ -91,29 +107,24 @@ class SocketManager {
     return this.socket;
   }
 
-  // eslint-disable-next-line
-  emit(event: string, data: any): void {
+  emit<T>(event: string, data: T): void {
     if (this.socket && this.socket.connected) {
       this.socket.emit(event, data);
     } else {
       console.log("Socket not connected. Event not sent:", event);
     }
   }
-  // eslint-disable-next-line
-  on(event: string, callback: (data: any) => void): void {
+
+  on<T>(event: string, callback: (data: T) => void): void {
     if (this.socket) {
       this.socket.on(event, callback);
     }
   }
-  // eslint-disable-next-line
-  off(event: string, callback?: (data: any) => void): void {
+
+  off<T>(event: string, callback?: (data: T) => void): void {
     if (this.socket) {
       this.socket.off(event, callback);
     }
-  }
-
-  isConnected(): boolean {
-    return this.socket?.connected || false;
   }
 }
 

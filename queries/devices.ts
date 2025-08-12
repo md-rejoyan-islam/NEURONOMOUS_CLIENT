@@ -1,4 +1,4 @@
-import { IDevice, IScheduledNotice } from "@/lib/types";
+import { IDevice, IScheduledNotice, IUser } from "@/lib/types";
 import { Device, DeviceUpdate } from "@/lib/validations";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -12,7 +12,14 @@ export const devicesApi = createApi({
   reducerPath: "devicesApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/proxy",
+    responseHandler: async (response) => {
+      if (response.status === 301) {
+        window.location.reload();
+      }
+      return response.json();
+    },
   }),
+  keepUnusedDataFor: 0,
   tagTypes: ["Device", "ScheduledNotice"],
   endpoints: (builder) => ({
     getAllDevices: builder.query<IDevice[], void>({
@@ -46,8 +53,8 @@ export const devicesApi = createApi({
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice>).data,
-      providesTags: (result) =>
-        result ? [{ type: "Device", id: result.id }] : ["Device"],
+      providesTags: (result, error, { id }) =>
+        result ? [{ type: "Device", id }] : ["Device"],
     }),
     updateDevice: builder.mutation<Device, { id: string; data: DeviceUpdate }>({
       queryFn: async ({ id, data }) => {
@@ -105,6 +112,18 @@ export const devicesApi = createApi({
       }),
       invalidatesTags: (result, error, { id }) => [{ type: "Device", id }],
     }),
+    sendNoticeToSelectedDevices: builder.mutation<
+      void,
+      { deviceIds: string[]; notice: string; duration?: number }
+    >({
+      query: ({ deviceIds, notice, duration }) => ({
+        url: `/devices/send-notice`,
+        method: "PATCH",
+        body: { deviceIds, notice, duration },
+      }),
+      invalidatesTags: (result, error, { deviceIds }) =>
+        deviceIds.map((id) => ({ type: "Device", id })),
+    }),
     sendScheduledNotice: builder.mutation<
       void,
       {
@@ -121,6 +140,23 @@ export const devicesApi = createApi({
       }),
       invalidatesTags: (result, error, { id }) => [{ type: "Device", id }],
     }),
+    sendScheduledNoticeToSelectedDevices: builder.mutation<
+      void,
+      {
+        deviceIds: string[];
+        notice: string;
+        startTime: number;
+        endTime: number;
+      }
+    >({
+      query: ({ deviceIds, notice, startTime, endTime }) => ({
+        url: `/devices/scheduled-notice`,
+        method: "PATCH",
+        body: { deviceIds, notice, startTime, endTime },
+      }),
+      invalidatesTags: (result, error, { deviceIds }) =>
+        deviceIds.map((id) => ({ type: "Device", id })),
+    }),
     getAllScheduledNotices: builder.query<IScheduledNotice[], { id: string }>({
       query: ({ id }) => ({
         url: `/devices/${id}/scheduled-notices`,
@@ -135,6 +171,60 @@ export const devicesApi = createApi({
         },
       ],
     }),
+    cancelScheduledNotice: builder.mutation<
+      void,
+      { id: string; noticeId: string }
+    >({
+      query: ({ id, noticeId }) => ({
+        url: `/devices/${id}/scheduled-notices/${noticeId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "ScheduledNotice", id },
+      ],
+    }),
+    getAllowedUsersForDevice: builder.query<IUser[], { id: string }>({
+      query: ({ id }) => ({
+        url: `/devices/${id}/allowed-users`,
+        method: "GET",
+      }),
+      transformResponse: (response) =>
+        (response as ISuccessResponse<IUser[]>).data,
+      providesTags: (result, error, { id }) =>
+        result ? [{ type: "Device", id }] : ["Device"],
+    }),
+    // give device access to user by superadmin/admin
+    giveDeviceAccessToUser: builder.mutation<
+      void,
+      { userIds: string[]; deviceId: string }
+    >({
+      query: ({ userIds, deviceId }) => ({
+        url: `/devices/${deviceId}/give-device-access`,
+        method: "POST",
+        body: { userIds },
+      }),
+    }),
+    revolkDeviceAccessFromUser: builder.mutation<
+      void,
+      { userId: string; deviceId: string }
+    >({
+      query: ({ userId, deviceId }) => ({
+        url: `/devices/${deviceId}/revoke-device-access/${userId}`,
+        method: "POST",
+      }),
+    }),
+    changeSelectedDeviceMode: builder.mutation<
+      void,
+      { deviceIds: string[]; mode: "clock" | "notice" }
+    >({
+      query: ({ deviceIds, mode }) => ({
+        url: `/devices/change-mode`,
+        method: "PATCH",
+        body: { mode, deviceIds },
+      }),
+      invalidatesTags: (result, error, { deviceIds }) =>
+        deviceIds.map((id) => ({ type: "Device", id })),
+    }),
   }),
 });
 
@@ -143,9 +233,16 @@ export const {
   useGetDeviceQuery,
   useUpdateDeviceMutation,
   useSendNoticeToDevicesMutation,
+  useGetAllowedUsersForDeviceQuery,
   useGetAllDevicesQuery,
   useChangeDeviceModeMutation,
   useSendNoticeToDeviceMutation,
   useSendScheduledNoticeMutation,
   useGetAllScheduledNoticesQuery,
+  useCancelScheduledNoticeMutation,
+  useGiveDeviceAccessToUserMutation,
+  useRevolkDeviceAccessFromUserMutation,
+  useChangeSelectedDeviceModeMutation,
+  useSendNoticeToSelectedDevicesMutation,
+  useSendScheduledNoticeToSelectedDevicesMutation,
 } = devicesApi;

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { socketManager } from "@/lib/socket";
 import { useGetAllDevicesQuery } from "@/queries/devices";
 import { useGetAllGroupsQuery } from "@/queries/group";
 import {
@@ -15,13 +16,18 @@ import {
   WifiOff,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SimpleSummaryCard from "../cards/simple-summary-card";
 import BulkOperationModel from "../groups/bulk-operation-model";
 import SmallLoading from "../loading/small-loading";
 
 export default function DevicesComponent() {
-  const { data: devices = [], isLoading, error } = useGetAllDevicesQuery();
+  const {
+    data: devices = [],
+    isLoading,
+    error,
+    refetch,
+  } = useGetAllDevicesQuery();
   const { data: groups } = useGetAllGroupsQuery();
 
   const usedDevices =
@@ -42,15 +48,19 @@ export default function DevicesComponent() {
     return matchesSearch;
   });
 
-  const formatUptime = (seconds: number) => {
-    const days = Math.floor(seconds / 86400);
-    const hours = Math.floor((seconds % 86400) / 3600);
-    return `${days}d ${hours}h`;
-  };
-
   const formatLastSeen = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
+
+  useEffect(() => {
+    const socket = socketManager.connect();
+    if (!socket) return;
+    const handler = () => refetch();
+    socket.on("device:status", handler);
+    return () => {
+      socket.off("device:status", handler);
+    };
+  }, []);
 
   if (isLoading) {
     return <SmallLoading />;
@@ -233,9 +243,7 @@ export default function DevicesComponent() {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Uptime:</span>
-                        <span className="font-medium">
-                          {formatUptime(device.uptime)}
-                        </span>
+                        <span className="font-medium">{device.uptime}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">

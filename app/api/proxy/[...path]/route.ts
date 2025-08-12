@@ -116,12 +116,13 @@ async function handleProxyRequest(
           });
         }
       } else {
-        // If refresh token fails, clear all tokens and return an error
-        const response = NextResponse.redirect(new URL("/", request.url));
-        response.cookies.delete("accessToken");
-        response.cookies.delete("refreshToken");
+        cookieStore.delete("accessToken");
+        cookieStore.delete("refreshToken");
 
-        return response;
+        return NextResponse.json(
+          { message: "Session expired. Please log in again." },
+          { status: 301 }
+        );
       }
     } catch (error) {
       console.error("Error during token refresh:", error);

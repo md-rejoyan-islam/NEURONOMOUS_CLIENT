@@ -35,7 +35,14 @@ export const groupApi = createApi({
   reducerPath: "groupApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/proxy",
+    responseHandler: async (response) => {
+      if (response.status === 301) {
+        window.location.reload();
+      }
+      return response.json();
+    },
   }),
+  keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
   tagTypes,
   endpoints: (builder) => ({
     getAllGroups: builder.query<IGroupWithPopulatedData[], void>({

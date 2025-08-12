@@ -1,18 +1,15 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { permanentRedirect } from "next/navigation";
 export const logout = async () => {
   const cookieStore = await cookies();
   cookieStore.delete("accessToken");
   cookieStore.delete("refreshToken");
 
-  permanentRedirect("/login");
-
-  // return {
-  //   success: true,
-  //   message: "Logged out successfully",
-  // };
+  return {
+    success: true,
+    message: "Logged out successfully",
+  };
 };
 
 export const getGroupById = async (id: string) => {
