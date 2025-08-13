@@ -27,7 +27,7 @@ class SocketManager {
       this.connectionAttempts++;
 
       try {
-        this.socket = io("http://localhost:5050", {
+        this.socket = io(process.env.API_URL, {
           autoConnect: true,
           reconnection: false, // Disable automatic reconnection
           timeout: 5000, // 5 second timeout
