@@ -8,17 +8,19 @@ export const generateMetadata = async ({
 }) => {
   const { id } = await params;
 
-  const data = await getDeviceById(id);
-  if (!data) {
+  try {
+    const data = await getDeviceById(id);
+
+    return {
+      title: data.name || data.id,
+      description: data.description || "Details of the device",
+    };
+  } catch {
     return {
       title: "Device Not Found",
       description: "The requested device does not exist.",
     };
   }
-  return {
-    title: data.name || data.id,
-    description: data.description || "Details of the device",
-  };
 };
 
 const SingleDevicePage = async ({

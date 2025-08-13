@@ -1,58 +1,88 @@
 "use client";
 
-import { ChangePasswordModal } from "@/components/change-password-modal";
-import { CreateAdminModal } from "@/components/create-admin-modal";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+import PasswordField from "@/components/form/password-field";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { getRoleColor, getRoleLabel } from "@/lib/helper";
+import { IUser } from "@/lib/types";
 import {
+  AuthChangePasswordInput,
+  authChangePasswordSchema,
   profileUpdateSchema,
   type ProfileUpdateInput,
 } from "@/lib/validations";
+import {
+  useChangePasswordMutation,
+  useGetUserPermissionDevicesQuery,
+  useProfileQuery,
+  useUpdateProfileMutation,
+} from "@/queries/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Calendar,
   Clock,
   KeyRound,
   Mail,
-  MoreVertical,
   Save,
-  Settings,
   Shield,
   User,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-interface UserData {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: "user" | "admin" | "superAdmin";
-  status: "active" | "inactive" | "banned";
-  createdAt: string;
-  lastLogin: string;
-  deviceAccess: string[];
-}
-
 export default function ProfilePage() {
-  const [user, setUser] = useState<UserData | null>(null);
+  const { data } = useProfileQuery();
+  const { data: devices } = useGetUserPermissionDevicesQuery();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [mode, setMode] = useState<"view" | "edit">("view");
+  const [user] = useState<IUser | null>(data || null);
   const [isEditing, setIsEditing] = useState(false);
-  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
-    useState(false);
-  const [isCreateAdminModalOpen, setIsCreateAdminModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const {
+    register: changePasswordRegister,
+    handleSubmit: handleChangePasswordSubmit,
+    formState: { errors: changePasswordErrors },
+    reset,
+  } = useForm<AuthChangePasswordInput>({
+    resolver: zodResolver(authChangePasswordSchema),
+  });
+
+  const onChangeSubmit = async (data: AuthChangePasswordInput) => {
+    try {
+      await changePassword({
+        newPassword: data.newPassword,
+        currentPassword: data.currentPassword,
+      }).unwrap();
+
+      toast.success("Password Changed", {
+        description: "Your password has been updated successfully.",
+      });
+      reset();
+
+      setIsOpen(false);
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error("Password Change Failed", {
+        description:
+          error?.data?.message ||
+          "Failed to change password. Please try again.",
+      });
+    }
+  };
 
   const {
     register,
@@ -61,75 +91,61 @@ export default function ProfilePage() {
     setValue,
   } = useForm<ProfileUpdateInput>({
     resolver: zodResolver(profileUpdateSchema),
+    defaultValues: {
+      first_name: user?.first_name || "",
+      last_name: user?.last_name || "",
+      phone: user?.phone || "",
+      address: user?.address || "",
+      notes: user?.notes || "",
+    },
   });
 
-  useEffect(() => {
-    // Load user data from localStorage
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-        setValue("firstName", parsedUser.firstName);
-        setValue("lastName", parsedUser.lastName);
-      } catch (error) {
-        console.error("Error parsing user data:", error);
-      }
-    }
-  }, [setValue]);
+  const [updateProfile] = useUpdateProfileMutation();
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
 
   const onSubmit = async (data: ProfileUpdateInput) => {
     if (!user) return;
 
+    const updatedUser: {
+      first_name: string;
+      last_name: string;
+      phone?: string;
+      address?: string;
+      notes?: string;
+    } = {
+      first_name: data.first_name,
+      last_name: data.last_name,
+    };
+    if (data.phone) updatedUser.phone = data.phone;
+    if (data.address) updatedUser.address = data.address;
+    if (data.notes) updatedUser.notes = data.notes;
     setSaving(true);
-
-    // Mock API call
-    setTimeout(() => {
-      const updatedUser = {
-        ...user,
-        firstName: data.firstName,
-        lastName: data.lastName,
-      };
-
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setUser(updatedUser);
-      setIsEditing(false);
-      setSaving(false);
+    try {
+      await updateProfile(updatedUser).unwrap();
 
       toast.success("Profile Updated", {
         description: "Your profile has been updated successfully.",
       });
-    }, 1000);
+      setMode("view");
+      setIsEditing(false);
+
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error("Profile Update Failed", {
+        description: error?.data?.message || "Internal server error.",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancelEdit = () => {
     if (user) {
-      setValue("firstName", user.firstName);
-      setValue("lastName", user.lastName);
+      setValue("first_name", user.first_name);
+      setValue("last_name", user.last_name);
     }
     setIsEditing(false);
-  };
-
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case "superAdmin":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-      case "admin":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-      default:
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-    }
-  };
-
-  const getRoleLabel = (role: string) => {
-    switch (role) {
-      case "superAdmin":
-        return "Super Admin";
-      case "admin":
-        return "Admin";
-      default:
-        return "User";
-    }
+    setMode("view");
   };
 
   const formatDate = (dateString: string) => {
@@ -164,29 +180,14 @@ export default function ProfilePage() {
         </div>
 
         {/* Profile Actions Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Settings className="w-4 h-4 mr-2" />
-              Actions
-              <MoreVertical className="w-4 h-4 ml-2" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => setIsChangePasswordModalOpen(true)}
-            >
-              <KeyRound className="w-4 h-4 mr-2" />
-              Change Password
-            </DropdownMenuItem>
-            {user.role === "superAdmin" && (
-              <DropdownMenuItem onClick={() => setIsCreateAdminModalOpen(true)}>
-                <User className="w-4 h-4 mr-2" />
-                Create New Admin
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          variant="default"
+          className="max-w-xs"
+          onClick={() => setIsOpen(true)}
+        >
+          <KeyRound className="w-4 h-4 mr-2" />
+          Change Password
+        </Button>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -204,12 +205,12 @@ export default function ProfilePage() {
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
-                  {...register("firstName")}
+                  {...register("first_name")}
                   disabled={!isEditing || saving}
                 />
-                {errors.firstName && (
+                {errors.first_name && (
                   <p className="text-sm text-red-600">
-                    {errors.firstName.message}
+                    {errors.first_name.message}
                   </p>
                 )}
               </div>
@@ -217,12 +218,36 @@ export default function ProfilePage() {
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
-                  {...register("lastName")}
+                  {...register("last_name")}
                   disabled={!isEditing || saving}
                 />
-                {errors.lastName && (
+                {errors.last_name && (
                   <p className="text-sm text-red-600">
-                    {errors.lastName.message}
+                    {errors.last_name.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Phone Number</Label>
+                <Input
+                  id="phone"
+                  {...register("phone")}
+                  disabled={!isEditing || saving}
+                />
+                {errors.phone && (
+                  <p className="text-sm text-red-600">{errors.phone.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Address</Label>
+                <Input
+                  id="phone"
+                  {...register("address")}
+                  disabled={!isEditing || saving}
+                />
+                {errors.address && (
+                  <p className="text-sm text-red-600">
+                    {errors.address.message}
                   </p>
                 )}
               </div>
@@ -239,8 +264,16 @@ export default function ProfilePage() {
               <Separator />
 
               <div className="flex gap-2">
-                {!isEditing ? (
-                  <Button onClick={() => setIsEditing(true)} className="flex-1">
+                {mode === "view" ? (
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMode("edit");
+                      setIsEditing(true);
+                    }}
+                    type="button"
+                    className="flex-1"
+                  >
                     Edit Profile
                   </Button>
                 ) : (
@@ -310,7 +343,7 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2 text-sm">
                 <Clock className="w-4 h-4 text-muted-foreground" />
                 <span className="text-muted-foreground">Last login:</span>
-                <span>{formatDate(user.lastLogin)}</span>
+                <span>{formatDate(user.last_login)}</span>
               </div>
 
               <div className="flex items-center gap-2 text-sm">
@@ -329,14 +362,17 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {user.deviceAccess.includes("all") ? (
-                <Badge variant="outline" className="mr-2">
-                  All Devices
-                </Badge>
+              {user.role === "superadmin" ? (
+                <div className="flex">
+                  <Badge variant="outline" className="mr-2">
+                    All Devices
+                  </Badge>
+                  ({devices?.length || 0})
+                </div>
               ) : (
-                user.deviceAccess.map((deviceId) => (
-                  <Badge key={deviceId} variant="outline" className="mr-2">
-                    {deviceId}
+                devices?.map((device) => (
+                  <Badge key={device._id} variant="outline" className="mr-2">
+                    {device.name || device.id}
                   </Badge>
                 ))
               )}
@@ -346,17 +382,67 @@ export default function ProfilePage() {
       </div>
 
       {/* Change Password Modal */}
-      <ChangePasswordModal
-        isOpen={isChangePasswordModalOpen}
-        onClose={() => setIsChangePasswordModalOpen(false)}
-        targetUserId={user.id}
-      />
+      <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <KeyRound className="w-5 h-5" />
+              {`Change Password for ${user.first_name} ${user.last_name}`}
+            </DialogTitle>
+          </DialogHeader>
 
-      {/* Create Admin Modal */}
-      <CreateAdminModal
-        isOpen={isCreateAdminModalOpen}
-        onClose={() => setIsCreateAdminModalOpen(false)}
-      />
+          <form
+            onSubmit={handleChangePasswordSubmit(onChangeSubmit)}
+            className="space-y-4"
+          >
+            <PasswordField
+              label="New Password"
+              placeholder="Enter new password"
+              error={changePasswordErrors.newPassword?.message}
+              props={changePasswordRegister("newPassword", {
+                required: "New password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
+              disabled={isLoading}
+            />
+            <PasswordField
+              label="Current Password"
+              placeholder="Enter your current password"
+              error={changePasswordErrors.currentPassword?.message}
+              props={{ ...changePasswordRegister("currentPassword") }}
+              disabled={isLoading}
+            />
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+                className="flex-1"
+                disabled={isLoading}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" className="flex-1" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <KeyRound className="w-4 h-4 mr-2 animate-spin" />
+                    Changing...
+                  </>
+                ) : (
+                  <>
+                    <KeyRound className="w-4 h-4 mr-2" />
+                    Change Password
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

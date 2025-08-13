@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { useProfileQuery } from "@/queries/auth";
+import { useLogoutMutation, useProfileQuery } from "@/queries/auth";
 import { useGetNotificationsQuery } from "@/queries/notifications";
 import { Bell, LogOut, Search, User, User2 } from "lucide-react";
 import Link from "next/link";
@@ -25,11 +25,13 @@ export function DashboardHeader() {
   const { data: user } = useProfileQuery();
   const router = useRouter();
   const { data: notifications = [] } = useGetNotificationsQuery();
+  const [clientLogout] = useLogoutMutation();
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const handleLogout = async () => {
     await logout();
+    clientLogout();
     toast.success("Logged out successfully");
     router.push("/login");
   };

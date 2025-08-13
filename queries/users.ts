@@ -115,24 +115,11 @@ export const usersApi = createApi({
     }),
 
     deleteUser: builder.mutation<void, string>({
-      queryFn: async (userId) => {
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        const userIndex = mockUsers.findIndex((u) => u.id === userId);
-        if (userIndex === -1) {
-          return {
-            error: {
-              status: 404,
-              data: { message: "User not found" },
-            },
-          };
-        }
-
-        mockUsers.splice(userIndex, 1);
-        return { data: undefined };
-      },
-      invalidatesTags: ["User"],
+      query: (userId) => ({
+        url: `/users/${userId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User", "Users"],
     }),
 
     banUserById: builder.mutation<void, string>({

@@ -71,9 +71,6 @@ async function handleProxyRequest(
     body: requestBody,
   });
 
-  // response body
-  const responseBody = await response.json();
-
   // Handle 401 Unauthorized - attempt to refresh token
   if (response.status === 401) {
     if (!refreshToken) {
@@ -82,7 +79,9 @@ async function handleProxyRequest(
 
       // send before returning responseBody
       return NextResponse.json(
-        { ...responseBody },
+        {
+          ...(await response.json()),
+        },
         {
           status: response.status,
         }
@@ -132,6 +131,11 @@ async function handleProxyRequest(
       );
     }
   }
+
+  // response body
+  const responseBody = await response.json();
+
+  console.log("response body:", responseBody);
 
   // If the request is a login and successful, set cookies
   if (

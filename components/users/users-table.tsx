@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getRoleColor, getStatusColor } from "@/lib/helper";
 import { IUser } from "@/lib/types";
 import { useProfileQuery } from "@/queries/auth";
 import {
@@ -64,10 +65,6 @@ const UsersTable = ({
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [deletingUser, setDeletingUser] = useState<IUser | null>(null);
 
-  // RTK Query hooks
-  // const { data: users = [], isLoading, error } = useGetUsersQuery();
-  // console.log(users);
-
   const [deleteUser] = useDeleteUserMutation();
   const [banUserById] = useBanUserByIdMutation();
   const [unbanUserById] = useUnbanUserByIdMutation();
@@ -106,13 +103,18 @@ const UsersTable = ({
 
     try {
       await deleteUser(deletingUser._id).unwrap();
-      toast("User Deleted", {
+      toast.success("User Deleted", {
         description: `${deletingUser.first_name} ${deletingUser.last_name} has been deleted.`,
       });
       setDeletingUser(null);
-    } catch {
+      refetch?.();
+      setFilteredUsers((prev) =>
+        prev.filter((user) => user._id !== deletingUser?._id)
+      );
+      // eslint-disable-next-line
+    } catch (error: any) {
       toast("Delete Failed", {
-        description: "Failed to delete user. Please try again.",
+        description: error?.data?.message || "Failed to delete user.",
       });
     }
   };
@@ -120,28 +122,6 @@ const UsersTable = ({
   const handleChangePassword = (user: IUser) => {
     setSelectedUser(user);
     setIsChangePasswordModalOpen(true);
-  };
-
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case "superAdmin":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-      case "admin":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-      default:
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-      case "banned":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
-    }
   };
 
   const formatDate = (dateString: string) => {
@@ -171,14 +151,6 @@ const UsersTable = ({
     });
     setFilteredUsers(filtered);
   };
-
-  // useEffect(() => {
-  //   setFilteredUsers(
-  //     users.filter((user) =>
-  //       user.first_name.toLowerCase().includes(searchTerm.toLowerCase())
-  //     )
-  //   );
-  // }, [users]);
 
   return (
     <>
@@ -309,8 +281,11 @@ const UsersTable = ({
                             )}
                             <DropdownMenuItem
                               onClick={() => setDeletingUser(user)}
-                              className="text-red-600"
-                              disabled
+                              className="text-red-600 cursor-pointer"
+                              disabled={
+                                user.role === "superadmin" ||
+                                user.role === "admin"
+                              }
                             >
                               <Trash2 className="w-4 h-4 mr-2" />
                               Delete User

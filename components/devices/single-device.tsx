@@ -49,6 +49,7 @@ import { toast } from "sonner";
 import DatetimeRange from "../groups/bulk-operation/datetime-range";
 import DurationMinutes from "../groups/bulk-operation/duration-minutes";
 import SmallLoading from "../loading/small-loading";
+import DeviceNotFound from "../not-found/device-not-found";
 import { AlertDialogHeader } from "../ui/alert-dialog";
 import { Checkbox } from "../ui/checkbox";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
@@ -321,21 +322,7 @@ export default function SingleDevice({ id }: { id: string }) {
   }
 
   if (error || !device) {
-    return (
-      <div className="p-4 sm:p-6">
-        <div className="text-center py-12">
-          <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium mb-2">Device not found</h3>
-          <p className="text-muted-foreground mb-4">
-            The requested device could not be found.
-          </p>
-          <Button onClick={() => router.push("/devices")} variant="outline">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Devices
-          </Button>
-        </div>
-      </div>
-    );
+    return <DeviceNotFound />;
   }
 
   return (

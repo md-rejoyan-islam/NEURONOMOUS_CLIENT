@@ -26,12 +26,12 @@ const LoginForm = () => {
     try {
       const result = await login(data).unwrap();
 
+      console.log(result);
+
       if (result?.success) {
         const socket = socketManager.connect();
 
         if (socket && socketManager.isConnected()) {
-          console.log("Socket connected successfully.");
-
           socket.emit("auth:login", { userId: result.data.user._id });
         }
 

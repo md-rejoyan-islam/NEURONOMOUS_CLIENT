@@ -3,6 +3,7 @@ export interface IUser {
   email: string;
   first_name: string;
   last_name: string;
+  address?: string;
   role: "superadmin" | "admin" | "user";
   status: "active" | "inactive";
   allowed_devices: string[];

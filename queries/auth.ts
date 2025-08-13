@@ -1,4 +1,4 @@
-import { IUser } from "@/lib/types";
+import { IDevice, IUser } from "@/lib/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { tagTypes } from "./tags";
 
@@ -27,7 +27,7 @@ export interface LoginResponse {
 
 export interface ChangePasswordRequest {
   newPassword: string;
-  userId: string; // Optional for admin mode
+  currentPassword: string;
 }
 
 export interface AdminChangePasswordRequest {
@@ -66,15 +66,26 @@ export const authApi = createApi({
         body: { email, password },
       }),
     }),
-    changeUserPassword: builder.mutation<void, ChangePasswordRequest>({
-      query: ({ newPassword, userId }) => ({
-        url: `/users/${userId}/change-password`,
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: "/auth/logout",
         method: "POST",
-        body: { newPassword },
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Auth"],
     }),
-
+    getUserPermissionDevices: builder.query<
+      Pick<IDevice, "_id" | "id" | "name">[],
+      void
+    >({
+      query: () => ({
+        url: "/auth/devices-permission",
+        method: "GET",
+      }),
+      transformResponse: (response: {
+        data: Pick<IDevice, "_id" | "id" | "name">[];
+      }) => response.data,
+      providesTags: ["Auth"],
+    }),
     forgotPassword: builder.mutation<void, ForgotPasswordRequest>({
       query: (data) => ({
         url: "/auth/forgot-password",
@@ -100,10 +111,20 @@ export const authApi = createApi({
       transformResponse: (response: { data: IUser }) => response.data,
       providesTags: ["Auth"],
     }),
-    logout: builder.mutation<void, void>({
-      query: () => ({
-        url: "/auth/logout",
-        method: "POST",
+    updateProfile: builder.mutation<IUser, Partial<IUser>>({
+      query: (data) => ({
+        url: "/auth/profile",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Auth"],
+      transformResponse: (response: { data: IUser }) => response.data,
+    }),
+    changePassword: builder.mutation<void, ChangePasswordRequest>({
+      query: (payload) => ({
+        url: `/auth/change-password`,
+        method: "PATCH",
+        body: payload,
       }),
       invalidatesTags: ["Auth"],
     }),
@@ -112,8 +133,11 @@ export const authApi = createApi({
 
 export const {
   useLoginMutation,
-  useChangeUserPasswordMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useProfileQuery,
+  useLogoutMutation,
+  useGetUserPermissionDevicesQuery,
+  useUpdateProfileMutation,
+  useChangePasswordMutation,
 } = authApi;

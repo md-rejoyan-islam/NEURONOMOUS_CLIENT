@@ -25,6 +25,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import SmallLoading from "../loading/small-loading";
+import GroupNotFound from "../not-found/group-not-found";
 import BulkOperationModel from "./bulk-operation-model";
 
 const SingleGroupComponent = ({ _id }: { _id: string }) => {
@@ -32,6 +33,7 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
     data: group,
     isLoading,
     refetch: refetchGroup,
+    error,
   } = useGetGroupdByIdQuery(_id as string);
 
   const [filteredDevices, setFilteredDevices] = useState<IDevice[]>([]);
@@ -67,6 +69,10 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
 
   if (isLoading || isUserLoading) {
     return <SmallLoading />;
+  }
+
+  if (error) {
+    return <GroupNotFound />;
   }
 
   return (

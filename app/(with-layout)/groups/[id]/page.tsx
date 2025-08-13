@@ -7,17 +7,19 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const data = await getGroupById(id);
-  if (!data) {
+
+  try {
+    const data = await getGroupById(id);
+    return {
+      title: data.name,
+      description: data.description,
+    };
+  } catch {
     return {
       title: "Group Not Found",
       description: "The requested group does not exist.",
     };
   }
-  return {
-    title: data.name || "Group Details",
-    description: data.description || "Details of the group",
-  };
 }
 
 const SingleGroupPage = async ({
