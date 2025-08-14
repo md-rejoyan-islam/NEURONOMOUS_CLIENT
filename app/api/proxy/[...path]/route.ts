@@ -50,16 +50,7 @@ async function handleProxyRequest(
   const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
-  // requestHeaders.delete("host");
-  // requestHeaders.delete("connection");
-  // requestHeaders.delete("keep-alive");
-  // requestHeaders.delete("transfer-encoding");
-  // requestHeaders.delete("upgrade");
-  // requestHeaders.delete("proxy-connection");
-  // requestHeaders.delete("proxy-authenticate");
-  // requestHeaders.delete("proxy-authorization");
-  // requestHeaders.delete("te");
-  // requestHeaders.delete("trailer");
+  requestHeaders.delete("connection");
 
   if (accessToken) {
     requestHeaders.set("Authorization", `Bearer ${accessToken}`);
