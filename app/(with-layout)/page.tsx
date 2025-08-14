@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { socketManager } from "@/lib/socket";
 import {
   useGetRecentActivityQuery,
   useGetSystemMetricsQuery,
@@ -22,7 +21,6 @@ import {
   Users,
   Wifi,
 } from "lucide-react";
-import { useEffect } from "react";
 
 export default function DashboardPage() {
   const { data: user } = useProfileQuery();
@@ -39,31 +37,31 @@ export default function DashboardPage() {
     refetch: refetchActivity,
   } = useGetRecentActivityQuery();
 
-  useEffect(() => {
-    // Connect to socket for real-time updates (optional)
-    const socket = socketManager.connect();
+  // useEffect(() => {
+  //   // Connect to socket for real-time updates (optional)
+  //   const socket = socketManager.connect();
 
-    if (socket && socketManager.isConnected()) {
-      // Listen for system metrics updates
-      socket.on("metrics:updated", (updatedMetrics) => {
-        console.log("Metrics updated via socket:", updatedMetrics);
-        refetchMetrics();
-      });
+  //   if (socket && socketManager.isConnected()) {
+  //     // Listen for system metrics updates
+  //     socket.on("metrics:updated", (updatedMetrics) => {
+  //       console.log("Metrics updated via socket:", updatedMetrics);
+  //       refetchMetrics();
+  //     });
 
-      // Listen for new activity
-      socket.on("activity:new", (newActivity) => {
-        console.log("New activity via socket:", newActivity);
-        refetchActivity();
-      });
+  //     // Listen for new activity
+  //     socket.on("activity:new", (newActivity) => {
+  //       console.log("New activity via socket:", newActivity);
+  //       refetchActivity();
+  //     });
 
-      return () => {
-        socket.off("metrics:updated");
-        socket.off("activity:new");
-      };
-    } else {
-      console.log("Running in offline mode - real-time updates disabled");
-    }
-  }, [refetchMetrics, refetchActivity]);
+  //     return () => {
+  //       socket.off("metrics:updated");
+  //       socket.off("activity:new");
+  //     };
+  //   } else {
+  //     console.log("Running in offline mode - real-time updates disabled");
+  //   }
+  // }, [refetchMetrics, refetchActivity]);
 
   const getActivityIcon = (type: string) => {
     switch (type) {

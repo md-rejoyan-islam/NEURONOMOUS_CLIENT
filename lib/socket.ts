@@ -27,7 +27,7 @@ class SocketManager {
       this.connectionAttempts++;
 
       try {
-        this.socket = io(process.env.API_URL, {
+        this.socket = io(process.env.NEXT_PUBLIC_API_URL, {
           autoConnect: true,
           reconnection: false, // Disable automatic reconnection
           timeout: 5000, // 5 second timeout

@@ -51,6 +51,15 @@ async function handleProxyRequest(
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
   // requestHeaders.delete("host");
+  // requestHeaders.delete("connection");
+  // requestHeaders.delete("keep-alive");
+  // requestHeaders.delete("transfer-encoding");
+  // requestHeaders.delete("upgrade");
+  // requestHeaders.delete("proxy-connection");
+  // requestHeaders.delete("proxy-authenticate");
+  // requestHeaders.delete("proxy-authorization");
+  // requestHeaders.delete("te");
+  // requestHeaders.delete("trailer");
 
   if (accessToken) {
     requestHeaders.set("Authorization", `Bearer ${accessToken}`);
@@ -134,8 +143,6 @@ async function handleProxyRequest(
 
   // response body
   const responseBody = await response.json();
-
-  console.log("response body:", responseBody);
 
   // If the request is a login and successful, set cookies
   if (

@@ -26,17 +26,19 @@ const LoginForm = () => {
     try {
       const result = await login(data).unwrap();
 
-      console.log(result);
-
       if (result?.success) {
         const socket = socketManager.connect();
 
+        console.log("Socket connection status:", socketManager.isConnected());
+
         if (socket && socketManager.isConnected()) {
+          console.log("Socket connected successfully.");
+
           socket.emit("auth:login", { userId: result.data.user._id });
         }
 
         toast.success("Login Successful", {
-          description: `Welcome back, ${
+          description: `Welcome back2, ${
             result.data.user.first_name + " " + result.data.user.last_name
           }!`,
         });
