@@ -34,7 +34,7 @@ export interface ISuccessResponse<T> {
 export const groupApi = createApi({
   reducerPath: "groupApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/proxy",
+    baseUrl: "/api/proxy/api/v1",
     responseHandler: async (response) => {
       if (response.status === 301) {
         window.location.reload();

@@ -1,0 +1,8 @@
+[nginx-limit-req]
+enabled  = true
+port     = http,https
+filter   = nginx-limit-req
+logpath  = /var/log/nginx/limit_req_error.log
+findtime = 60
+maxretry = 5
+bantime  = 300 

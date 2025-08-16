@@ -1,32 +1,33 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Notification } from '@/lib/validations'
-import { getApiUrl } from '@/lib/config'
+import { getApiUrl } from "@/lib/config";
+import { Notification } from "@/lib/validations";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const notificationsApi = createApi({
-  reducerPath: 'notificationsApi',
+  reducerPath: "notificationsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: getApiUrl('NOTIFICATIONS'),
+    baseUrl: getApiUrl("NOTIFICATIONS"),
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem("token");
       if (token) {
-        headers.set('authorization', `Bearer ${token}`)
+        headers.set("authorization", `Bearer ${token}`);
       }
-      return headers
+      return headers;
     },
   }),
-  tagTypes: ['Notification'],
+  tagTypes: ["Notification"],
   endpoints: (builder) => ({
     getNotifications: builder.query<Notification[], void>({
       queryFn: async () => {
         // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 200))
-        
+        await new Promise((resolve) => setTimeout(resolve, 200));
+
         const mockNotifications: Notification[] = [
           {
             id: "1",
             type: "success",
             title: "Device Connected",
-            message: "Device device-001 has successfully connected to the network",
+            message:
+              "Device device-001 has successfully connected to the network",
             timestamp: new Date().toISOString(),
             read: false,
           },
@@ -34,7 +35,8 @@ export const notificationsApi = createApi({
             id: "2",
             type: "warning",
             title: "High Memory Usage",
-            message: "System memory usage has exceeded 80%. Consider optimizing resources.",
+            message:
+              "System memory usage has exceeded 80%. Consider optimizing resources.",
             timestamp: new Date(Date.now() - 3600000).toISOString(),
             read: false,
           },
@@ -54,39 +56,39 @@ export const notificationsApi = createApi({
             timestamp: new Date(Date.now() - 10800000).toISOString(),
             read: true,
           },
-        ]
-        
-        return { data: mockNotifications }
+        ];
+
+        return { data: mockNotifications };
       },
-      providesTags: ['Notification'],
+      providesTags: ["Notification"],
     }),
     markAsRead: builder.mutation<void, string>({
       queryFn: async () => {
-        await new Promise(resolve => setTimeout(resolve, 300))
-        return { data: undefined }
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        return { data: undefined };
       },
-      invalidatesTags: ['Notification'],
+      invalidatesTags: ["Notification"],
     }),
     markAllAsRead: builder.mutation<void, void>({
       queryFn: async () => {
-        await new Promise(resolve => setTimeout(resolve, 500))
-        return { data: undefined }
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        return { data: undefined };
       },
-      invalidatesTags: ['Notification'],
+      invalidatesTags: ["Notification"],
     }),
     deleteNotification: builder.mutation<void, string>({
       queryFn: async () => {
-        await new Promise(resolve => setTimeout(resolve, 300))
-        return { data: undefined }
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        return { data: undefined };
       },
-      invalidatesTags: ['Notification'],
+      invalidatesTags: ["Notification"],
     }),
   }),
-})
+});
 
 export const {
   useGetNotificationsQuery,
   useMarkAsReadMutation,
   useMarkAllAsReadMutation,
   useDeleteNotificationMutation,
-} = notificationsApi
+} = notificationsApi;

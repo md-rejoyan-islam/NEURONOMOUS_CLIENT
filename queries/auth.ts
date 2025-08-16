@@ -48,7 +48,7 @@ export interface ResetPasswordRequest {
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/proxy",
+    baseUrl: "/api/proxy/api/v1",
     responseHandler: async (response) => {
       if (response.status === 301) {
         window.location.reload();

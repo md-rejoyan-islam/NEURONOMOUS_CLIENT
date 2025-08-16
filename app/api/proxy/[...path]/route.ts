@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_URL = process.env.API_URL + "/api/v1";
+const API_URL = process.env.API_URL;
 
 export async function GET(
   request: NextRequest,
@@ -50,7 +50,18 @@ async function handleProxyRequest(
   const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
-  requestHeaders.delete("connection");
+  requestHeaders.delete("host");
+  requestHeaders.set("upgrade-insecure-requests", "1");
+  requestHeaders.set("accept", "application/json, text/plain, */*");
+  // #requestHeaders.delete("connection");
+  // #requestHeaders.delete("keep-alive");
+  // #requestHeaders.delete("transfer-encoding");
+  // requestHeaders.delete("upgrade");
+  // #requestHeaders.delete("proxy-connection");
+  // #requestHeaders.delete("proxy-authenticate");
+  // #requestHeaders.delete("proxy-authorization");
+  // #requestHeaders.delete("te");
+  // #requestHeaders.delete("trailer");
 
   if (accessToken) {
     requestHeaders.set("Authorization", `Bearer ${accessToken}`);

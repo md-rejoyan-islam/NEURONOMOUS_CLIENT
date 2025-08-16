@@ -2,6 +2,8 @@
 
 import { io, Socket } from "socket.io-client";
 
+const socketUrl = process.env.NODE_ENV ? process.env.NEXT_PUBLIC_API_URL : "/";
+
 class SocketManager {
   private socket: Socket | null = null;
   private static instance: SocketManager;
@@ -27,7 +29,7 @@ class SocketManager {
       this.connectionAttempts++;
 
       try {
-        this.socket = io(process.env.NEXT_PUBLIC_API_URL, {
+        this.socket = io(socketUrl, {
           autoConnect: true,
           reconnection: false, // Disable automatic reconnection
           timeout: 5000, // 5 second timeout
