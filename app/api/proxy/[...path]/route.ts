@@ -98,7 +98,7 @@ async function handleProxyRequest(
 
     try {
       const tokenRefreshResponse = await fetchResource({
-        url: `${API_URL}/auth/refresh-token`,
+        url: `${API_URL}/api/v1/auth/refresh-token`,
         method: "POST",
         body: JSON.stringify({
           refreshToken: refreshToken,
@@ -151,13 +151,6 @@ async function handleProxyRequest(
   ) {
     await setCookie("accessToken", responseBody.data.accessToken);
     await setCookie("refreshToken", responseBody.data.refreshToken);
-
-    // (await cookies()).set("accessToken", responseBody.data.accessToken, {
-    //   maxAge: 60 * 60, // 1 hour
-    // });
-    // (await cookies()).set("refreshToken", responseBody.data.refreshToken, {
-    //   maxAge: 60 * 60 * 24 * 30, // 30 days
-    // });
   }
 
   return new NextResponse(JSON.stringify(responseBody), {
