@@ -2,9 +2,10 @@
 
 import { io, Socket } from "socket.io-client";
 
-const socketUrl = process.env.NEXT_PUBLIC_NODE_ENV
-  ? process.env.NEXT_PUBLIC_API_URL
-  : "/";
+const socketUrl =
+  process.env.NEXT_PUBLIC_NODE_ENV !== "production"
+    ? process.env.NEXT_PUBLIC_API_URL
+    : "/";
 
 class SocketManager {
   private socket: Socket | null = null;
