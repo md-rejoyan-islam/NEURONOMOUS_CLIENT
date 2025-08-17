@@ -21,19 +21,25 @@ jobs:
           node-version: 20
           cache: npm
 
-      # 3. Install dependencies
-      - name: Install dependencies
-        run: npm ci
+      # 3. Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
 
-      # 4. Run ESLint
+      # 4. Install dependencies using pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. Run ESLint
       - name: Run ESLint
         run: npm run lint
 
-        # 5. Build project
+      # 6. Build project
       - name: Build project
         run: npm run build
 
-      # 6. Create .env file
+      # 7. Create .env file
       - name: Create .env file
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
@@ -41,7 +47,7 @@ jobs:
           echo "${ENV_FILE}" > .env
           echo "Environment file created."
 
-      # 7. Deploy to VPS via SSH with password
+      # 8. Deploy to VPS via SSH with password
       - name: Deploy to VPS Hosting
         uses: appleboy/ssh-action@master
         with:
