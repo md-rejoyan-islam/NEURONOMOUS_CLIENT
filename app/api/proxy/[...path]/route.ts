@@ -50,10 +50,10 @@ async function handleProxyRequest(
   const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
-  requestHeaders.delete("host");
-  requestHeaders.set("upgrade-insecure-requests", "1");
-  requestHeaders.set("accept", "application/json, text/plain, */*");
-  // #requestHeaders.delete("connection");
+  requestHeaders.delete("connection");
+  // requestHeaders.delete("host");
+  // requestHeaders.set("upgrade-insecure-requests", "1");
+  // requestHeaders.set("accept", "application/json, text/plain, */*");
   // #requestHeaders.delete("keep-alive");
   // #requestHeaders.delete("transfer-encoding");
   // requestHeaders.delete("upgrade");
