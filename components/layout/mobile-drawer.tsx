@@ -42,49 +42,49 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
       name: "Dashboard",
       href: "/",
       icon: Home,
-      roles: ["superAdmin", "admin", "user"],
+      roles: ["superadmin", "admin", "user"],
     },
     {
       name: "Devices",
       href: "/devices",
       icon: Devices,
-      roles: ["superAdmin", "admin", "user"],
+      roles: ["superadmin", "admin", "user"],
     },
     {
       name: "Users",
       href: "/users",
       icon: Users,
-      roles: ["superAdmin", "admin"],
+      roles: ["superadmin", "admin"],
     },
     {
       name: "Analytics",
       href: "/analytics",
       icon: BarChart3,
-      roles: ["superAdmin", "admin"],
+      roles: ["superadmin", "admin"],
     },
     {
       name: "Notifications",
       href: "/notifications",
       icon: Bell,
-      roles: ["superAdmin", "admin", "user"],
+      roles: ["superadmin", "admin", "user"],
     },
     {
       name: "Activity Logs",
       href: "/user-activity",
       icon: Activity,
-      roles: ["superAdmin"],
+      roles: ["superadmin"],
     },
     {
       name: "System Logs",
       href: "/system-logs",
       icon: FileText,
-      roles: ["superAdmin"],
+      roles: ["superadmin"],
     },
     {
       name: "Create User",
       href: "/create-user",
       icon: UserCheck,
-      roles: ["superAdmin"],
+      roles: ["superadmin"],
     },
   ];
 
@@ -93,8 +93,6 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
   );
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
     setOpen(false);
     router.push("/login");
   };
@@ -118,7 +116,7 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
           </SheetTitle>
         </SheetHeader>
 
-        <div className="mt-0 px-1  space-y-6">
+        <div className="mt-0 px-1 overflow-scroll pb-4  space-y-6">
           {/* User Info */}
           <div className="flex items-center gap-3 py-2 px-2 bg-muted/50 rounded-lg">
             <div className="bg-primary/10 p-2 rounded-full">
@@ -138,9 +136,9 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
           </div>
 
           {/* Navigation */}
-          <div className="">
+          <div className=" ">
             <h3 className="text-sm font-semibold px-2 mb-3">Navigation</h3>
-            <div className="space-y-1">
+            <div className="space-y-1  overflow-y-scroll">
               {filteredItems.map((item) => {
                 const Icon = item.icon;
                 return (
