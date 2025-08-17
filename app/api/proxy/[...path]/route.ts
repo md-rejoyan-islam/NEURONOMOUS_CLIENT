@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { deleteCookie, getCookie, setCookie } from "@/app/actions";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.API_URL;
@@ -44,11 +44,8 @@ async function handleProxyRequest(
 ) {
   const requestHeaders = new Headers(request.headers);
 
-  // Extract access and refresh tokens from cookies
-  const cookieStore = await cookies();
-
-  const accessToken = cookieStore.get("accessToken")?.value;
-  const refreshToken = cookieStore.get("refreshToken")?.value;
+  const accessToken = await getCookie("accessToken");
+  const refreshToken = await getCookie("refreshToken");
 
   requestHeaders.delete("connection");
   // requestHeaders.delete("host");
@@ -85,8 +82,8 @@ async function handleProxyRequest(
   // Handle 401 Unauthorized - attempt to refresh token
   if (response.status === 401) {
     if (!refreshToken) {
-      cookieStore.delete("accessToken");
-      cookieStore.delete("refreshToken");
+      await deleteCookie("accessToken");
+      await deleteCookie("refreshToken");
 
       // send before returning responseBody
       return NextResponse.json(
@@ -113,7 +110,7 @@ async function handleProxyRequest(
         const newAccessToken = tokenData.data.accessToken;
 
         if (newAccessToken) {
-          cookieStore.set("accessToken", newAccessToken);
+          await setCookie("accessToken", newAccessToken);
 
           // Retry the original request with the new access token
           response = await fetchResource({
@@ -126,8 +123,8 @@ async function handleProxyRequest(
           });
         }
       } else {
-        cookieStore.delete("accessToken");
-        cookieStore.delete("refreshToken");
+        await deleteCookie("accessToken");
+        await deleteCookie("refreshToken");
 
         return NextResponse.json(
           { message: "Session expired. Please log in again." },
@@ -152,12 +149,15 @@ async function handleProxyRequest(
     request.url.includes("/auth/login") &&
     response.status === 200
   ) {
-    (await cookies()).set("accessToken", responseBody.data.accessToken, {
-      maxAge: 60 * 60, // 1 hour
-    });
-    (await cookies()).set("refreshToken", responseBody.data.refreshToken, {
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-    });
+    await setCookie("accessToken", responseBody.data.accessToken);
+    await setCookie("refreshToken", responseBody.data.refreshToken);
+
+    // (await cookies()).set("accessToken", responseBody.data.accessToken, {
+    //   maxAge: 60 * 60, // 1 hour
+    // });
+    // (await cookies()).set("refreshToken", responseBody.data.refreshToken, {
+    //   maxAge: 60 * 60 * 24 * 30, // 30 days
+    // });
   }
 
   return new NextResponse(JSON.stringify(responseBody), {
