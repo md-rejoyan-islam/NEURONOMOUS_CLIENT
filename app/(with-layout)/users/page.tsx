@@ -1,19 +1,17 @@
 "use client";
 
 import SimpleSummaryCard from "@/components/cards/simple-summary-card";
-import { CreateAdminModal } from "@/components/create-admin-modal";
+import { CreateUserModal } from "@/components/create-user-modal";
 import { Button } from "@/components/ui/button";
 import UsersTable from "@/components/users/users-table";
-import { useGetUsersQuery } from "@/queries/users";
+import { useProfileQuery } from "@/queries/auth";
 import {
-  AlertTriangle,
-  Plus,
-  Shield,
-  UserCheck,
-  Users,
-  UserX,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+  useGetAllGroupDevicesQuery,
+  useGetAllUsersInGroupQuery,
+} from "@/queries/group";
+import { useGetUsersQuery } from "@/queries/users";
+import { Plus, Shield, UserCheck, Users, UserX } from "lucide-react";
+import { useState } from "react";
 
 interface User {
   id: string;
@@ -29,22 +27,36 @@ interface User {
 }
 
 export default function UsersPage() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const { data: user } = useProfileQuery();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // RTK Query hooks
-  const { data: users, isLoading, error } = useGetUsersQuery();
+  // All users for superadmin
+  const { data: allUsers, isLoading } = useGetUsersQuery(undefined, {
+    skip: user?.role !== "superadmin",
+  });
+  // All users in the group for admin
+  const {
+    data: allGroupUsers,
+    isLoading: isGroupUsersLoading,
+    refetch: groupUserRefetch,
+  } = useGetAllUsersInGroupQuery(user?.group || "", {
+    skip: user?.role !== "admin" || !user?.group,
+  }) || {
+    data: [],
+  };
 
-  useEffect(() => {
-    // Load current user
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setCurrentUser(JSON.parse(userData));
+  const users = user?.role === "superadmin" ? allUsers : allGroupUsers || [];
+
+  // Get all group devices
+  const { data: allGroupDevices } = useGetAllGroupDevicesQuery(
+    user?.group || "",
+    {
+      skip: user?.role !== "admin" || !user?.group,
     }
-  }, []);
+  );
 
-  if (isLoading) {
+  if (isLoading || isGroupUsersLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -52,19 +64,19 @@ export default function UsersPage() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="p-4 sm:p-6">
-        <div className="text-center py-12">
-          <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium mb-2">Failed to load users</h3>
-          <p className="text-muted-foreground">
-            Please try refreshing the page.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="p-4 sm:p-6">
+  //       <div className="text-center py-12">
+  //         <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+  //         <h3 className="text-lg font-medium mb-2">Failed to load users</h3>
+  //         <p className="text-muted-foreground">
+  //           Please try refreshing the page.
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
@@ -79,14 +91,13 @@ export default function UsersPage() {
             Manage admin users and their permissions
           </p>
         </div>
-        {(currentUser?.role === "superAdmin" ||
-          currentUser?.role === "admin") && (
+        {user?.role === "admin" && (
           <Button
             onClick={() => setIsCreateModalOpen(true)}
             className="w-full sm:w-auto bg-green-600 hover:bg-green-700"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add New Admin
+            Add New User
           </Button>
         )}
       </div>
@@ -123,25 +134,30 @@ export default function UsersPage() {
           }
           valueColor="text-purple-600 dark:text-purple-400"
         />
-        <SimpleSummaryCard
-          label="Super Admins"
-          value={
-            users?.filter((user) => user.role === "superadmin").length || 0
-          }
-          icon={
-            <Shield className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-          }
-          valueColor="text-yellow-600 dark:text-yellow-400"
-        />
+        {user?.role === "superadmin" && (
+          <SimpleSummaryCard
+            label="Super Admins"
+            value={
+              users?.filter((user) => user.role === "superadmin").length || 0
+            }
+            icon={
+              <Shield className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            }
+            valueColor="text-yellow-600 dark:text-yellow-400"
+          />
+        )}
       </div>
 
       {/* Users List */}
       <UsersTable users={users || []} />
 
       {/* Create Admin Modal */}
-      <CreateAdminModal
+      <CreateUserModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
+        devices={allGroupDevices || []}
+        groupId={user?.group || ""}
+        groupUserRefetch={groupUserRefetch}
       />
     </div>
   );

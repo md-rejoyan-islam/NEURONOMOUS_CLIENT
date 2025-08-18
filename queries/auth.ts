@@ -1,4 +1,4 @@
-import { IDevice, IUser } from "@/lib/types";
+import { IUser } from "@/lib/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { tagTypes } from "./tags";
 
@@ -73,19 +73,19 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
-    getUserPermissionDevices: builder.query<
-      Pick<IDevice, "_id" | "id" | "name">[],
-      void
-    >({
-      query: () => ({
-        url: "/auth/devices-permission",
-        method: "GET",
-      }),
-      transformResponse: (response: {
-        data: Pick<IDevice, "_id" | "id" | "name">[];
-      }) => response.data,
-      providesTags: ["Auth"],
-    }),
+    // getUserPermissionDevices: builder.query<
+    //   Pick<IDevice, "_id" | "id" | "name">[],
+    //   void
+    // >({
+    //   query: () => ({
+    //     url: "/auth/devices-permission",
+    //     method: "GET",
+    //   }),
+    //   transformResponse: (response: {
+    //     data: Pick<IDevice, "_id" | "id" | "name">[];
+    //   }) => response.data,
+    //   providesTags: ["Auth"],
+    // }),
     forgotPassword: builder.mutation<void, ForgotPasswordRequest>({
       query: (data) => ({
         url: "/auth/forgot-password",
@@ -137,7 +137,6 @@ export const {
   useResetPasswordMutation,
   useProfileQuery,
   useLogoutMutation,
-  useGetUserPermissionDevicesQuery,
   useUpdateProfileMutation,
   useChangePasswordMutation,
 } = authApi;

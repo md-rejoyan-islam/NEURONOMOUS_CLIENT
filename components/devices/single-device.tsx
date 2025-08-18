@@ -850,12 +850,12 @@ export default function SingleDevice({ id }: { id: string }) {
           </AlertDialogHeader>
 
           <div className="space-y-4">
+            <Label className="text-sm font-medium text-muted-foreground">
+              Select User
+            </Label>
             {withoutAccessUsers.length ? (
               withoutAccessUsers?.map((user) => (
                 <div key={user._id} className="space-y-2">
-                  <Label className="text-sm font-medium text-muted-foreground">
-                    Select User
-                  </Label>
                   <div className="flex items-start space-x-3 p-3 border rounded-lg">
                     <Checkbox
                       id={user._id}

@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { socketManager } from "@/lib/socket";
+import { useProfileQuery } from "@/queries/auth";
 import { useGetAllDevicesQuery } from "@/queries/devices";
-import { useGetAllGroupsQuery } from "@/queries/group";
 import {
   Bell,
   Clock,
@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import SimpleSummaryCard from "../cards/simple-summary-card";
+import AddDeviceModal from "../groups/add-device-modal";
 import BulkOperationModel from "../groups/bulk-operation-model";
 import SmallLoading from "../loading/small-loading";
 
@@ -26,14 +27,14 @@ export default function DevicesComponent() {
     data: devices = [],
     isLoading,
     error,
-    refetch,
+    refetch: refetchAllDevices,
   } = useGetAllDevicesQuery();
-  const { data: groups } = useGetAllGroupsQuery();
 
-  const usedDevices =
-    groups?.reduce((acc, group) => {
-      return acc + (group.devices?.length || 0);
-    }, 0) || 0;
+  const { data: user } = useProfileQuery();
+
+  const usedDevices = devices.reduce((acc, device) => {
+    return acc + (device?.allowed_users?.length ? 1 : 0);
+  }, 0);
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -55,7 +56,7 @@ export default function DevicesComponent() {
   useEffect(() => {
     const socket = socketManager.connect();
     if (!socket) return;
-    const handler = () => refetch();
+    const handler = () => refetchAllDevices();
     socket.on("device:status", handler);
     return () => {
       socket.off("device:status", handler);
@@ -93,13 +94,18 @@ export default function DevicesComponent() {
               Monitor and control your IoT devices
             </p>
           </div>
-          <div className="flex gap-2">
-            <BulkOperationModel devices={devices || []} />
-          </div>
+          {user?.role === "admin" && user?.group && (
+            <div>
+              <AddDeviceModal
+                groupId={user?.group}
+                refetchAllDevices={refetchAllDevices}
+              />
+            </div>
+          )}
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 pb-6 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid pt-4 grid-cols-1 sm:grid-cols-2 pb-6 lg:grid-cols-4 gap-4 sm:gap-6">
           <SimpleSummaryCard
             label="Total Devices"
             value={devices.length}
@@ -132,14 +138,16 @@ export default function DevicesComponent() {
             }
             valueColor="text-orange-600 dark:text-orange-400"
           />
-          <SimpleSummaryCard
-            label="Unused Devices"
-            value={devices.length - usedDevices}
-            icon={
-              <Bell className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-            }
-            valueColor="text-orange-600 dark:text-orange-400"
-          />
+          {user?.role === "superadmin" && (
+            <SimpleSummaryCard
+              label="Unused Devices"
+              value={devices.length - usedDevices}
+              icon={
+                <Bell className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              }
+              valueColor="text-orange-600 dark:text-orange-400"
+            />
+          )}
         </div>
 
         {/* Search and Filter */}
@@ -150,15 +158,20 @@ export default function DevicesComponent() {
                 <Devices className="w-5 h-5 text-primary" />
                 All Devices
               </CardTitle>
-              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input
-                    placeholder="Search devices..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 w-full sm:w-64"
-                  />
+              <div className="flex gap-3 items-center">
+                <div className="flex gap-2">
+                  <BulkOperationModel devices={devices || []} />
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      placeholder="Search devices..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 w-full sm:w-64"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

@@ -24,7 +24,6 @@ import {
 } from "@/lib/validations";
 import {
   useChangePasswordMutation,
-  useGetUserPermissionDevicesQuery,
   useProfileQuery,
   useUpdateProfileMutation,
 } from "@/queries/auth";
@@ -44,7 +43,7 @@ import { toast } from "sonner";
 
 export default function ProfilePage() {
   const { data } = useProfileQuery();
-  const { data: devices } = useGetUserPermissionDevicesQuery();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const [mode, setMode] = useState<"view" | "edit">("view");
@@ -351,31 +350,6 @@ export default function ProfilePage() {
                 <span className="text-muted-foreground">Email:</span>
                 <span>{user.email}</span>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Device Access */}
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Device Access</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {user.role === "superadmin" ? (
-                <div className="flex">
-                  <Badge variant="outline" className="mr-2">
-                    All Devices
-                  </Badge>
-                  ({devices?.length || 0})
-                </div>
-              ) : (
-                devices?.map((device) => (
-                  <Badge key={device._id} variant="outline" className="mr-2">
-                    {device.name || device.id}
-                  </Badge>
-                ))
-              )}
             </div>
           </CardContent>
         </Card>

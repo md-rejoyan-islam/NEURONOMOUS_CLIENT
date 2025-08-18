@@ -59,6 +59,9 @@ export const getCookie = async (name: string) => {
 
 export const setCookie = async (name: string, value: string) => {
   const cookieStore = await cookies();
+
+  console.log("env", process.env.NODE_ENV === "production");
+
   cookieStore.set(name, value, {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,

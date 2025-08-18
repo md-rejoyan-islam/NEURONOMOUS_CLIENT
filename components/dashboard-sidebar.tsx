@@ -64,7 +64,7 @@ export function DashboardSidebar({ className }: SidebarProps) {
       name: "Create User",
       href: "/create-user",
       icon: UserCheck,
-      roles: ["superadmin", "admin"],
+      roles: ["superadmin"],
     },
     {
       name: "Notifications",

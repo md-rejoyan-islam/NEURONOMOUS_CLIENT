@@ -51,6 +51,16 @@ export const usersApi = createApi({
         (response as IGetAllUsersResponse<IUser>).data,
       providesTags: ["Users"],
     }),
+    getUserById: builder.query<IUser, string>({
+      query: (userId) => ({
+        url: `/users/${userId}`,
+        method: "GET",
+      }),
+      transformResponse: (response) =>
+        (response as { success: boolean; data: IUser }).data,
+      providesTags: (result, error, userId) =>
+        result ? [{ type: "User", id: userId }] : ["User"],
+    }),
 
     deleteUser: builder.mutation<void, string>({
       query: (userId) => ({
@@ -94,4 +104,5 @@ export const {
   useBanUserByIdMutation,
   useUnbanUserByIdMutation,
   useChangeUserPasswordByIdMutation,
+  useGetUserByIdQuery,
 } = usersApi;

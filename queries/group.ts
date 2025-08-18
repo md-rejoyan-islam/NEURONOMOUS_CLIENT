@@ -1,4 +1,4 @@
-import { IGroup, IGroupWithPopulatedData, IUser } from "@/lib/types";
+import { IDevice, IGroup, IGroupWithPopulatedData, IUser } from "@/lib/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { tagTypes } from "./tags";
 import { IAddGroupRequest } from "./users";
@@ -144,6 +144,14 @@ export const groupApi = createApi({
     // transformResponse: (response) =>
     //   (response as ISuccessResponse<IUse    []>).data,
     // invalidatesTags
+    getAllGroupDevices: builder.query<IDevice[], string>({
+      query: (id) => ({
+        url: `/groups/${id}/devices`,
+        method: "GET",
+      }),
+      transformResponse: (response) =>
+        (response as ISuccessResponse<IDevice[]>).data,
+    }),
   }),
 });
 
@@ -155,4 +163,5 @@ export const {
   useAddDeviceToGroupMutation,
   useGetAllUsersInGroupQuery,
   useAddUserToGroupWithDevicesMutation,
+  useGetAllGroupDevicesQuery,
 } = groupApi;

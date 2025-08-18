@@ -33,7 +33,8 @@ import {
   Users,
   UserX,
 } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ChangePasswordModal } from "../change-password-modal";
 import { Badge } from "../ui/badge";
@@ -152,6 +153,10 @@ const UsersTable = ({
     setFilteredUsers(filtered);
   };
 
+  useEffect(() => {
+    setFilteredUsers(users);
+  }, [users]);
+
   return (
     <>
       <Card>
@@ -198,14 +203,9 @@ const UsersTable = ({
                   {filteredUsers.map((user) => (
                     <TableRow key={user._id}>
                       <TableCell className="font-medium">
-                        <div>
-                          <div>
-                            {user.first_name} {user.last_name}
-                          </div>
-                          <div className="text-sm text-muted-foreground sm:hidden">
-                            {user.email}
-                          </div>
-                        </div>
+                        <Link href={`/users/${user._id}`}>
+                          {user.first_name} {user.last_name}
+                        </Link>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <div className="flex items-center gap-2">

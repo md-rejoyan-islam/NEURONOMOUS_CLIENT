@@ -18,7 +18,13 @@ import { toast } from "sonner";
 import InputField from "../form/input-field";
 import { Button } from "../ui/button";
 
-const AddDeviceModal = ({ groupId }: { groupId: string }) => {
+const AddDeviceModal = ({
+  groupId,
+  refetchAllDevices,
+}: {
+  groupId: string;
+  refetchAllDevices?: () => void;
+}) => {
   const [saving, setSaving] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const {
@@ -40,6 +46,7 @@ const AddDeviceModal = ({ groupId }: { groupId: string }) => {
     try {
       setSaving(true);
       const response = await addDevice({ id: groupId, payload: data }).unwrap();
+      refetchAllDevices?.();
 
       if (response.success) {
         toast.success("Device Added", {

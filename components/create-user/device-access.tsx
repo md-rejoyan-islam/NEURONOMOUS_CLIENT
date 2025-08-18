@@ -43,7 +43,7 @@ const DeviceAccess = ({
         <div className="space-y-3 max-h-64 overflow-y-auto">
           {devices.map((device) => (
             <div
-              key={device.id}
+              key={device._id}
               className="flex items-start space-x-3 p-3 border rounded-lg"
             >
               <Checkbox

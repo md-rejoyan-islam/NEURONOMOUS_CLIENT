@@ -11,6 +11,7 @@ export interface IUser {
   notes?: string;
   phone?: string;
   createdAt: string;
+  group?: string; // Group ID if the user is part of a group
 }
 
 export interface IDevice {
@@ -27,6 +28,7 @@ export interface IDevice {
   start_time: number | null; // Unix timestamp in milliseconds, can be null
   end_time: number | null; // Unix timestamp in milliseconds, can be null
   free_heap: number;
+  allowed_users: string[]; // Array of user IDs who can access this device
   history: {
     message: string;
     timestamp: number;

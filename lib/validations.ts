@@ -66,14 +66,6 @@ export const profileUpdateSchema = z.object({
   notes: z.string().optional(),
 });
 
-export const createAdminSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  groupName: z.string().optional(),
-});
-
 // Device schemas
 export const deviceSchema = z.object({
   id: z.string(),
@@ -109,6 +101,18 @@ export const userSchema = z.object({
   createdAt: z.string(),
   lastLogin: z.string(),
   deviceAccess: z.array(z.string()),
+});
+
+export const userUpdateSchema = z.object({
+  first_name: z.string().min(2, "First name must be at least 2 characters"),
+  last_name: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  role: z.enum(["user", "admin", "superAdmin"]),
+  status: z.enum(["active", "inactive", "banned"]),
+  phone: z.string().optional(),
+  notes: z.string().optional(),
+  deviceAccess: z.array(z.string()).min(1, "Select at least one device"),
+  group: z.string().optional(), // Group ID if the user is part of a group
 });
 
 export const createUserSchema = z.object({
@@ -205,7 +209,6 @@ export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;
-export type CreateAdminInput = z.infer<typeof createAdminSchema>;
 export type Device = z.infer<typeof deviceSchema>;
 export type DeviceUpdate = z.infer<typeof deviceUpdateSchema>;
 export type User = z.infer<typeof userSchema>;
@@ -219,3 +222,4 @@ export type CreateGroupWithAdminInput = z.infer<
 export type AddDeviceToGroupInput = z.infer<typeof addDeviceToGroupSchema>;
 export type UserCreateInput = z.infer<typeof userCreateSchema>;
 export type AuthChangePasswordInput = z.infer<typeof authChangePasswordSchema>;
+export type UserUpdateInput = z.infer<typeof userUpdateSchema>;
