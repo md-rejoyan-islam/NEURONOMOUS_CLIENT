@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { IUser } from "@/lib/types";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/sheet';
+import { IUser } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import {
   Activity,
   BarChart3,
@@ -25,10 +25,10 @@ import {
   UserCheck,
   Users,
   Zap,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export function MobileDrawer({ user }: { user?: IUser | null }) {
   const [open, setOpen] = useState(false);
@@ -39,52 +39,52 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
 
   const navigationItems = [
     {
-      name: "Dashboard",
-      href: "/",
+      name: 'Dashboard',
+      href: '/',
       icon: Home,
-      roles: ["superadmin", "admin", "user"],
+      roles: ['superadmin', 'admin', 'user'],
     },
     {
-      name: "Devices",
-      href: "/devices",
+      name: 'Devices',
+      href: '/devices',
       icon: Devices,
-      roles: ["superadmin", "admin", "user"],
+      roles: ['superadmin', 'admin', 'user'],
     },
     {
-      name: "Users",
-      href: "/users",
+      name: 'Users',
+      href: '/users',
       icon: Users,
-      roles: ["superadmin", "admin"],
+      roles: ['superadmin', 'admin'],
     },
     {
-      name: "Analytics",
-      href: "/analytics",
+      name: 'Analytics',
+      href: '/analytics',
       icon: BarChart3,
-      roles: ["superadmin", "admin"],
+      roles: ['superadmin', 'admin'],
     },
     {
-      name: "Notifications",
-      href: "/notifications",
+      name: 'Notifications',
+      href: '/notifications',
       icon: Bell,
-      roles: ["superadmin", "admin", "user"],
+      roles: ['superadmin', 'admin', 'user'],
     },
     {
-      name: "Activity Logs",
-      href: "/user-activity",
+      name: 'Activity Logs',
+      href: '/user-activity',
       icon: Activity,
-      roles: ["superadmin"],
+      roles: ['superadmin'],
     },
     {
-      name: "System Logs",
-      href: "/system-logs",
+      name: 'System Logs',
+      href: '/system-logs',
       icon: FileText,
-      roles: ["superadmin"],
+      roles: ['superadmin'],
     },
     {
-      name: "Create User",
-      href: "/create-user",
+      name: 'Create User',
+      href: '/create-user',
       icon: UserCheck,
-      roles: ["superadmin"],
+      roles: ['superadmin'],
     },
   ];
 
@@ -94,7 +94,7 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
 
   const handleLogout = () => {
     setOpen(false);
-    router.push("/login");
+    router.push('/login');
   };
 
   if (!user) return null;
@@ -107,38 +107,38 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px] sm:w-[350px]">
-        <SheetHeader className="pb-0 ">
+        <SheetHeader className="pb-0">
           <SheetTitle className="flex items-center gap-2">
-            <div className="bg-primary p-2 rounded-lg">
-              <Zap className="w-5 h-5 text-primary-foreground" />
+            <div className="bg-primary rounded-lg p-2">
+              <Zap className="text-primary-foreground h-5 w-5" />
             </div>
             IoT Hub
           </SheetTitle>
         </SheetHeader>
 
-        <div className="mt-0 px-1 overflow-scroll pb-4  space-y-6">
+        <div className="mt-0 space-y-6 overflow-scroll px-1 pb-4">
           {/* User Info */}
-          <div className="flex items-center gap-3 py-2 px-2 bg-muted/50 rounded-lg">
-            <div className="bg-primary/10 p-2 rounded-full">
-              <Shield className="w-5 h-5 text-primary" />
+          <div className="bg-muted/50 flex items-center gap-3 rounded-lg px-2 py-2">
+            <div className="bg-primary/10 rounded-full p-2">
+              <Shield className="text-primary h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium truncate">
+              <p className="truncate text-sm font-medium">
                 {user.first_name} {user.last_name}
               </p>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="text-muted-foreground truncate text-xs">
                 {user.email}
               </p>
               <Badge variant="outline" className="mt-1 text-xs">
-                {user.role === "superadmin" ? "Super Admin" : user.role}
+                {user.role === 'superadmin' ? 'Super Admin' : user.role}
               </Badge>
             </div>
           </div>
 
           {/* Navigation */}
           <div className=" ">
-            <h3 className="text-sm font-semibold px-2 mb-3">Navigation</h3>
-            <div className="space-y-1  overflow-y-scroll">
+            <h3 className="mb-3 px-2 text-sm font-semibold">Navigation</h3>
+            <div className="space-y-1 overflow-y-scroll">
               {filteredItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -146,14 +146,14 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md transition-colors",
+                      'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors',
                       isActive(item.href)
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                     )}
                     onClick={() => setOpen(false)}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="h-5 w-5" />
                     <span>{item.name}</span>
                   </Link>
                 );
@@ -166,22 +166,22 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
             <Link
               href="/profile"
               className={cn(
-                "flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-md transition-colors mb-2",
-                isActive("/profile")
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                'mb-2 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors',
+                isActive('/profile')
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
               )}
               onClick={() => setOpen(false)}
             >
-              <Settings className="w-5 h-5" />
+              <Settings className="h-5 w-5" />
               Profile Settings
             </Link>
             <Button
               onClick={handleLogout}
               variant="outline"
-              className="w-full text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950"
+              className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
             >
-              <LogOut className="w-4 h-4 mr-2" />
+              <LogOut className="mr-2 h-4 w-4" />
               Log out
             </Button>
           </div>

@@ -1,22 +1,22 @@
-"use client";
+'use client';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   AddDeviceToGroupInput,
   addDeviceToGroupSchema,
-} from "@/lib/validations";
-import { useAddDeviceToGroupMutation } from "@/queries/group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Wifi } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import InputField from "../form/input-field";
-import { Button } from "../ui/button";
+} from '@/lib/validations';
+import { useAddDeviceToGroupMutation } from '@/queries/group';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus, Wifi } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import InputField from '../form/input-field';
+import { Button } from '../ui/button';
 
 const AddDeviceModal = ({
   groupId,
@@ -49,7 +49,7 @@ const AddDeviceModal = ({
       refetchAllDevices?.();
 
       if (response.success) {
-        toast.success("Device Added", {
+        toast.success('Device Added', {
           description: `Device ${data.deviceId} has been added successfully.`,
         });
         reset();
@@ -57,10 +57,10 @@ const AddDeviceModal = ({
       }
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log("Error creating group:", error);
+      console.log('Error creating group:', error);
 
-      toast.error("Failed to add device", {
-        description: error?.data?.message || "Invalid email or password.",
+      toast.error('Failed to add device', {
+        description: error?.data?.message || 'Invalid email or password.',
       });
     } finally {
       setSaving(false);
@@ -73,14 +73,14 @@ const AddDeviceModal = ({
         onClick={() => setIsOpen(true)}
         className="bg-green-600 hover:bg-green-700"
       >
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="mr-2 h-4 w-4" />
         Add Device
       </Button>
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5 text-green-600" />
+              <Plus className="h-5 w-5 text-green-600" />
               Add New Device
             </DialogTitle>
           </DialogHeader>
@@ -93,10 +93,10 @@ const AddDeviceModal = ({
                 placeholder="Enter unique device ID"
                 type="text"
                 error={errors.deviceId?.message}
-                props={register("deviceId")}
+                props={register('deviceId')}
                 isOptional={false}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Enter a unique identifier for the device
               </p>
             </div>
@@ -107,10 +107,10 @@ const AddDeviceModal = ({
                 placeholder="Enter device name"
                 type="text"
                 error={errors.name?.message}
-                props={register("name")}
+                props={register('name')}
                 isOptional={false}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 A friendly name for the device (auto-generated from ID)
               </p>
             </div>
@@ -120,22 +120,22 @@ const AddDeviceModal = ({
               label="Location"
               type="text"
               error={errors.location?.message}
-              props={register("location")}
+              props={register('location')}
               isOptional={true}
               placeholder="e.g. Living Room, Office"
             />
 
-            <div className="bg-muted/50 p-4 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Wifi className="w-4 h-4 text-blue-500" />
+            <div className="bg-muted/50 rounded-lg p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <Wifi className="h-4 w-4 text-blue-500" />
                 <span className="text-sm font-medium">
                   Device Setup Instructions
                 </span>
               </div>
-              <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+              <ol className="text-muted-foreground list-inside list-decimal space-y-1 text-xs">
                 <li>
-                  Configure the device with ID:{" "}
-                  <code className="bg-muted px-1 rounded">{"[device-id]"}</code>
+                  Configure the device with ID:{' '}
+                  <code className="bg-muted rounded px-1">{'[device-id]'}</code>
                 </li>
                 <li>Connect the device to your network</li>
                 <li>The device will appear online once connected</li>
@@ -159,12 +159,12 @@ const AddDeviceModal = ({
               >
                 {saving ? (
                   <>
-                    <Plus className="w-4 h-4 mr-2 animate-pulse" />
+                    <Plus className="mr-2 h-4 w-4 animate-pulse" />
                     Adding Device...
                   </>
                 ) : (
                   <>
-                    <Plus className="w-4 h-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Add Device
                   </>
                 )}

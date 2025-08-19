@@ -1,13 +1,13 @@
-import { IUser } from "@/lib/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { IUser } from '@/lib/types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
-  role: "user" | "admin" | "superAdmin";
-  status: "active" | "inactive" | "banned";
+  role: 'user' | 'admin' | 'superAdmin';
+  status: 'active' | 'inactive' | 'banned';
   createdAt: string;
   lastLogin: string;
   deviceAccess: string[];
@@ -20,7 +20,7 @@ export interface IAddGroupRequest {
   last_name: string;
   email: string;
   password: string;
-  role: "user" | "admin" | "superAdmin";
+  role: 'user' | 'admin' | 'superAdmin';
 }
 
 interface IGetAllUsersResponse<T> {
@@ -29,9 +29,9 @@ interface IGetAllUsersResponse<T> {
 }
 
 export const usersApi = createApi({
-  reducerPath: "usersApi",
+  reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/proxy/api/v1",
+    baseUrl: '/api/proxy/api/v1',
     responseHandler: async (response) => {
       if (response.status === 301) {
         window.location.reload();
@@ -40,49 +40,49 @@ export const usersApi = createApi({
     },
   }),
   keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
-  tagTypes: ["User", "Users"],
+  tagTypes: ['User', 'Users'],
   endpoints: (builder) => ({
     getUsers: builder.query<IUser[], void>({
       query: () => ({
-        url: "/users",
-        method: "GET",
+        url: '/users',
+        method: 'GET',
       }),
       transformResponse: (response) =>
         (response as IGetAllUsersResponse<IUser>).data,
-      providesTags: ["Users"],
+      providesTags: ['Users'],
     }),
     getUserById: builder.query<IUser, string>({
       query: (userId) => ({
         url: `/users/${userId}`,
-        method: "GET",
+        method: 'GET',
       }),
       transformResponse: (response) =>
         (response as { success: boolean; data: IUser }).data,
       providesTags: (result, error, userId) =>
-        result ? [{ type: "User", id: userId }] : ["User"],
+        result ? [{ type: 'User', id: userId }] : ['User'],
     }),
 
     deleteUser: builder.mutation<void, string>({
       query: (userId) => ({
         url: `/users/${userId}`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["User", "Users"],
+      invalidatesTags: ['User', 'Users'],
     }),
 
     banUserById: builder.mutation<void, string>({
       query: (userId) => ({
         url: `/users/${userId}/ban`,
-        method: "PATCH",
+        method: 'PATCH',
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
     }),
     unbanUserById: builder.mutation<void, string>({
       query: (userId) => ({
         url: `/users/${userId}/unban`,
-        method: "PATCH",
+        method: 'PATCH',
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
     }),
     changeUserPasswordById: builder.mutation<
       void,
@@ -90,10 +90,10 @@ export const usersApi = createApi({
     >({
       query: ({ userId, newPassword }) => ({
         url: `/users/${userId}/change-password`,
-        method: "PATCH",
+        method: 'PATCH',
         body: { newPassword },
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
     }),
   }),
 });

@@ -1,7 +1,7 @@
-import { IDevice, IGroup, IGroupWithPopulatedData, IUser } from "@/lib/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { tagTypes } from "./tags";
-import { IAddGroupRequest } from "./users";
+import { IDevice, IGroup, IGroupWithPopulatedData, IUser } from '@/lib/types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { tagTypes } from './tags';
+import { IAddGroupRequest } from './users';
 
 export interface LoginRequest {
   email: string;
@@ -32,9 +32,9 @@ export interface ISuccessResponse<T> {
 }
 
 export const groupApi = createApi({
-  reducerPath: "groupApi",
+  reducerPath: 'groupApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/proxy/api/v1",
+    baseUrl: '/api/proxy/api/v1',
     responseHandler: async (response) => {
       if (response.status === 301) {
         window.location.reload();
@@ -47,8 +47,8 @@ export const groupApi = createApi({
   endpoints: (builder) => ({
     getAllGroups: builder.query<IGroupWithPopulatedData[], void>({
       query: () => ({
-        url: "/groups",
-        method: "GET",
+        url: '/groups',
+        method: 'GET',
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IGroupWithPopulatedData[]>).data,
@@ -56,20 +56,20 @@ export const groupApi = createApi({
         result
           ? [
               ...result.map(({ _id }) => ({
-                type: "Group" as const,
+                type: 'Group' as const,
                 id: _id,
               })),
-              "Group",
+              'Group',
             ]
-          : ["Group"],
+          : ['Group'],
     }),
     addAdminWithGroup: builder.mutation<IGroupResponse, IAddGroupRequest>({
       query: (payload) => ({
-        url: "/users/create-admin",
-        method: "POST",
+        url: '/users/create-admin',
+        method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ["Group"],
+      invalidatesTags: ['Group'],
     }),
     updateGroupById: builder.mutation<
       IGroupResponse,
@@ -77,26 +77,26 @@ export const groupApi = createApi({
     >({
       query: ({ id, data }) => ({
         url: `/groups/${id}`,
-        method: "PATCH",
+        method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
+      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
     }),
     getGroupdById: builder.query<IGroupWithPopulatedData, string>({
       query: (id) => ({
         url: `/groups/${id}`,
-        method: "GET",
+        method: 'GET',
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IGroupWithPopulatedData>).data,
-      providesTags: (result, error, id) => [{ type: "Group", id }],
+      providesTags: (result, error, id) => [{ type: 'Group', id }],
     }),
     getAllUsersInGroup: builder.query<IUser[], string>({
       query: (id) => ({
         url: `/groups/${id}/users`,
-        method: "GET",
+        method: 'GET',
       }),
-      providesTags: (result, error, id) => [{ type: "Group", id }],
+      providesTags: (result, error, id) => [{ type: 'Group', id }],
       transformResponse: (response) =>
         (response as ISuccessResponse<IUser[]>).data,
     }),
@@ -113,10 +113,10 @@ export const groupApi = createApi({
     >({
       query: ({ id, payload }) => ({
         url: `/groups/${id}/add-device`,
-        method: "POST",
+        method: 'POST',
         body: payload,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
+      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
     }),
     // add user to group and give device access
     addUserToGroupWithDevices: builder.mutation<
@@ -136,10 +136,10 @@ export const groupApi = createApi({
     >({
       query: ({ id, payload }) => ({
         url: `/groups/${id}/add-user`,
-        method: "POST",
+        method: 'POST',
         body: payload,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
+      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
     }),
     // transformResponse: (response) =>
     //   (response as ISuccessResponse<IUse    []>).data,
@@ -147,7 +147,7 @@ export const groupApi = createApi({
     getAllGroupDevices: builder.query<IDevice[], string>({
       query: (id) => ({
         url: `/groups/${id}/devices`,
-        method: "GET",
+        method: 'GET',
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice[]>).data,

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { AuthGuard } from "@/components/auth-guard";
-import { DashboardHeader } from "@/components/dashboard-header";
-import { DashboardSidebar } from "@/components/dashboard-sidebar";
+import { AuthGuard } from '@/components/auth-guard';
+import { DashboardHeader } from '@/components/dashboard-header';
+import { DashboardSidebar } from '@/components/dashboard-sidebar';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -11,10 +11,10 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <AuthGuard>
-      <div className="flex h-screen bg-background">
+      <div className="bg-background flex h-screen">
         <DashboardSidebar />
 
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden">
           <DashboardHeader />
 
           <main className="flex-1 overflow-y-auto">{children}</main>

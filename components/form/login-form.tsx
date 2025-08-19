@@ -1,15 +1,15 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { socketManager } from "@/lib/socket";
-import { LoginInput, loginSchema } from "@/lib/validations";
-import { useLoginMutation } from "@/queries/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import InputField from "./input-field";
-import PasswordField from "./password-field";
+'use client';
+import { Button } from '@/components/ui/button';
+import { socketManager } from '@/lib/socket';
+import { LoginInput, loginSchema } from '@/lib/validations';
+import { useLoginMutation } from '@/queries/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import InputField from './input-field';
+import PasswordField from './password-field';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -29,25 +29,25 @@ const LoginForm = () => {
       if (result?.success) {
         const socket = socketManager.connect();
 
-        console.log("Socket connection status:", socketManager.isConnected());
+        console.log('Socket connection status:', socketManager.isConnected());
 
         if (socket && socketManager.isConnected()) {
-          console.log("Socket connected successfully.");
+          console.log('Socket connected successfully.');
 
-          socket.emit("auth:login", { userId: result.data.user._id });
+          socket.emit('auth:login', { userId: result.data.user._id });
         }
 
-        toast.success("Login Successful", {
+        toast.success('Login Successful', {
           description: `Welcome back2, ${
-            result.data.user.first_name + " " + result.data.user.last_name
+            result.data.user.first_name + ' ' + result.data.user.last_name
           }!`,
         });
-        router.push("/");
+        router.push('/');
       }
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Login Failed", {
-        description: error?.data?.message || "Internal server error.",
+      toast.error('Login Failed', {
+        description: error?.data?.message || 'Internal server error.',
       });
     }
   };
@@ -60,11 +60,11 @@ const LoginForm = () => {
         name="email"
         isOptional={false}
         error={errors.email?.message}
-        props={register("email", {
-          required: "Email is required",
+        props={register('email', {
+          required: 'Email is required',
           pattern: {
             value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            message: "Invalid email address",
+            message: 'Invalid email address',
           },
         })}
         disabled={isLoading}
@@ -73,11 +73,11 @@ const LoginForm = () => {
         label="Enter your password"
         placeholder="Enter your password"
         error={errors.password?.message}
-        props={register("password", {
-          required: "Password is required",
+        props={register('password', {
+          required: 'Password is required',
           minLength: {
             value: 6,
-            message: "Password must be at least 6 characters",
+            message: 'Password must be at least 6 characters',
           },
         })}
       />
@@ -86,14 +86,14 @@ const LoginForm = () => {
         <div />
         <Link
           href="/forgot-password"
-          className="text-sm text-primary hover:underline"
+          className="text-primary text-sm hover:underline"
         >
           Forgot password?
         </Link>
       </div>
 
       <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Signing in..." : "Sign In"}
+        {isLoading ? 'Signing in...' : 'Sign In'}
       </Button>
     </form>
   );

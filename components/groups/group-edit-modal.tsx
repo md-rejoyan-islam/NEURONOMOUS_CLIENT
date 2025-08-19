@@ -1,15 +1,15 @@
-import { Edit, Plus } from "lucide-react";
-import { useState } from "react";
-import { Button } from "../ui/button";
+import { Edit, Plus } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '../ui/button';
 
-import { GroupInput, groupSchema } from "@/lib/validations";
-import { useUpdateGroupByIdMutation } from "@/queries/group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import InputField from "../form/input-field";
-import TextField from "../form/text-field";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { GroupInput, groupSchema } from '@/lib/validations';
+import { useUpdateGroupByIdMutation } from '@/queries/group';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import InputField from '../form/input-field';
+import TextField from '../form/text-field';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 
 const GroupEditModal = ({
   _id,
@@ -50,18 +50,18 @@ const GroupEditModal = ({
         },
       }).unwrap();
       if (response.success) {
-        toast.success("Group Updated", {
+        toast.success('Group Updated', {
           description: `Group ${data.group_name} has been updated successfully.`,
         });
         reset();
-        setValue("group_name", data.group_name);
-        setValue("group_description", data.group_description);
+        setValue('group_name', data.group_name);
+        setValue('group_description', data.group_description);
         setIsModalOpen(false);
       }
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Group Update Failed", {
-        description: error?.data?.message || "Failed to update group.",
+      toast.error('Group Update Failed', {
+        description: error?.data?.message || 'Failed to update group.',
       });
     } finally {
       setSaving(false);
@@ -72,9 +72,9 @@ const GroupEditModal = ({
     setIsModalOpen(false);
     reset();
     setGroup({
-      _id: "",
-      name: "",
-      description: "",
+      _id: '',
+      name: '',
+      description: '',
     });
   };
   return (
@@ -85,14 +85,14 @@ const GroupEditModal = ({
         onClick={() => setIsModalOpen(true)}
         className="h-8 w-8 p-0"
       >
-        <Edit className="w-4 h-4" />
+        <Edit className="h-4 w-4" />
       </Button>
 
       <Dialog open={isModalOpen} onOpenChange={closeModal}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5 text-green-600" />
+              <Plus className="h-5 w-5 text-green-600" />
               Update Group Data
             </DialogTitle>
           </DialogHeader>
@@ -103,7 +103,7 @@ const GroupEditModal = ({
               placeholder="Enter group name"
               type="text"
               error={errors.group_name?.message}
-              props={register("group_name")}
+              props={register('group_name')}
               isOptional={false}
               name="groupName"
               disabled={saving}
@@ -113,7 +113,7 @@ const GroupEditModal = ({
               name="groupDescription"
               label="Description"
               placeholder="Brief description of this group..."
-              props={register("group_description")}
+              props={register('group_description')}
               error={errors.group_description?.message}
               disabled={saving}
             />
@@ -135,12 +135,12 @@ const GroupEditModal = ({
               >
                 {saving ? (
                   <>
-                    <Plus className="w-4 h-4 mr-2 animate-pulse" />
+                    <Plus className="mr-2 h-4 w-4 animate-pulse" />
                     Updating...
                   </>
                 ) : (
                   <>
-                    <Plus className="w-4 h-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Update Group
                   </>
                 )}

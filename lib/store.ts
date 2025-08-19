@@ -1,11 +1,11 @@
-import { analyticsApi } from "@/queries/analytics";
-import { authApi } from "@/queries/auth";
-import { devicesApi } from "@/queries/devices";
-import { groupApi } from "@/queries/group";
-import { notificationsApi } from "@/queries/notifications";
-import { usersApi } from "@/queries/users";
-import { configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query";
+import { analyticsApi } from '@/queries/analytics';
+import { authApi } from '@/queries/auth';
+import { devicesApi } from '@/queries/devices';
+import { groupApi } from '@/queries/group';
+import { notificationsApi } from '@/queries/notifications';
+import { usersApi } from '@/queries/users';
+import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +19,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
     }).concat(
       devicesApi.middleware,

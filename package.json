@@ -6,6 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prepare": "husky"
@@ -63,6 +65,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "husky": "^9.1.7",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5"

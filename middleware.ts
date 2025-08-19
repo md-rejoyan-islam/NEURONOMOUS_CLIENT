@@ -1,11 +1,11 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const publicRoutes = ["/login", "/forgot-password"];
+  const publicRoutes = ['/login', '/forgot-password'];
 
   // Get the authentication token from the request cookies.
-  const token = request.cookies.get("accessToken")?.value;
+  const token = request.cookies.get('accessToken')?.value;
 
   const pathname = request.nextUrl.pathname;
 
@@ -13,12 +13,12 @@ export function middleware(request: NextRequest) {
 
   // If the user is authenticated and trying to access a public route,
   if (token && isPublicRoute) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   // If the user is not authenticated and trying to access a protected route,
   if (!isPublicRoute && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   // If the user is authenticated and trying to access a protected route,
@@ -31,5 +31,5 @@ export function middleware(request: NextRequest) {
  * except for API routes, static files, and internal Next.js paths.
  */
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

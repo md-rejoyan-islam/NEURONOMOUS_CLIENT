@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { IDevice } from "@/lib/types";
-import { UserCreateInput, userCreateSchema } from "@/lib/validations";
-import { useAddUserToGroupWithDevicesMutation } from "@/queries/group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { User2, UserPlus } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import DeviceAccess from "./create-user/device-access";
-import InputField from "./form/input-field";
-import PasswordField from "./form/password-field";
-import TextField from "./form/text-field";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+} from '@/components/ui/dialog';
+import { IDevice } from '@/lib/types';
+import { UserCreateInput, userCreateSchema } from '@/lib/validations';
+import { useAddUserToGroupWithDevicesMutation } from '@/queries/group';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { User2, UserPlus } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import DeviceAccess from './create-user/device-access';
+import InputField from './form/input-field';
+import PasswordField from './form/password-field';
+import TextField from './form/text-field';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 interface CreateAdminModalProps {
   isOpen: boolean;
@@ -68,15 +68,15 @@ export function CreateUserModal({
   const onSubmit = async (data: UserCreateInput) => {
     try {
       if (selectedDevices.length === 0) {
-        return toast.error("Validation Error", {
+        return toast.error('Validation Error', {
           description:
-            "Please select at least one device for the user to control.",
+            'Please select at least one device for the user to control.',
         });
       }
       const payload = {
         ...data,
-        phone: data.phone || "",
-        notes: data.notes || "",
+        phone: data.phone || '',
+        notes: data.notes || '',
         deviceIds: selectedDevices,
       };
 
@@ -89,15 +89,15 @@ export function CreateUserModal({
         groupUserRefetch();
         reset();
         onClose();
-        toast.success("User Created Successfully", {
+        toast.success('User Created Successfully', {
           description: `User ${data.first_name} ${data.last_name} has been created and assigned to the group.`,
         });
       }
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Login Failed", {
-        description: error?.data?.message || "Internal server error.",
+      toast.error('Login Failed', {
+        description: error?.data?.message || 'Internal server error.',
       });
     }
   };
@@ -114,8 +114,8 @@ export function CreateUserModal({
       <DialogContent className="lg:max-w-[1000px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <div className="bg-green-500 p-2 rounded-md">
-              <UserPlus className="w-5 h-5 text-white" />
+            <div className="rounded-md bg-green-500 p-2">
+              <UserPlus className="h-5 w-5 text-white" />
             </div>
             <div>
               <h3 className="text-xl">Create New Admin</h3>
@@ -124,11 +124,11 @@ export function CreateUserModal({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="lg:grid lg:grid-cols-2 space-y-4 lg:gap-6">
+        <div className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <User2 className="w-5 h-5 text-primary" />
+                <User2 className="text-primary h-5 w-5" />
                 User Information
               </CardTitle>
             </CardHeader>
@@ -139,7 +139,7 @@ export function CreateUserModal({
                     label="First Name"
                     name="first_name"
                     placeholder="Enter first name"
-                    props={{ ...register("first_name") }}
+                    props={{ ...register('first_name') }}
                     error={errors.first_name?.message}
                     disabled={isLoading}
                   />
@@ -147,7 +147,7 @@ export function CreateUserModal({
                     label="Last Name"
                     name="last_name"
                     placeholder="Enter last name"
-                    props={{ ...register("last_name") }}
+                    props={{ ...register('last_name') }}
                     error={errors.last_name?.message}
                     disabled={isLoading}
                   />
@@ -158,13 +158,13 @@ export function CreateUserModal({
                   placeholder="Enter email address"
                   type="email"
                   name="email"
-                  props={{ ...register("email") }}
+                  props={{ ...register('email') }}
                   error={errors.email?.message}
                   disabled={isLoading}
                 />
                 <PasswordField
                   placeholder="Enter password"
-                  props={{ ...register("password") }}
+                  props={{ ...register('password') }}
                   disabled={isLoading}
                   label="Password"
                   error={errors.password?.message}
@@ -172,7 +172,7 @@ export function CreateUserModal({
                 <InputField
                   label="Phone Number"
                   placeholder="Enter phone number"
-                  {...register("phone")}
+                  {...register('phone')}
                   error={errors.phone?.message}
                   disabled={isLoading}
                   isOptional={true}
@@ -181,7 +181,7 @@ export function CreateUserModal({
                 <TextField
                   label="Notes"
                   placeholder="Enter any notes"
-                  {...register("notes")}
+                  {...register('notes')}
                   disabled={isLoading}
                   error={errors.notes?.message}
                 />
@@ -213,16 +213,16 @@ export function CreateUserModal({
             <Button
               onClick={handleSubmit(onSubmit)}
               disabled={isLoading}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              className="flex-1 bg-green-600 text-white hover:bg-green-700"
             >
               {isLoading ? (
                 <>
-                  <UserPlus className="w-4 h-4 mr-2 animate-pulse" />
+                  <UserPlus className="mr-2 h-4 w-4 animate-pulse" />
                   Creating...
                 </>
               ) : (
                 <>
-                  <UserPlus className="w-4 h-4 mr-2" />
+                  <UserPlus className="mr-2 h-4 w-4" />
                   Create User
                 </>
               )}

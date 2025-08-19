@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 import {
   Select,
@@ -12,10 +12,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { dateTimeDurationValidation } from "@/lib/helper";
-import { socketManager } from "@/lib/socket";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { dateTimeDurationValidation } from '@/lib/helper';
+import { socketManager } from '@/lib/socket';
 import {
   useCancelScheduledNoticeMutation,
   useChangeDeviceModeMutation,
@@ -26,9 +26,9 @@ import {
   useRevolkDeviceAccessFromUserMutation,
   useSendNoticeToDeviceMutation,
   useSendScheduledNoticeMutation,
-} from "@/queries/devices";
-import { useGetAllUsersInGroupQuery } from "@/queries/group";
-import { format } from "date-fns";
+} from '@/queries/devices';
+import { useGetAllUsersInGroupQuery } from '@/queries/group';
+import { format } from 'date-fns';
 import {
   AlertTriangle,
   ArrowLeft,
@@ -42,17 +42,17 @@ import {
   Users,
   Wifi,
   WifiOff,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import DatetimeRange from "../groups/bulk-operation/datetime-range";
-import DurationMinutes from "../groups/bulk-operation/duration-minutes";
-import SmallLoading from "../loading/small-loading";
-import DeviceNotFound from "../not-found/device-not-found";
-import { AlertDialogHeader } from "../ui/alert-dialog";
-import { Checkbox } from "../ui/checkbox";
-import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import DatetimeRange from '../groups/bulk-operation/datetime-range';
+import DurationMinutes from '../groups/bulk-operation/duration-minutes';
+import SmallLoading from '../loading/small-loading';
+import DeviceNotFound from '../not-found/device-not-found';
+import { AlertDialogHeader } from '../ui/alert-dialog';
+import { Checkbox } from '../ui/checkbox';
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 import {
   Table,
   TableBody,
@@ -60,7 +60,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from '../ui/table';
 
 export default function SingleDevice({ id }: { id: string }) {
   const router = useRouter();
@@ -86,19 +86,19 @@ export default function SingleDevice({ id }: { id: string }) {
   const [sendScheduleNotice] = useSendScheduledNoticeMutation();
 
   // Form states
-  const [mode, setMode] = useState<"clock" | "notice" | undefined>(
+  const [mode, setMode] = useState<'clock' | 'notice' | undefined>(
     device?.mode || undefined
   );
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useState('');
 
   const [durationType, setDurationType] = useState<
-    "unlimited" | "minutes" | "datetime"
-  >("unlimited");
-  const [durationMinutes, setDurationMinutes] = useState("");
+    'unlimited' | 'minutes' | 'datetime'
+  >('unlimited');
+  const [durationMinutes, setDurationMinutes] = useState('');
   const [startDate, setStartDate] = useState<Date>();
-  const [startTime, setStartTime] = useState("12:00");
+  const [startTime, setStartTime] = useState('12:00');
   const [endDate, setEndDate] = useState<Date>();
-  const [endTime, setEndTime] = useState("12:00");
+  const [endTime, setEndTime] = useState('12:00');
   const [isChangeFontTime, setIsChangeFontTime] = useState(false);
   const [giveDeviceAccess] = useGiveDeviceAccessToUserMutation();
   const [isUpdating] = useState(false);
@@ -106,15 +106,15 @@ export default function SingleDevice({ id }: { id: string }) {
   const handleRevokeAccess = async (userId: string) => {
     try {
       await revolkDeviceAccess({ userId, deviceId: id }).unwrap();
-      toast.success("Device Access Revoked", {
-        description: "User access to the device has been revoked.",
+      toast.success('Device Access Revoked', {
+        description: 'User access to the device has been revoked.',
       });
       refetchAllowUsers();
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log("Error revoking access:", error);
-      toast.error("Failed to revoke access", {
-        description: error?.data?.message || "Failed to revoke device access.",
+      console.log('Error revoking access:', error);
+      toast.error('Failed to revoke access', {
+        description: error?.data?.message || 'Failed to revoke device access.',
       });
     }
   };
@@ -122,12 +122,12 @@ export default function SingleDevice({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: groupMembers } =
-    useGetAllUsersInGroupQuery(device?.group || "") || [];
+    useGetAllUsersInGroupQuery(device?.group || '') || [];
   const handleAddUserToDevice = async () => {
     try {
       await giveDeviceAccess({ userIds: selectedUsers, deviceId: id }).unwrap();
-      toast.success("Device Access Granted", {
-        description: "Selected users have been granted access to the device.",
+      toast.success('Device Access Granted', {
+        description: 'Selected users have been granted access to the device.',
       });
       setSelectedUsers([]);
       setIsOpen(false);
@@ -135,10 +135,10 @@ export default function SingleDevice({ id }: { id: string }) {
 
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log("Error creating group:", error);
+      console.log('Error creating group:', error);
 
-      toast.error("Failed to add device", {
-        description: error?.data?.message || "Invalid email or password.",
+      toast.error('Failed to add device', {
+        description: error?.data?.message || 'Invalid email or password.',
       });
     }
   };
@@ -146,7 +146,7 @@ export default function SingleDevice({ id }: { id: string }) {
   const withoutAccessUsers =
     groupMembers?.filter(
       (user) =>
-        !allowedUsers?.some((u) => u._id === user._id) && user.role !== "admin"
+        !allowedUsers?.some((u) => u._id === user._id) && user.role !== 'admin'
     ) || [];
 
   useEffect(() => {
@@ -208,28 +208,28 @@ export default function SingleDevice({ id }: { id: string }) {
   const handleModeSubmit = async () => {
     try {
       if (!mode || mode === device?.mode) {
-        return toast("Validation Error", {
-          description: "Please select a valid mode to update.",
+        return toast('Validation Error', {
+          description: 'Please select a valid mode to update.',
         });
       }
       await changeMode({ id, mode }).unwrap();
 
-      toast.success("Device Mode Updated", {
+      toast.success('Device Mode Updated', {
         description: `Device mode changed to ${mode}.`,
       });
       // refetch();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast("Update Failed", {
-        description: error?.data?.message || "Failed to update device mode.",
+      toast('Update Failed', {
+        description: error?.data?.message || 'Failed to update device mode.',
       });
     }
   };
 
   const handleNoticeSubmit = async () => {
     if (!notice.trim()) {
-      toast("Validation Error", {
-        description: "Please enter a notice message.",
+      toast('Validation Error', {
+        description: 'Please enter a notice message.',
       });
       return;
     }
@@ -245,31 +245,31 @@ export default function SingleDevice({ id }: { id: string }) {
       });
       if (!response) return;
 
-      if (durationType === "unlimited") {
+      if (durationType === 'unlimited') {
         await sendNotice({
           id,
           notice,
         }).unwrap();
-      } else if (durationType === "minutes") {
+      } else if (durationType === 'minutes') {
         await sendNotice({
           id,
           notice,
           duration: +durationMinutes,
         }).unwrap();
-      } else if (durationType === "datetime") {
+      } else if (durationType === 'datetime') {
         // get unix time from startDate and StartTime
         if (!startDate || !endDate) {
-          toast.error("Validation Error", {
-            description: "Please select start and end dates.",
+          toast.error('Validation Error', {
+            description: 'Please select start and end dates.',
           });
           return;
         }
 
         const startTimeInUnix = new Date(
-          `${format(startDate, "yyyy-MM-dd")}T${startTime}:00`
+          `${format(startDate, 'yyyy-MM-dd')}T${startTime}:00`
         ).getTime();
         const endTimeInUnix = new Date(
-          `${format(endDate, "yyyy-MM-dd")}T${endTime}:00`
+          `${format(endDate, 'yyyy-MM-dd')}T${endTime}:00`
         ).getTime();
 
         await sendScheduleNotice({
@@ -282,22 +282,22 @@ export default function SingleDevice({ id }: { id: string }) {
         refetch();
       }
 
-      toast.success("Notice Sent", {
+      toast.success('Notice Sent', {
         description: `Notice message sent to device successfully.`,
       });
 
-      setNotice("");
-      setDurationType("unlimited");
-      setDurationMinutes("");
+      setNotice('');
+      setDurationType('unlimited');
+      setDurationMinutes('');
       setStartDate(undefined);
-      setStartTime("12:00");
+      setStartTime('12:00');
       setEndDate(undefined);
-      setEndTime("12:00");
+      setEndTime('12:00');
       setIsChangeFontTime(false);
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Update Failed", {
-        description: error?.data?.message || "Failed to send notice.",
+      toast.error('Update Failed', {
+        description: error?.data?.message || 'Failed to send notice.',
       });
     }
   };
@@ -305,14 +305,14 @@ export default function SingleDevice({ id }: { id: string }) {
   const cancelScheduledNoticeHandler = async (noticeId: string) => {
     try {
       await cancelScheduledNotice({ id, noticeId }).unwrap();
-      toast.success("Scheduled Notice Cancelled", {
-        description: "The scheduled notice has been cancelled successfully.",
+      toast.success('Scheduled Notice Cancelled', {
+        description: 'The scheduled notice has been cancelled successfully.',
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Cancellation Failed", {
+      toast.error('Cancellation Failed', {
         description:
-          error?.data?.message || "Failed to cancel scheduled notice.",
+          error?.data?.message || 'Failed to cancel scheduled notice.',
       });
     }
   };
@@ -327,37 +327,37 @@ export default function SingleDevice({ id }: { id: string }) {
 
   return (
     <>
-      <div className="p-4 sm:p-6 space-y-6">
+      <div className="space-y-6 p-4 sm:p-6">
         {/* Header */}
         <div>
           <Button
-            onClick={() => router.push("/devices")}
+            onClick={() => router.push('/devices')}
             variant="outline"
             className="mb-4"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Devices
           </Button>
 
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold">{device.name}</h1>
+              <h1 className="text-2xl font-bold sm:text-3xl">{device.name}</h1>
               <p className="text-muted-foreground mt-1">
                 Device ID: {device.id}
               </p>
             </div>
             <div className="flex items-center gap-2">
-              {device.status === "online" ? (
-                <Wifi className="w-5 h-5 text-green-500" />
+              {device.status === 'online' ? (
+                <Wifi className="h-5 w-5 text-green-500" />
               ) : (
-                <WifiOff className="w-5 h-5 text-red-500" />
+                <WifiOff className="h-5 w-5 text-red-500" />
               )}
               <Badge
-                variant={device.status === "online" ? "default" : "destructive"}
+                variant={device.status === 'online' ? 'default' : 'destructive'}
                 className={
-                  device.status === "online"
-                    ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
-                    : ""
+                  device.status === 'online'
+                    ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
+                    : ''
                 }
               >
                 {device.status}
@@ -366,19 +366,19 @@ export default function SingleDevice({ id }: { id: string }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Device Information */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <RefreshCw className="w-5 h-5 text-primary" />
+                <RefreshCw className="text-primary h-5 w-5" />
                 Device Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Status
                   </Label>
                   <p className="text-lg font-semibold capitalize">
@@ -386,14 +386,14 @@ export default function SingleDevice({ id }: { id: string }) {
                   </p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Current Mode
                   </Label>
-                  <div className="flex items-center gap-2 mt-1">
-                    {device.mode === "clock" ? (
-                      <Clock className="w-4 h-4 text-blue-500" />
+                  <div className="mt-1 flex items-center gap-2">
+                    {device.mode === 'clock' ? (
+                      <Clock className="h-4 w-4 text-blue-500" />
                     ) : (
-                      <Bell className="w-4 h-4 text-orange-500" />
+                      <Bell className="h-4 w-4 text-orange-500" />
                     )}
                     <span className="font-semibold capitalize">
                       {device.mode}
@@ -402,50 +402,50 @@ export default function SingleDevice({ id }: { id: string }) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Location
                   </Label>
                   <p className="text-lg font-semibold">{device.location}</p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Uptime
                   </Label>
                   <p className="text-lg font-semibold">{device.uptime}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Current Font
                   </Label>
                   <p className="text-lg font-semibold">
-                    {device.font || "Default Font"}
+                    {device.font || 'Default Font'}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Time Format
                   </Label>
                   <p className="text-sm font-semibold">
-                    {device.time_format === "12h"
-                      ? "12-Hour Format"
-                      : "24-Hour Format"}
+                    {device.time_format === '12h'
+                      ? '12-Hour Format'
+                      : '24-Hour Format'}
                   </p>
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Free Heap
                   </Label>
                   <p className="text-lg font-semibold">{device.free_heap}</p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-muted-foreground">
+                  <Label className="text-muted-foreground text-sm font-medium">
                     Last Seen
                   </Label>
                   <p className="text-sm font-semibold">{device.last_seen}</p>
@@ -453,15 +453,15 @@ export default function SingleDevice({ id }: { id: string }) {
               </div>
 
               {device.notice && (
-                <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
+                <div className="rounded-lg border border-orange-200 bg-orange-50 p-4 dark:border-orange-800 dark:bg-orange-900/20">
                   <Label className="text-sm font-medium text-orange-800 dark:text-orange-400">
                     Current Notice
                   </Label>
-                  <p className="text-orange-700 dark:text-orange-300 mt-1">
+                  <p className="mt-1 text-orange-700 dark:text-orange-300">
                     {device.notice}
                   </p>
                   {device.duration && (
-                    <p className="text-sm text-orange-600 dark:text-orange-400 mt-2">
+                    <p className="mt-2 text-sm text-orange-600 dark:text-orange-400">
                       Duration: {device.duration} minutes
                     </p>
                   )}
@@ -474,7 +474,7 @@ export default function SingleDevice({ id }: { id: string }) {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary" />
+                <Clock className="text-primary h-5 w-5" />
                 Device Mode Control
               </CardTitle>
             </CardHeader>
@@ -483,7 +483,7 @@ export default function SingleDevice({ id }: { id: string }) {
                 <Label>Device Mode</Label>
                 <Select
                   value={mode}
-                  onValueChange={(value: "clock" | "notice") => setMode(value)}
+                  onValueChange={(value: 'clock' | 'notice') => setMode(value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select Device Mode" />
@@ -491,13 +491,13 @@ export default function SingleDevice({ id }: { id: string }) {
                   <SelectContent>
                     <SelectItem value="clock">
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
+                        <Clock className="h-4 w-4" />
                         Clock Mode
                       </div>
                     </SelectItem>
                     <SelectItem value="notice">
                       <div className="flex items-center gap-2">
-                        <Bell className="w-4 h-4" />
+                        <Bell className="h-4 w-4" />
                         Notice Mode
                       </div>
                     </SelectItem>
@@ -513,12 +513,12 @@ export default function SingleDevice({ id }: { id: string }) {
               >
                 {isUpdating ? (
                   <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                     Updating...
                   </>
                 ) : (
                   <>
-                    <Save className="w-4 h-4 mr-2" />
+                    <Save className="mr-2 h-4 w-4" />
                     Update Mode
                   </>
                 )}
@@ -526,12 +526,12 @@ export default function SingleDevice({ id }: { id: string }) {
             </CardContent>
           </Card>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Notice Message Control */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-primary" />
+                <Bell className="text-primary h-5 w-5" />
                 Notice Message Control
               </CardTitle>
             </CardHeader>
@@ -553,7 +553,7 @@ export default function SingleDevice({ id }: { id: string }) {
                 <RadioGroup
                   value={durationType}
                   onValueChange={(
-                    value: "unlimited" | "minutes" | "datetime"
+                    value: 'unlimited' | 'minutes' | 'datetime'
                   ) => setDurationType(value)}
                 >
                   <div className="flex items-center space-x-2">
@@ -571,7 +571,7 @@ export default function SingleDevice({ id }: { id: string }) {
                 </RadioGroup>
 
                 {/* Minutes Input */}
-                {durationType === "minutes" && (
+                {durationType === 'minutes' && (
                   <DurationMinutes
                     durationMinutes={durationMinutes}
                     setDurationMinutes={setDurationMinutes}
@@ -579,7 +579,7 @@ export default function SingleDevice({ id }: { id: string }) {
                 )}
 
                 {/* Date Time Range */}
-                {durationType === "datetime" && (
+                {durationType === 'datetime' && (
                   <DatetimeRange
                     endDate={endDate}
                     setEndDate={setEndDate}
@@ -592,10 +592,10 @@ export default function SingleDevice({ id }: { id: string }) {
                   />
                 )}
 
-                {durationType === "datetime" && startDate && endDate && (
-                  <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
-                    <strong>Duration:</strong> From {format(startDate, "PPP")}{" "}
-                    at {startTime} to {format(endDate, "PPP")} at {endTime}
+                {durationType === 'datetime' && startDate && endDate && (
+                  <div className="text-muted-foreground bg-muted/50 rounded-lg p-3 text-sm">
+                    <strong>Duration:</strong> From {format(startDate, 'PPP')}{' '}
+                    at {startTime} to {format(endDate, 'PPP')} at {endTime}
                   </div>
                 )}
               </div>
@@ -607,12 +607,12 @@ export default function SingleDevice({ id }: { id: string }) {
               >
                 {isUpdating ? (
                   <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                     Sending Notice...
                   </>
                 ) : (
                   <>
-                    <Bell className="w-4 h-4 mr-2" />
+                    <Bell className="mr-2 h-4 w-4" />
                     Send Notice
                   </>
                 )}
@@ -623,7 +623,7 @@ export default function SingleDevice({ id }: { id: string }) {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-primary" />
+                <Bell className="text-primary h-5 w-5" />
                 Font & Time Format Control
               </CardTitle>
             </CardHeader>
@@ -665,12 +665,12 @@ export default function SingleDevice({ id }: { id: string }) {
               >
                 {isChangeFontTime ? (
                   <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                     Updating Font/Time Format...
                   </>
                 ) : (
                   <>
-                    <Bell className="w-4 h-4 mr-2" />
+                    <Bell className="mr-2 h-4 w-4" />
                     Update Font/Time Format
                   </>
                 )}
@@ -683,12 +683,12 @@ export default function SingleDevice({ id }: { id: string }) {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-primary" />
+                <Bell className="text-primary h-5 w-5" />
                 Scheduled Notices
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600">
+              <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600 overflow-x-auto">
                 <div className="min-w-[800px]">
                   {(schedules?.length ?? 0) > 0 ? (
                     <Table>
@@ -718,19 +718,19 @@ export default function SingleDevice({ id }: { id: string }) {
                               <div>{notice.notice}</div>
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">
-                              {format(new Date(notice.start_time), "PPPpp")}
+                              {format(new Date(notice.start_time), 'PPPpp')}
                               {/* {format(
                             new Date(notice.start_time),
                             "yyyy-MM-dd hh:mm:ss a"
                           )} */}
                             </TableCell>
                             <TableCell>
-                              {format(new Date(notice.end_time), "PPPpp")}
+                              {format(new Date(notice.end_time), 'PPPpp')}
                             </TableCell>
 
-                            <TableCell className="text-sm text-muted-foreground hidden md:table-cell">
+                            <TableCell className="text-muted-foreground hidden text-sm md:table-cell">
                               <Trash
-                                className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-600"
+                                className="h-5 w-5 cursor-pointer text-red-500 hover:text-red-600"
                                 onClick={() =>
                                   cancelScheduledNoticeHandler(notice.id)
                                 }
@@ -741,9 +741,9 @@ export default function SingleDevice({ id }: { id: string }) {
                       </TableBody>
                     </Table>
                   ) : (
-                    <div className="text-center py-12">
-                      <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-medium mb-2">
+                    <div className="py-12 text-center">
+                      <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+                      <h3 className="mb-2 text-lg font-medium">
                         No Scheduled Notices
                       </h3>
                       <p className="text-muted-foreground">
@@ -761,7 +761,7 @@ export default function SingleDevice({ id }: { id: string }) {
             <CardHeader>
               <CardTitle className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-primary" />
+                  <Users className="text-primary h-5 w-5" />
                   Allowed Users
                 </div>
                 <Button
@@ -774,7 +774,7 @@ export default function SingleDevice({ id }: { id: string }) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600">
+              <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600 overflow-x-auto">
                 <div className="min-w-[800px]">
                   {(allowedUsers?.length ?? 0) > 0 ? (
                     <Table>
@@ -807,15 +807,15 @@ export default function SingleDevice({ id }: { id: string }) {
                             <TableCell>{user?.role}</TableCell>
 
                             <TableCell
-                              className="text-sm text-muted-foreground hidden md:table-cell"
+                              className="text-muted-foreground hidden text-sm md:table-cell"
                               // title="Remove User from Allowed List"
                             >
                               <button
-                                disabled={user.role === "admin"}
+                                disabled={user.role === 'admin'}
                                 onClick={() => handleRevokeAccess(user._id)}
-                                className="disabled:text-red-200 disabled:cursor-default text-red-500 cursor-pointer hover:text-red-600"
+                                className="cursor-pointer text-red-500 hover:text-red-600 disabled:cursor-default disabled:text-red-200"
                               >
-                                <LogOut className="w-5 h-5 " />
+                                <LogOut className="h-5 w-5" />
                               </button>
                             </TableCell>
                           </TableRow>
@@ -823,9 +823,9 @@ export default function SingleDevice({ id }: { id: string }) {
                       </TableBody>
                     </Table>
                   ) : (
-                    <div className="text-center py-12">
-                      <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-medium mb-2">
+                    <div className="py-12 text-center">
+                      <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+                      <h3 className="mb-2 text-lg font-medium">
                         No Allowed Users
                       </h3>
                       <p className="text-muted-foreground">
@@ -844,30 +844,30 @@ export default function SingleDevice({ id }: { id: string }) {
         <DialogContent className="sm:max-w-md">
           <AlertDialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <KeyRound className="w-5 h-5" />
+              <KeyRound className="h-5 w-5" />
               Add New Allowed User
             </DialogTitle>
           </AlertDialogHeader>
 
           <div className="space-y-4">
-            <Label className="text-sm font-medium text-muted-foreground">
+            <Label className="text-muted-foreground text-sm font-medium">
               Select User
             </Label>
             {withoutAccessUsers.length ? (
               withoutAccessUsers?.map((user) => (
                 <div key={user._id} className="space-y-2">
-                  <div className="flex items-start space-x-3 p-3 border rounded-lg">
+                  <div className="flex items-start space-x-3 rounded-lg border p-3">
                     <Checkbox
                       id={user._id}
                       checked={selectedUsers.includes(user._id)}
                       onCheckedChange={() => handleUserToggle(user._id)}
                     />
-                    <div className="flex-1 min-w-0">
+                    <div className="min-w-0 flex-1">
                       <Label htmlFor={user._id} className="cursor-pointer">
-                        <div className="font-medium text-sm">
-                          {user.first_name + " " + user.last_name}
+                        <div className="text-sm font-medium">
+                          {user.first_name + ' ' + user.last_name}
                         </div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-muted-foreground text-xs">
                           {user.email}
                         </div>
                       </Label>
@@ -876,9 +876,9 @@ export default function SingleDevice({ id }: { id: string }) {
                 </div>
               ))
             ) : (
-              <div className="text-center py-12">
-                <AlertTriangle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No Users Available</h3>
+              <div className="py-12 text-center">
+                <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+                <h3 className="mb-2 text-lg font-medium">No Users Available</h3>
                 <p className="text-muted-foreground">
                   There are no users available to add to this device.
                 </p>
@@ -905,12 +905,12 @@ export default function SingleDevice({ id }: { id: string }) {
               >
                 {isLoading ? (
                   <>
-                    <KeyRound className="w-4 h-4 mr-2 animate-spin" />
+                    <KeyRound className="mr-2 h-4 w-4 animate-spin" />
                     Adding User...
                   </>
                 ) : (
                   <>
-                    <KeyRound className="w-4 h-4 mr-2" />
+                    <KeyRound className="mr-2 h-4 w-4" />
                     Add User
                   </>
                 )}

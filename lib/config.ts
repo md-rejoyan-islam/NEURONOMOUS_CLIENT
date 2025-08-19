@@ -8,13 +8,13 @@ export const API_CONFIG = {
     NOTIFICATIONS: '/notifications',
     ANALYTICS: '/analytics',
     LOGS: '/logs',
-  }
-} as const
+  },
+} as const;
 
 export const getApiUrl = (endpoint: keyof typeof API_CONFIG.ENDPOINTS) => {
-  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS[endpoint]}`
-}
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS[endpoint]}`;
+};
 
 // Development mode check
-export const isDevelopment = process.env.NODE_ENV === 'development'
-export const hasSocketServer = process.env.NEXT_PUBLIC_SOCKET_URL !== undefined
+export const isDevelopment = process.env.NODE_ENV === 'development';
+export const hasSocketServer = process.env.NEXT_PUBLIC_SOCKET_URL !== undefined;

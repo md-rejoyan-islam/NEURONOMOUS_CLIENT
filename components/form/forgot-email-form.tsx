@@ -1,20 +1,20 @@
-"use client";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ForgotPasswordInput, forgotPasswordSchema } from "@/lib/validations";
-import { useForgotPasswordMutation } from "@/queries/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+'use client';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ForgotPasswordInput, forgotPasswordSchema } from '@/lib/validations';
+import { useForgotPasswordMutation } from '@/queries/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 const ForgotEmailForm = ({
   setStep,
   setEmail,
 }: {
-  setStep: (step: "email" | "code") => void;
+  setStep: (step: 'email' | 'code') => void;
   setEmail: (email: string) => void;
 }) => {
   const emailForm = useForm<ForgotPasswordInput>({
@@ -29,16 +29,16 @@ const ForgotEmailForm = ({
       await forgotPassword(data).unwrap();
 
       setEmail(data.email);
-      toast.success("Reset Code Sent", {
+      toast.success('Reset Code Sent', {
         description:
-          "A 6-digit reset code has been sent to your email address.",
+          'A 6-digit reset code has been sent to your email address.',
       });
 
-      setStep("code");
+      setStep('code');
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Failed to send reset code", {
-        description: error?.data?.message || "Internal server error.",
+      toast.error('Failed to send reset code', {
+        description: error?.data?.message || 'Internal server error.',
       });
     }
   };
@@ -54,7 +54,7 @@ const ForgotEmailForm = ({
           id="email"
           type="email"
           placeholder="Enter your email address"
-          {...emailForm.register("email")}
+          {...emailForm.register('email')}
           disabled={isSendingCode}
         />
         {emailForm.formState.errors.email && (
@@ -75,12 +75,12 @@ const ForgotEmailForm = ({
       <Button type="submit" className="w-full" disabled={isSendingCode}>
         {isSendingCode ? (
           <>
-            <Mail className="w-4 h-4 mr-2 animate-pulse" />
+            <Mail className="mr-2 h-4 w-4 animate-pulse" />
             Sending Code...
           </>
         ) : (
           <>
-            <Mail className="w-4 h-4 mr-2" />
+            <Mail className="mr-2 h-4 w-4" />
             Send Reset Code
           </>
         )}

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { logout } from "@/app/actions";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { logout } from '@/app/actions';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,16 +10,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { useLogoutMutation, useProfileQuery } from "@/queries/auth";
-import { useGetNotificationsQuery } from "@/queries/notifications";
-import { Bell, LogOut, Search, User, User2 } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { MobileDrawer } from "./layout/mobile-drawer";
-import { ThemeToggle } from "./theme-toggle";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { useLogoutMutation, useProfileQuery } from '@/queries/auth';
+import { useGetNotificationsQuery } from '@/queries/notifications';
+import { Bell, LogOut, Search, User, User2 } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { MobileDrawer } from './layout/mobile-drawer';
+import { ThemeToggle } from './theme-toggle';
 
 export function DashboardHeader() {
   const { data: user } = useProfileQuery();
@@ -32,41 +32,41 @@ export function DashboardHeader() {
   const handleLogout = async () => {
     await logout();
     clientLogout();
-    toast.success("Logged out successfully");
-    router.push("/login");
+    toast.success('Logged out successfully');
+    router.push('/login');
   };
 
   const formatTime = (timestamp: string) => {
-    return new Date(timestamp).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(timestamp).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "success":
-        return "✅";
-      case "warning":
-        return "⚠️";
-      case "error":
-        return "❌";
+      case 'success':
+        return '✅';
+      case 'warning':
+        return '⚠️';
+      case 'error':
+        return '❌';
       default:
-        return "ℹ️";
+        return 'ℹ️';
     }
   };
 
   return (
-    <header className="h-16 border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50">
-      <div className="flex items-center justify-between h-full px-4 sm:px-6">
+    <header className="bg-card/50 supports-[backdrop-filter]:bg-card/50 h-16 border-b backdrop-blur">
+      <div className="flex h-full items-center justify-between px-4 sm:px-6">
         {/* Mobile Menu & Search */}
-        <div className="flex items-center gap-4 flex-1 max-w-md">
+        <div className="flex max-w-md flex-1 items-center gap-4">
           <MobileDrawer user={user} />
-          <div className="relative w-full hidden sm:block">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <div className="relative hidden w-full sm:block">
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               placeholder="Search systems..."
-              className="pl-10 bg-background/50"
+              className="bg-background/50 pl-10"
             />
           </div>
         </div>
@@ -83,7 +83,7 @@ export function DashboardHeader() {
               >
                 <Bell className="h-4 w-4" />
                 {unreadCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs bg-red-500 hover:bg-red-500">
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 p-0 text-xs hover:bg-red-500">
                     {unreadCount}
                   </Badge>
                 )}
@@ -102,15 +102,15 @@ export function DashboardHeader() {
                   </span>
                   <div className="flex-1 space-y-1">
                     <p className="text-sm font-medium">{notification.title}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       {notification.message}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       {formatTime(notification.timestamp)}
                     </p>
                   </div>
                   {!notification.read && (
-                    <div className="w-2 h-2 bg-primary rounded-full" />
+                    <div className="bg-primary h-2 w-2 rounded-full" />
                   )}
                 </DropdownMenuItem>
               ))}
@@ -139,7 +139,7 @@ export function DashboardHeader() {
                   <p className="text-sm font-medium">
                     {user?.first_name} {user?.last_name}
                   </p>
-                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  <p className="text-muted-foreground text-xs">{user?.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />

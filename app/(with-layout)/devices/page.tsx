@@ -1,14 +1,14 @@
-import DevicesComponent from "@/components/devices/devices-component";
-import type { Metadata } from "next";
+import DevicesComponent from '@/components/devices/devices-component';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Devices Management",
-  description: "Manage your IoT devices efficiently",
+  title: 'Devices Management',
+  description: 'Manage your IoT devices efficiently',
 };
 
 const DevicesPage = () => {
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <DevicesComponent />
     </div>
   );

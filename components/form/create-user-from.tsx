@@ -1,32 +1,32 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { IGroupWithPopulatedData } from "@/lib/types";
-import { UserCreateInput, userCreateSchema } from "@/lib/validations";
-import { useProfileQuery } from "@/queries/auth";
+} from '@/components/ui/select';
+import { IGroupWithPopulatedData } from '@/lib/types';
+import { UserCreateInput, userCreateSchema } from '@/lib/validations';
+import { useProfileQuery } from '@/queries/auth';
 import {
   useAddUserToGroupWithDevicesMutation,
   useGetAllGroupsQuery,
-} from "@/queries/group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Save, Shield, User, UserPlus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import DeviceAccess from "../create-user/device-access";
-import SmallLoading from "../loading/small-loading";
-import InputField from "./input-field";
-import PasswordField from "./password-field";
-import TextField from "./text-field";
+} from '@/queries/group';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Save, Shield, User, UserPlus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import DeviceAccess from '../create-user/device-access';
+import SmallLoading from '../loading/small-loading';
+import InputField from './input-field';
+import PasswordField from './password-field';
+import TextField from './text-field';
 
 const CreateUserFrom = () => {
   const { data: currentUser, isLoading } = useProfileQuery();
@@ -78,28 +78,28 @@ const CreateUserFrom = () => {
   const onSubmit = async (data: UserCreateInput) => {
     try {
       if (selectedDevices.length === 0) {
-        return toast.error("Validation Error", {
+        return toast.error('Validation Error', {
           description:
-            "Please select at least one device for the user to control.",
+            'Please select at least one device for the user to control.',
         });
       }
       const payload = {
         ...data,
-        phone: data.phone || "",
-        notes: data.notes || "",
+        phone: data.phone || '',
+        notes: data.notes || '',
         deviceIds: selectedDevices,
       };
 
       const result = await createUserWithDevices({
-        id: selectedGroup?._id || "",
+        id: selectedGroup?._id || '',
         payload,
       }).unwrap();
 
       if (result?.success) {
-        toast.success("User Created Successfully", {
+        toast.success('User Created Successfully', {
           description: `User ${data.first_name} ${data.last_name} has been created and assigned to the group ${selectedGroup?.name}.`,
         });
-        router.push("/users");
+        router.push('/users');
       }
 
       console.log(payload, selectedGroup?._id);
@@ -116,13 +116,13 @@ const CreateUserFrom = () => {
       //   }
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Login Failed", {
-        description: error?.data?.message || "Internal server error.",
+      toast.error('Login Failed', {
+        description: error?.data?.message || 'Internal server error.',
       });
     }
   };
 
-  if (!currentUser || currentUser.role !== "superadmin") {
+  if (!currentUser || currentUser.role !== 'superadmin') {
     return null;
   }
 
@@ -131,26 +131,26 @@ const CreateUserFrom = () => {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* User Information */}
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <User className="w-5 h-5 text-primary" />
+                <User className="text-primary h-5 w-5" />
                 User Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Basic Info */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <InputField
                   name="firstName"
                   label="First Name"
                   placeholder="Enter first name"
                   isOptional={false}
                   error={errors.first_name?.message}
-                  props={{ ...register("first_name") }}
+                  props={{ ...register('first_name') }}
                 />
                 <InputField
                   name="lastName"
@@ -158,7 +158,7 @@ const CreateUserFrom = () => {
                   placeholder="Enter last name"
                   isOptional={false}
                   error={errors.last_name?.message}
-                  props={{ ...register("last_name") }}
+                  props={{ ...register('last_name') }}
                 />
               </div>
               <InputField
@@ -167,17 +167,17 @@ const CreateUserFrom = () => {
                 placeholder="Enter email address"
                 isOptional={false}
                 error={errors.email?.message}
-                props={{ ...register("email") }}
+                props={{ ...register('email') }}
               />
               <PasswordField
                 label="Password"
                 placeholder="Enter password"
                 error={errors.password?.message}
-                props={{ ...register("password") }}
+                props={{ ...register('password') }}
               />
 
               {/* Additional Info */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="role">Select Group</Label>
                   <Select
@@ -192,7 +192,7 @@ const CreateUserFrom = () => {
                       {groups?.map((group) => (
                         <SelectItem key={group._id} value={group._id}>
                           <div className="flex items-center gap-2">
-                            <Shield className="w-4 h-4" />
+                            <Shield className="h-4 w-4" />
                             {group.name}
                           </div>
                         </SelectItem>
@@ -206,7 +206,7 @@ const CreateUserFrom = () => {
                   placeholder="Enter phone number"
                   isOptional={true}
                   error={errors.phone?.message}
-                  props={{ ...register("phone") }}
+                  props={{ ...register('phone') }}
                 />
               </div>
               <TextField
@@ -214,7 +214,7 @@ const CreateUserFrom = () => {
                 label="Notes"
                 placeholder="Additional notes about the user..."
                 error={errors.notes?.message}
-                props={{ ...register("notes") }}
+                props={{ ...register('notes') }}
               />
             </CardContent>
           </Card>
@@ -232,11 +232,11 @@ const CreateUserFrom = () => {
       </div>
 
       {/* Submit Button */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <Button
           type="button"
           variant="outline"
-          onClick={() => router.push("/users")}
+          onClick={() => router.push('/users')}
           className="w-full sm:w-auto"
         >
           Cancel
@@ -244,16 +244,16 @@ const CreateUserFrom = () => {
         <Button
           type="submit"
           disabled={creating}
-          className="w-full sm:w-auto bg-green-600 hover:bg-green-700"
+          className="w-full bg-green-600 hover:bg-green-700 sm:w-auto"
         >
           {creating ? (
             <>
-              <UserPlus className="w-4 h-4 mr-2 animate-pulse" />
+              <UserPlus className="mr-2 h-4 w-4 animate-pulse" />
               Creating User...
             </>
           ) : (
             <>
-              <Save className="w-4 h-4 mr-2" />
+              <Save className="mr-2 h-4 w-4" />
               Create User
             </>
           )}

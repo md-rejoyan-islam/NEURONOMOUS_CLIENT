@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { io, Socket } from "socket.io-client";
+import { io, Socket } from 'socket.io-client';
 
 const socketUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV !== "production"
+  process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
     ? process.env.NEXT_PUBLIC_API_URL
-    : "/";
+    : '/';
 
 class SocketManager {
   private socket: Socket | null = null;
@@ -39,21 +39,21 @@ class SocketManager {
           forceNew: true,
         });
 
-        this.socket.on("connect", () => {
-          console.log("Socket connected:", this.socket?.id);
+        this.socket.on('connect', () => {
+          console.log('Socket connected:', this.socket?.id);
           this.connectionAttempts = 0; // Reset on successful connection
           this.isConnecting = false;
         });
 
-        this.socket.on("disconnect", (reason) => {
-          console.log("Socket disconnectedd:", reason);
+        this.socket.on('disconnect', (reason) => {
+          console.log('Socket disconnectedd:', reason);
           this.isConnecting = false;
         });
 
-        this.socket.on("session:invalidate", () => {
-          console.log("Session invalidated due to new login. Reloading...");
+        this.socket.on('session:invalidate', () => {
+          console.log('Session invalidated due to new login. Reloading...');
           window.location.reload();
-          window.location.href = "/login"; // Redirect to login page
+          window.location.href = '/login'; // Redirect to login page
           // this.disconnect();
         });
 
@@ -63,9 +63,9 @@ class SocketManager {
         //   window.location.reload();
         // });
 
-        this.socket.on("connect_error", (error) => {
+        this.socket.on('connect_error', (error) => {
           console.warn(
-            "Socket connection failed (this is expected in development):",
+            'Socket connection failed (this is expected in development):',
             error.message
           );
           this.isConnecting = false;
@@ -73,7 +73,7 @@ class SocketManager {
           // Don't retry if we've exceeded max attempts
           if (this.connectionAttempts >= this.maxRetries) {
             console.log(
-              "Max socket connection attempts reached. Running in offline mode."
+              'Max socket connection attempts reached. Running in offline mode.'
             );
             this.disconnect();
           }
@@ -82,12 +82,12 @@ class SocketManager {
         // Set a timeout to stop trying after 5 seconds
         setTimeout(() => {
           if (this.isConnecting && this.socket && !this.socket.connected) {
-            console.log("Socket connection timeout. Running in offline mode.");
+            console.log('Socket connection timeout. Running in offline mode.');
             this.disconnect();
           }
         }, 5000);
       } catch (error) {
-        console.warn("Failed to initialize socket connection:", error);
+        console.warn('Failed to initialize socket connection:', error);
         this.isConnecting = false;
         this.socket = null;
       }
@@ -116,7 +116,7 @@ class SocketManager {
     if (this.socket && this.socket.connected) {
       this.socket.emit(event, data);
     } else {
-      console.log("Socket not connected. Event not sent:", event);
+      console.log('Socket not connected. Event not sent:', event);
     }
   }
 

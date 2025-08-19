@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   changePasswordSchema,
   type ChangePasswordInput,
-} from "@/lib/validations";
+} from '@/lib/validations';
 
-import { useChangeUserPasswordByIdMutation } from "@/queries/users";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { KeyRound } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import PasswordField from "./form/password-field";
+import { useChangeUserPasswordByIdMutation } from '@/queries/users';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { KeyRound } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import PasswordField from './form/password-field';
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -51,17 +51,17 @@ export function ChangePasswordModal({
         userId: targetUserId,
       }).unwrap();
 
-      toast.success("Password Changed", {
-        description: "Your password has been updated successfully.",
+      toast.success('Password Changed', {
+        description: 'Your password has been updated successfully.',
       });
 
       handleClose();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Password Change Failed", {
+      toast.error('Password Change Failed', {
         description:
           error?.data?.message ||
-          "Failed to change password. Please try again.",
+          'Failed to change password. Please try again.',
       });
     }
   };
@@ -76,7 +76,7 @@ export function ChangePasswordModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <KeyRound className="w-5 h-5" />
+            <KeyRound className="h-5 w-5" />
             {`Change Password for ${targetUserName}`}
           </DialogTitle>
         </DialogHeader>
@@ -86,11 +86,11 @@ export function ChangePasswordModal({
             label="New Password"
             placeholder="Enter new password"
             error={errors.newPassword?.message}
-            props={register("newPassword", {
-              required: "New password is required",
+            props={register('newPassword', {
+              required: 'New password is required',
               minLength: {
                 value: 6,
-                message: "Password must be at least 6 characters",
+                message: 'Password must be at least 6 characters',
               },
             })}
             disabled={isLoading}
@@ -99,10 +99,10 @@ export function ChangePasswordModal({
             label="Confirm New Password"
             placeholder="Confirm new password"
             error={errors.confirmPassword?.message}
-            props={register("confirmPassword", {
-              required: "Please confirm your new password",
+            props={register('confirmPassword', {
+              required: 'Please confirm your new password',
               validate: (value) =>
-                value === watch("newPassword") || "Passwords do not match",
+                value === watch('newPassword') || 'Passwords do not match',
             })}
             disabled={isLoading}
           />
@@ -120,12 +120,12 @@ export function ChangePasswordModal({
             <Button type="submit" className="flex-1" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <KeyRound className="w-4 h-4 mr-2 animate-spin" />
+                  <KeyRound className="mr-2 h-4 w-4 animate-spin" />
                   Changing...
                 </>
               ) : (
                 <>
-                  <KeyRound className="w-4 h-4 mr-2" />
+                  <KeyRound className="mr-2 h-4 w-4" />
                   Change Password
                 </>
               )}

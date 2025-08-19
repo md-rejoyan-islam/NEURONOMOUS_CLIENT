@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 
 const SimpleSummaryCard = ({
   label,
@@ -16,10 +16,10 @@ const SimpleSummaryCard = ({
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">{label}</p>
+            <p className="text-muted-foreground text-sm font-medium">{label}</p>
             <p className={`text-2xl font-bold ${valueColor}`}>{value}</p>
           </div>
-          <div className="bg-orange-100 dark:bg-orange-900/20 p-3 rounded-full">
+          <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/20">
             {icon}
           </div>
         </div>

@@ -1,20 +1,20 @@
-"use client";
-import { Plus } from "lucide-react";
-import { useState } from "react";
-import { Button } from "../ui/button";
+'use client';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '../ui/button';
 
 import {
   CreateGroupWithAdminInput,
   createGroupWithAdminSchema,
-} from "@/lib/validations";
-import { useAddAdminWithGroupMutation } from "@/queries/group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import InputField from "../form/input-field";
-import PasswordField from "../form/password-field";
-import TextField from "../form/text-field";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+} from '@/lib/validations';
+import { useAddAdminWithGroupMutation } from '@/queries/group';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import InputField from '../form/input-field';
+import PasswordField from '../form/password-field';
+import TextField from '../form/text-field';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 
 const GroupCreateModal = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -27,7 +27,7 @@ const GroupCreateModal = () => {
   } = useForm<CreateGroupWithAdminInput>({
     resolver: zodResolver(createGroupWithAdminSchema),
     defaultValues: {
-      role: "admin",
+      role: 'admin',
     },
   });
 
@@ -39,7 +39,7 @@ const GroupCreateModal = () => {
       console.log(response);
 
       if (response.success) {
-        toast.success("Group Created", {
+        toast.success('Group Created', {
           description: `Group ${data.group_name} has been created with admin ${data.first_name} ${data.last_name}.`,
         });
         reset();
@@ -47,10 +47,10 @@ const GroupCreateModal = () => {
       }
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log("Error creating group:", error);
+      console.log('Error creating group:', error);
 
-      toast.error("Group Creation Failed", {
-        description: error?.data?.message || "Invalid email or password.",
+      toast.error('Group Creation Failed', {
+        description: error?.data?.message || 'Invalid email or password.',
       });
     } finally {
       setSaving(false);
@@ -65,16 +65,16 @@ const GroupCreateModal = () => {
     <>
       <Button
         onClick={() => setIsCreateModalOpen(true)}
-        className="w-full sm:w-auto bg-green-600 hover:bg-green-700"
+        className="w-full bg-green-600 hover:bg-green-700 sm:w-auto"
       >
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="mr-2 h-4 w-4" />
         Create Group
       </Button>
       <Dialog open={isCreateModalOpen} onOpenChange={closeModal}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5 text-green-600" />
+              <Plus className="h-5 w-5 text-green-600" />
               Create Group with Admin
             </DialogTitle>
           </DialogHeader>
@@ -85,7 +85,7 @@ const GroupCreateModal = () => {
               placeholder="Enter group name"
               type="text"
               error={errors.group_name?.message}
-              props={register("group_name")}
+              props={register('group_name')}
               isOptional={false}
               name="groupName"
             />
@@ -94,17 +94,17 @@ const GroupCreateModal = () => {
               name="groupDescription"
               placeholder="Brief description of this group..."
               label="Description"
-              props={register("group_description")}
+              props={register('group_description')}
               error={errors.group_description?.message}
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <InputField
                 label="First Name"
                 placeholder="Enter first name"
                 type="text"
                 error={errors.first_name?.message}
-                props={register("first_name")}
+                props={register('first_name')}
                 isOptional={false}
                 name="first_name"
                 disabled={saving}
@@ -114,7 +114,7 @@ const GroupCreateModal = () => {
                 placeholder="Enter last name"
                 type="text"
                 error={errors.last_name?.message}
-                props={register("last_name")}
+                props={register('last_name')}
                 isOptional={false}
                 name="last_name"
                 disabled={saving}
@@ -125,7 +125,7 @@ const GroupCreateModal = () => {
               placeholder="Enter admin email"
               type="email"
               error={errors.email?.message}
-              props={register("email")}
+              props={register('email')}
               isOptional={false}
               disabled={saving}
               name="email"
@@ -135,7 +135,7 @@ const GroupCreateModal = () => {
               label="Password"
               placeholder="Enter admin password"
               error={errors.password?.message}
-              props={register("password")}
+              props={register('password')}
               disabled={saving}
             />
 
@@ -156,12 +156,12 @@ const GroupCreateModal = () => {
               >
                 {saving ? (
                   <>
-                    <Plus className="w-4 h-4 mr-2 animate-pulse" />
+                    <Plus className="mr-2 h-4 w-4 animate-pulse" />
                     Creating...
                   </>
                 ) : (
                   <>
-                    <Plus className="w-4 h-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Create Group
                   </>
                 )}

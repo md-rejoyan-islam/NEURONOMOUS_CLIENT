@@ -1,27 +1,27 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { dateTimeDurationValidation } from "@/lib/helper";
-import { IDevice } from "@/lib/types";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { dateTimeDurationValidation } from '@/lib/helper';
+import { IDevice } from '@/lib/types';
 import {
   useChangeSelectedDeviceModeMutation,
   useSendNoticeToSelectedDevicesMutation,
   useSendScheduledNoticeToSelectedDevicesMutation,
-} from "@/queries/devices";
-import { format } from "date-fns";
-import { Send, Settings } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import DeviceSelect from "./bulk-operation/device-select";
-import ModeType from "./bulk-operation/mode-type";
-import NoticeType from "./bulk-operation/notice-type";
+} from '@/queries/devices';
+import { format } from 'date-fns';
+import { Send, Settings } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import DeviceSelect from './bulk-operation/device-select';
+import ModeType from './bulk-operation/mode-type';
+import NoticeType from './bulk-operation/notice-type';
 
 const BulkOperationModel = ({
   devices,
@@ -33,17 +33,17 @@ const BulkOperationModel = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
-  const [operation, setOperation] = useState<"mode" | "notice">("notice");
-  const [mode, setMode] = useState<"clock" | "notice">("clock");
-  const [message, setMessage] = useState("");
+  const [operation, setOperation] = useState<'mode' | 'notice'>('notice');
+  const [mode, setMode] = useState<'clock' | 'notice'>('clock');
+  const [message, setMessage] = useState('');
   const [durationType, setDurationType] = useState<
-    "unlimited" | "minutes" | "datetime"
-  >("unlimited");
-  const [durationMinutes, setDurationMinutes] = useState("");
+    'unlimited' | 'minutes' | 'datetime'
+  >('unlimited');
+  const [durationMinutes, setDurationMinutes] = useState('');
   const [startDate, setStartDate] = useState<Date>();
-  const [startTime, setStartTime] = useState("12:00");
+  const [startTime, setStartTime] = useState('12:00');
   const [endDate, setEndDate] = useState<Date>();
-  const [endTime, setEndTime] = useState("12:00");
+  const [endTime, setEndTime] = useState('12:00');
   const [processing, setProcessing] = useState(false);
 
   const handleDeviceToggle = (deviceId: string) => {
@@ -56,15 +56,15 @@ const BulkOperationModel = ({
   const onClose = () => {
     setIsOpen(false);
     setSelectedDevices([]);
-    setOperation("notice");
-    setMode("clock");
-    setMessage("");
-    setDurationType("unlimited");
-    setDurationMinutes("");
+    setOperation('notice');
+    setMode('clock');
+    setMessage('');
+    setDurationType('unlimited');
+    setDurationMinutes('');
     setStartDate(undefined);
     setEndDate(undefined);
-    setStartTime("12:00");
-    setEndTime("12:00");
+    setStartTime('12:00');
+    setEndTime('12:00');
     setProcessing(false);
   };
 
@@ -73,14 +73,14 @@ const BulkOperationModel = ({
   const handleModeSubmit = async () => {
     try {
       if (!mode) {
-        return toast.error("Validation Error", {
-          description: "Please select a valid mode to update.",
+        return toast.error('Validation Error', {
+          description: 'Please select a valid mode to update.',
         });
       }
 
       if (selectedDevices.length === 0) {
-        return toast.error("Validation Error", {
-          description: "Please select at least one device.",
+        return toast.error('Validation Error', {
+          description: 'Please select at least one device.',
         });
       }
 
@@ -95,18 +95,18 @@ const BulkOperationModel = ({
           return isSelected ? { ...device, mode } : device;
         })
       );
-      toast.success("Device Mode Updated", {
+      toast.success('Device Mode Updated', {
         description: `Device mode changed to ${mode}.`,
       });
       setIsOpen(false);
       setSelectedDevices([]);
-      setOperation("notice");
-      setMode("clock");
+      setOperation('notice');
+      setMode('clock');
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast("Update Failed", {
-        description: error?.data?.message || "Failed to update device mode.",
+      toast('Update Failed', {
+        description: error?.data?.message || 'Failed to update device mode.',
       });
     }
   };
@@ -117,13 +117,13 @@ const BulkOperationModel = ({
 
   const handleNoticeSubmit = async () => {
     if (selectedDevices.length === 0) {
-      return toast.error("Validation Error", {
-        description: "Please select at least one device.",
+      return toast.error('Validation Error', {
+        description: 'Please select at least one device.',
       });
     }
     if (!message.trim()) {
-      toast("Validation Error", {
-        description: "Please enter a notice message.",
+      toast('Validation Error', {
+        description: 'Please enter a notice message.',
       });
       return;
     }
@@ -139,34 +139,34 @@ const BulkOperationModel = ({
       });
       if (!response) return;
 
-      if (durationType === "unlimited") {
+      if (durationType === 'unlimited') {
         setProcessing(true);
         await sendNoticeToSelectedDevice({
           deviceIds: selectedDevices,
           notice: message,
         }).unwrap();
-      } else if (durationType === "minutes") {
+      } else if (durationType === 'minutes') {
         setProcessing(true);
         await sendNoticeToSelectedDevice({
           deviceIds: selectedDevices,
           notice: message,
           duration: +durationMinutes,
         }).unwrap();
-      } else if (durationType === "datetime") {
+      } else if (durationType === 'datetime') {
         setProcessing(true);
         // get unix time from startDate and StartTime
         if (!startDate || !endDate) {
-          toast.error("Validation Error", {
-            description: "Please select start and end dates.",
+          toast.error('Validation Error', {
+            description: 'Please select start and end dates.',
           });
           return;
         }
 
         const startTimeInUnix = new Date(
-          `${format(startDate, "yyyy-MM-dd")}T${startTime}:00`
+          `${format(startDate, 'yyyy-MM-dd')}T${startTime}:00`
         ).getTime();
         const endTimeInUnix = new Date(
-          `${format(endDate, "yyyy-MM-dd")}T${endTime}:00`
+          `${format(endDate, 'yyyy-MM-dd')}T${endTime}:00`
         ).getTime();
 
         await sendScheduledNoticeToSelectedDevices({
@@ -179,7 +179,7 @@ const BulkOperationModel = ({
         // refetch();
       }
 
-      toast.success("Notice Sent", {
+      toast.success('Notice Sent', {
         description: `Notice message sent to device successfully.`,
       });
       setFilteredDevices?.(
@@ -196,36 +196,36 @@ const BulkOperationModel = ({
 
       // Reset form
       setSelectedDevices([]);
-      setOperation("notice");
-      setMode("clock");
-      setMessage("");
-      setDurationType("unlimited");
-      setDurationMinutes("");
+      setOperation('notice');
+      setMode('clock');
+      setMessage('');
+      setDurationType('unlimited');
+      setDurationMinutes('');
       setStartDate(undefined);
       setEndDate(undefined);
-      setStartTime("12:00");
-      setEndTime("12:00");
+      setStartTime('12:00');
+      setEndTime('12:00');
       setProcessing(false);
       onClose();
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error("Update Failed", {
-        description: error?.data?.message || "Failed to send notice.",
+      toast.error('Update Failed', {
+        description: error?.data?.message || 'Failed to send notice.',
       });
     }
   };
   return (
     <>
       <Button onClick={() => setIsOpen(true)} variant="outline">
-        <Settings className="w-4 h-4 mr-2" />
+        <Settings className="mr-2 h-4 w-4" />
         Bulk Operations
       </Button>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Settings className="w-5 h-5 text-primary" />
+              <Settings className="text-primary h-5 w-5" />
               Bulk Device Operations
             </DialogTitle>
           </DialogHeader>
@@ -236,21 +236,21 @@ const BulkOperationModel = ({
               <Label>Operation Type</Label>
               <RadioGroup
                 value={operation}
-                onValueChange={(value: "mode" | "notice") =>
+                onValueChange={(value: 'mode' | 'notice') =>
                   setOperation(value)
                 }
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="mode" id="mode" />
                   <Label htmlFor="mode" className="flex items-center gap-2">
-                    <Settings className="w-4 h-4" />
+                    <Settings className="h-4 w-4" />
                     Change Device Mode
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="notice" id="notice" />
                   <Label htmlFor="notice" className="flex items-center gap-2">
-                    <Send className="w-4 h-4" />
+                    <Send className="h-4 w-4" />
                     Send Notice Message
                   </Label>
                 </div>
@@ -258,10 +258,10 @@ const BulkOperationModel = ({
             </div>
 
             {/* Mode Selection (only for mode operation) */}
-            {operation === "mode" && <ModeType mode={mode} setMode={setMode} />}
+            {operation === 'mode' && <ModeType mode={mode} setMode={setMode} />}
 
             {/* Notice Message (only for notice operation) */}
-            {operation === "notice" && (
+            {operation === 'notice' && (
               <NoticeType
                 message={message}
                 setMessage={setMessage}
@@ -300,24 +300,24 @@ const BulkOperationModel = ({
               </Button>
               <Button
                 onClick={
-                  operation === "mode" ? handleModeSubmit : handleNoticeSubmit
+                  operation === 'mode' ? handleModeSubmit : handleNoticeSubmit
                 }
                 disabled={processing}
                 className="flex-1"
               >
                 {processing ? (
                   <>
-                    <Settings className="w-4 h-4 mr-2 animate-spin" />
+                    <Settings className="mr-2 h-4 w-4 animate-spin" />
                     Processing...
                   </>
                 ) : (
                   <>
-                    {operation === "mode" ? (
-                      <Settings className="w-4 h-4 mr-2" />
+                    {operation === 'mode' ? (
+                      <Settings className="mr-2 h-4 w-4" />
                     ) : (
-                      <Send className="w-4 h-4 mr-2" />
+                      <Send className="mr-2 h-4 w-4" />
                     )}
-                    {operation === "mode" ? "Change Mode" : "Send Notice"}
+                    {operation === 'mode' ? 'Change Mode' : 'Send Notice'}
                   </>
                 )}
               </Button>

@@ -1,27 +1,27 @@
-"use client";
-import { Label } from "@/components/ui/label";
+'use client';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Bell, Clock } from "lucide-react";
+} from '@/components/ui/select';
+import { Bell, Clock } from 'lucide-react';
 
 const ModeType = ({
   mode,
   setMode,
 }: {
-  mode: "clock" | "notice";
-  setMode: (mode: "clock" | "notice") => void;
+  mode: 'clock' | 'notice';
+  setMode: (mode: 'clock' | 'notice') => void;
 }) => {
   return (
     <div className="space-y-2">
       <Label htmlFor="mode-select">Device Mode</Label>
       <Select
         value={mode}
-        onValueChange={(value: "clock" | "notice") => setMode(value)}
+        onValueChange={(value: 'clock' | 'notice') => setMode(value)}
       >
         <SelectTrigger>
           <SelectValue />
@@ -29,13 +29,13 @@ const ModeType = ({
         <SelectContent>
           <SelectItem value="clock">
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
+              <Clock className="h-4 w-4" />
               Clock Mode
             </div>
           </SelectItem>
           <SelectItem value="notice">
             <div className="flex items-center gap-2">
-              <Bell className="w-4 h-4" />
+              <Bell className="h-4 w-4" />
               Notice Mode
             </div>
           </SelectItem>

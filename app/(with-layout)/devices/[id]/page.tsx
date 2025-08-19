@@ -1,5 +1,5 @@
-import { getDeviceById } from "@/app/actions";
-import SingleDevice from "@/components/devices/single-device";
+import { getDeviceById } from '@/app/actions';
+import SingleDevice from '@/components/devices/single-device';
 
 export const generateMetadata = async ({
   params,
@@ -13,12 +13,12 @@ export const generateMetadata = async ({
 
     return {
       title: data.name || data.id,
-      description: data.description || "Details of the device",
+      description: data.description || 'Details of the device',
     };
   } catch {
     return {
-      title: "Device Not Found",
-      description: "The requested device does not exist.",
+      title: 'Device Not Found',
+      description: 'The requested device does not exist.',
     };
   }
 };

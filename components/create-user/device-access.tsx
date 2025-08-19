@@ -1,11 +1,11 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { IDevice } from "@/lib/types";
-import { TableIcon } from "lucide-react";
-import { Badge } from "../ui/badge";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { IDevice } from '@/lib/types';
+import { TableIcon } from 'lucide-react';
+import { Badge } from '../ui/badge';
 const DeviceAccess = ({
   selectedDevices,
   devices,
@@ -21,7 +21,7 @@ const DeviceAccess = ({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <TableIcon className="w-5 h-5 text-primary" />
+          <TableIcon className="text-primary h-5 w-5" />
           Device Access
         </CardTitle>
       </CardHeader>
@@ -35,36 +35,36 @@ const DeviceAccess = ({
             onClick={handleSelectAllDevices}
           >
             {selectedDevices.length === devices.length
-              ? "Deselect All"
-              : "Select All"}
+              ? 'Deselect All'
+              : 'Select All'}
           </Button>
         </div>
 
-        <div className="space-y-3 max-h-64 overflow-y-auto">
+        <div className="max-h-64 space-y-3 overflow-y-auto">
           {devices.map((device) => (
             <div
               key={device._id}
-              className="flex items-start space-x-3 p-3 border rounded-lg"
+              className="flex items-start space-x-3 rounded-lg border p-3"
             >
               <Checkbox
                 id={device._id}
                 checked={selectedDevices.includes(device._id)}
                 onCheckedChange={() => handleDeviceToggle(device._id)}
               />
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <Label htmlFor={device._id} className="cursor-pointer">
-                  <div className="font-medium text-sm">{device.name}</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-sm font-medium">{device.name}</div>
+                  <div className="text-muted-foreground text-xs">
                     {device.location}
                   </div>
                   <Badge
                     variant={
-                      device.status === "online" ? "default" : "secondary"
+                      device.status === 'online' ? 'default' : 'secondary'
                     }
                     className={`mt-1 text-xs ${
-                      device.status === "online"
-                        ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
-                        : ""
+                      device.status === 'online'
+                        ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
+                        : ''
                     }`}
                   >
                     {device.status}
@@ -75,8 +75,8 @@ const DeviceAccess = ({
           ))}
         </div>
 
-        <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
-          <strong>{selectedDevices.length}</strong> of{" "}
+        <div className="text-muted-foreground bg-muted/50 rounded-lg p-3 text-sm">
+          <strong>{selectedDevices.length}</strong> of{' '}
           <strong>{devices.length}</strong> devices selected
         </div>
       </CardContent>

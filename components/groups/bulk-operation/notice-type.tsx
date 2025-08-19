@@ -1,10 +1,10 @@
-"use client";
-import TextField from "@/components/form/text-field";
+'use client';
+import TextField from '@/components/form/text-field';
 
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import DatetimeRange from "./datetime-range";
-import DurationMinutes from "./duration-minutes";
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import DatetimeRange from './datetime-range';
+import DurationMinutes from './duration-minutes';
 
 const NoticeType = ({
   message,
@@ -24,8 +24,8 @@ const NoticeType = ({
 }: {
   message: string;
   setMessage: (message: string) => void;
-  durationType: "unlimited" | "minutes" | "datetime";
-  setDurationType: (type: "unlimited" | "minutes" | "datetime") => void;
+  durationType: 'unlimited' | 'minutes' | 'datetime';
+  setDurationType: (type: 'unlimited' | 'minutes' | 'datetime') => void;
   durationMinutes: string;
   setDurationMinutes: (minutes: string) => void;
   startDate: Date | undefined;
@@ -48,7 +48,7 @@ const NoticeType = ({
           onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setMessage(e.target.value),
         }}
-        error={!message ? "Message is required" : ""}
+        error={!message ? 'Message is required' : ''}
       />
 
       {/* Duration Settings */}
@@ -56,7 +56,7 @@ const NoticeType = ({
         <Label>Display Duration</Label>
         <RadioGroup
           value={durationType}
-          onValueChange={(value: "unlimited" | "minutes" | "datetime") =>
+          onValueChange={(value: 'unlimited' | 'minutes' | 'datetime') =>
             setDurationType(value)
           }
         >
@@ -75,7 +75,7 @@ const NoticeType = ({
         </RadioGroup>
 
         {/* Minutes Input */}
-        {durationType === "minutes" && (
+        {durationType === 'minutes' && (
           <DurationMinutes
             durationMinutes={durationMinutes}
             setDurationMinutes={setDurationMinutes}
@@ -83,7 +83,7 @@ const NoticeType = ({
         )}
 
         {/* Date Time Range */}
-        {durationType === "datetime" && (
+        {durationType === 'datetime' && (
           <DatetimeRange
             endDate={endDate}
             setEndDate={setEndDate}

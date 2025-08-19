@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, Clock, Users } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Activity, Clock, Users } from 'lucide-react';
 
 export default function UserActivityPage() {
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
-          <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+        <h1 className="flex items-center gap-2 text-2xl font-bold sm:text-3xl">
+          <Activity className="text-primary h-6 w-6 sm:h-8 sm:w-8" />
           User Activity Logs
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -21,42 +21,42 @@ export default function UserActivityPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-primary" />
+            <Clock className="text-primary h-5 w-5" />
             Activity Tracking
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-12">
-            <div className="bg-primary/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-              <Activity className="w-12 h-12 text-primary" />
+          <div className="py-12 text-center">
+            <div className="bg-primary/10 mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full p-6">
+              <Activity className="text-primary h-12 w-12" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">
+            <h3 className="mb-2 text-xl font-semibold">
               User Activity Logs Coming Soon
             </h3>
-            <p className="text-muted-foreground max-w-md mx-auto">
+            <p className="text-muted-foreground mx-auto max-w-md">
               We{"'"}re developing comprehensive user activity tracking to
               monitor all user interactions, login sessions, device controls,
               and administrative actions for enhanced security and auditing.
             </p>
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <Users className="w-8 h-8 text-primary mx-auto mb-2" />
+            <div className="mx-auto mt-8 grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="bg-muted/50 rounded-lg p-4 text-center">
+                <Users className="text-primary mx-auto mb-2 h-8 w-8" />
                 <h4 className="font-medium">User Sessions</h4>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Login and logout tracking
                 </p>
               </div>
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <Activity className="w-8 h-8 text-primary mx-auto mb-2" />
+              <div className="bg-muted/50 rounded-lg p-4 text-center">
+                <Activity className="text-primary mx-auto mb-2 h-8 w-8" />
                 <h4 className="font-medium">Device Actions</h4>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Device control history
                 </p>
               </div>
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <Clock className="w-8 h-8 text-primary mx-auto mb-2" />
+              <div className="bg-muted/50 rounded-lg p-4 text-center">
+                <Clock className="text-primary mx-auto mb-2 h-8 w-8" />
                 <h4 className="font-medium">Audit Trail</h4>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Complete action timeline
                 </p>
               </div>

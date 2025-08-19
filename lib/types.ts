@@ -4,8 +4,8 @@ export interface IUser {
   first_name: string;
   last_name: string;
   address?: string;
-  role: "superadmin" | "admin" | "user";
-  status: "active" | "inactive";
+  role: 'superadmin' | 'admin' | 'user';
+  status: 'active' | 'inactive';
   allowed_devices: string[];
   last_login: string;
   notes?: string;
@@ -18,10 +18,10 @@ export interface IDevice {
   _id: string;
   id: string;
   name: string | null;
-  status: "online" | "offline";
+  status: 'online' | 'offline';
   location: string | null;
   uptime: number;
-  mode: "clock" | "notice";
+  mode: 'clock' | 'notice';
   last_seen: string;
   notice: string | null;
   duration: number | null; // duration in minutes, can be null

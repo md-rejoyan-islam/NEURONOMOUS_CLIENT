@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useProfileQuery } from "@/queries/auth";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { useProfileQuery } from '@/queries/auth';
 import {
   Activity,
   BarChart3,
@@ -18,10 +18,10 @@ import {
   UserCheck,
   Users,
   Zap,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 interface SidebarProps {
   className?: string;
@@ -37,65 +37,65 @@ export function DashboardSidebar({ className }: SidebarProps) {
 
   const navigationItems = [
     {
-      name: "Dashboard",
-      href: "/",
+      name: 'Dashboard',
+      href: '/',
       icon: Home,
-      roles: ["superadmin", "admin", "user"],
+      roles: ['superadmin', 'admin', 'user'],
     },
     {
-      name: "Groups",
-      href: "/groups",
+      name: 'Groups',
+      href: '/groups',
       icon: Group,
-      roles: ["superadmin"],
+      roles: ['superadmin'],
     },
     {
-      name: "Devices",
-      href: "/devices",
+      name: 'Devices',
+      href: '/devices',
       icon: Devices,
-      roles: ["superadmin", "admin", "user"],
+      roles: ['superadmin', 'admin', 'user'],
     },
     {
-      name: "Users",
-      href: "/users",
+      name: 'Users',
+      href: '/users',
       icon: Users,
-      roles: ["superadmin", "admin"],
+      roles: ['superadmin', 'admin'],
     },
     {
-      name: "Create User",
-      href: "/create-user",
+      name: 'Create User',
+      href: '/create-user',
       icon: UserCheck,
-      roles: ["superadmin"],
+      roles: ['superadmin'],
     },
     {
-      name: "Notifications",
-      href: "/notifications",
+      name: 'Notifications',
+      href: '/notifications',
       icon: Bell,
-      roles: ["superadmin", "admin", "user"],
+      roles: ['superadmin', 'admin', 'user'],
     },
     {
-      name: "Analytics",
-      href: "/analytics",
+      name: 'Analytics',
+      href: '/analytics',
       icon: BarChart3,
-      roles: ["superadmin", "admin"],
+      roles: ['superadmin', 'admin'],
     },
 
     {
-      name: "Activity Logs",
-      href: "/user-activity",
+      name: 'Activity Logs',
+      href: '/user-activity',
       icon: Activity,
-      roles: ["superadmin"],
+      roles: ['superadmin'],
     },
     {
-      name: "System Logs",
-      href: "/system-logs",
+      name: 'System Logs',
+      href: '/system-logs',
       icon: FileText,
-      roles: ["superadmin"],
+      roles: ['superadmin'],
     },
     {
-      name: "Profile",
-      href: "/profile",
+      name: 'Profile',
+      href: '/profile',
       icon: User,
-      roles: ["superadmin", "admin", "user"],
+      roles: ['superadmin', 'admin', 'user'],
     },
   ];
 
@@ -108,20 +108,20 @@ export function DashboardSidebar({ className }: SidebarProps) {
   return (
     <div
       className={cn(
-        "relative hidden md:flex flex-col h-full bg-card border-r transition-all duration-300",
-        collapsed ? "w-16" : "w-64",
+        'bg-card relative hidden h-full flex-col border-r transition-all duration-300 md:flex',
+        collapsed ? 'w-16' : 'w-64',
         className
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center justify-between border-b p-4">
         {!collapsed && (
           <Link href="/" className="block">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Zap className="w-4 h-4 text-primary-foreground" />
+              <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
+                <Zap className="text-primary-foreground h-4 w-4" />
               </div>
-              <span className="font-bold text-lg">IoT Hub</span>
+              <span className="text-lg font-bold">IoT Hub</span>
             </div>
           </Link>
         )}
@@ -140,19 +140,19 @@ export function DashboardSidebar({ className }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 space-y-1 p-4">
         {filteredItems.map((item) => {
           const Icon = item.icon;
           return (
             <Link key={item.href} href={item.href} className="block">
               <Button
-                variant={isActive(item.href) ? "secondary" : "ghost"}
+                variant={isActive(item.href) ? 'secondary' : 'ghost'}
                 className={cn(
-                  "w-full justify-start gap-3 h-10",
-                  collapsed && "px-2",
+                  'h-10 w-full justify-start gap-3',
+                  collapsed && 'px-2',
                   isActive(item.href) &&
-                    "bg-primary/10 text-primary hover:bg-primary/20",
-                  collapsed && "w-10"
+                    'bg-primary/10 text-primary hover:bg-primary/20',
+                  collapsed && 'w-10'
                 )}
               >
                 <Icon className="h-4 w-4 flex-shrink-0" />
@@ -164,21 +164,21 @@ export function DashboardSidebar({ className }: SidebarProps) {
       </nav>
 
       {/* User Info */}
-      <div className="p-4 border-t">
+      <div className="border-t p-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-            <span className="text-sm font-medium text-primary">
+          <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full">
+            <span className="text-primary text-sm font-medium">
               {user.first_name[0]}
               {user.last_name[0]}
             </span>
           </div>
           {!collapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium">
                 {user.first_name} {user.last_name}
               </p>
               <Badge variant="outline" className="text-xs">
-                {user.role === "superadmin" ? "Super Admin" : user.role}
+                {user.role === 'superadmin' ? 'Super Admin' : user.role}
               </Badge>
             </div>
           )}
