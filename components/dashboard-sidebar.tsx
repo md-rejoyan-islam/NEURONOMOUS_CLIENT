@@ -10,10 +10,11 @@ import {
   Bell,
   ChevronLeft,
   ChevronRight,
-  TabletsIcon as Devices,
+  Cpu,
   FileText,
-  Group,
-  Home,
+  HardDrive,
+  Layers,
+  LayoutDashboard,
   User,
   UserCheck,
   Users,
@@ -39,19 +40,19 @@ export function DashboardSidebar({ className }: SidebarProps) {
     {
       name: 'Dashboard',
       href: '/',
-      icon: Home,
+      icon: LayoutDashboard,
       roles: ['superadmin', 'admin', 'user'],
     },
     {
       name: 'Groups',
       href: '/groups',
-      icon: Group,
+      icon: Layers,
       roles: ['superadmin'],
     },
     {
       name: 'Devices',
       href: '/devices',
-      icon: Devices,
+      icon: Cpu,
       roles: ['superadmin', 'admin', 'user'],
     },
     {
@@ -59,6 +60,12 @@ export function DashboardSidebar({ className }: SidebarProps) {
       href: '/users',
       icon: Users,
       roles: ['superadmin', 'admin'],
+    },
+    {
+      name: 'Firmware',
+      href: '/firmware',
+      icon: HardDrive,
+      roles: ['superadmin'],
     },
     {
       name: 'Create User',
@@ -140,7 +147,7 @@ export function DashboardSidebar({ className }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-1 overflow-y-scroll p-4">
         {filteredItems.map((item) => {
           const Icon = item.icon;
           return (

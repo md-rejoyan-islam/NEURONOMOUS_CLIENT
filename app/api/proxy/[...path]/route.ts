@@ -140,6 +140,18 @@ async function handleProxyRequest(
     }
   }
 
+  // Check the response's content type
+  const contentType = response.headers.get('content-type');
+
+  // If the content is not JSON, stream it directly back to the client
+  if (contentType && !contentType.includes('application/json')) {
+    return new NextResponse(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+    });
+  }
+
   // response body
   const responseBody = await response.json();
 
@@ -176,7 +188,7 @@ async function fetchResource({
 }) {
   // Create a Headers instance and set Content-Type
   const headers = new Headers(fetchHeaders);
-  headers.set('Content-Type', 'application/json');
+  // headers.set('Content-Type', 'application/json');
 
   return fetch(url, {
     method,

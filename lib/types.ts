@@ -14,6 +14,16 @@ export interface IUser {
   group?: string; // Group ID if the user is part of a group
 }
 
+export interface IFirmware {
+  _id: string;
+  version: number;
+  type: 'single' | 'double';
+  file: Buffer;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface IDevice {
   _id: string;
   id: string;

@@ -200,6 +200,28 @@ export const sendNoticeSchema = z.object({
   endDate: z.date().optional(),
   endTime: z.string().optional(),
 });
+// New firmware validation schema
+export const firmwareSchema = z.object({
+  version: z
+    .string()
+    .min(1, 'Version is required')
+    .regex(/^\d+\.\d+\.\d+$/, 'Version must be in format x.x.x (e.g., 2.1.0)'),
+  type: z.enum(['single', 'double'], {
+    message: 'Board type is required',
+  }),
+  description: z.string().min(1, 'Description is required'),
+  file: z
+    .any()
+    .refine((file) => file instanceof File, 'File is required')
+    .refine(
+      (file) => file?.name?.endsWith('.pdf') || file?.name?.endsWith('.bin'),
+      // (file) => file?.name?.endsWith('.bin'),
+      'Only .bin files are allowed'
+    )
+    .refine((file) => {
+      return file?.size <= 0.5 * 1024 * 1024;
+    }, 'File size must be less than 0.5 MB'),
+});
 
 // Type exports
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -223,3 +245,4 @@ export type AddDeviceToGroupInput = z.infer<typeof addDeviceToGroupSchema>;
 export type UserCreateInput = z.infer<typeof userCreateSchema>;
 export type AuthChangePasswordInput = z.infer<typeof authChangePasswordSchema>;
 export type UserUpdateInput = z.infer<typeof userUpdateSchema>;
+export type FirmwareFormData = z.infer<typeof firmwareSchema>;

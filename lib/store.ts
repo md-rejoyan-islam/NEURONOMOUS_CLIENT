@@ -1,6 +1,7 @@
 import { analyticsApi } from '@/queries/analytics';
 import { authApi } from '@/queries/auth';
 import { devicesApi } from '@/queries/devices';
+import { firmwareApi } from '@/queries/firmware';
 import { groupApi } from '@/queries/group';
 import { notificationsApi } from '@/queries/notifications';
 import { usersApi } from '@/queries/users';
@@ -15,19 +16,19 @@ export const store = configureStore({
     [analyticsApi.reducerPath]: analyticsApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [groupApi.reducerPath]: groupApi.reducer,
+    [firmwareApi.reducerPath]: firmwareApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
-      },
+      serializableCheck: false,
     }).concat(
       devicesApi.middleware,
       usersApi.middleware,
       notificationsApi.middleware,
       analyticsApi.middleware,
       authApi.middleware,
-      groupApi.middleware
+      groupApi.middleware,
+      firmwareApi.middleware
     ),
 });
 
