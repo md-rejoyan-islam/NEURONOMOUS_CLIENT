@@ -1,25 +1,47 @@
-import { useLazyDownloadFirmwareQuery } from '@/queries/firmware';
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { DropdownMenuItem } from '../ui/dropdown-menu';
 
 const DownloadFirmware = ({ id }: { id: string }) => {
-  const [download] = useLazyDownloadFirmwareQuery();
-
   const downloadFirmware = async () => {
     try {
-      const data = await download(id).unwrap();
-      if (data) {
-        const blob = new Blob([data]);
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `firmware-${id}.bin`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+      const response = await fetch(
+        `/api/proxy/api/v1/firmwares/${id}/download`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/octet-stream',
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error('Failed to download firmware');
       }
+
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `firmware-${id}.bin`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      //   const data = await download(id).unwrap();
+      //   if (data) {
+      //     const blob = new Blob([data]);
+      //     const url = window.URL.createObjectURL(blob);
+      //     const link = document.createElement('a');
+      //     link.href = url;
+      //     link.setAttribute('download', `firmware-${id}.bin`);
+      //     document.body.appendChild(link);
+      //     link.click();
+      //     document.body.removeChild(link);
+      //     window.URL.revokeObjectURL(url);
+      //   }
       toast.success('Download successful', {
         description: `Firmware ${id} has been downloaded.`,
       });
