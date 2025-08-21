@@ -1,6 +1,5 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -11,7 +10,7 @@ import {
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { useProfileQuery } from '@/queries/auth';
-import { LogOut, Menu, Settings, Shield, Zap } from 'lucide-react';
+import { LogOut, Menu, Settings, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { redirect, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -24,7 +23,8 @@ export function MobileDrawer() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) =>
+    pathname.split('/')[1] === path.split('/')[1];
 
   const filteredItems = navigationItems.filter(
     (item) => user && item.roles.includes(user.role)
@@ -62,27 +62,8 @@ export function MobileDrawer() {
         </SheetHeader>
 
         <div className="mt-0 space-y-6 overflow-scroll px-1 pb-4">
-          {/* User Info */}
-          <div className="bg-muted/50 flex items-center gap-3 rounded-lg px-2 py-2">
-            <div className="bg-primary/10 rounded-full p-2">
-              <Shield className="text-primary h-5 w-5" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium capitalize">
-                {user?.first_name} {user?.last_name}
-              </p>
-              <p className="text-muted-foreground truncate text-xs">
-                {user?.email}
-              </p>
-              <Badge variant="outline" className="mt-1 text-xs capitalize">
-                {user?.role === 'superadmin' ? 'Super Admin' : user?.role}
-              </Badge>
-            </div>
-          </div>
-
           {/* Navigation */}
           <div className=" ">
-            <h3 className="mb-3 px-2 text-sm font-semibold">Navigation</h3>
             <div className="space-y-1 overflow-y-scroll">
               {filteredItems.map((item) => {
                 const Icon = item.icon;
@@ -94,7 +75,7 @@ export function MobileDrawer() {
                       'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors',
                       isActive(item.href)
                         ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        : 'text-muted-foreground hover:bg-primary/10 hover:text-foreground'
                     )}
                     onClick={() => setOpen(false)}
                   >

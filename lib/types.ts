@@ -39,6 +39,7 @@ export interface IDevice {
   end_time: number | null; // Unix timestamp in milliseconds, can be null
   free_heap: number;
   allowed_users: string[]; // Array of user IDs who can access this device
+  version: string; // Version of the device firmware
   history: {
     message: string;
     timestamp: number;

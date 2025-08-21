@@ -16,7 +16,8 @@ export function DashboardSidebar({ className }: { className?: string }) {
 
   const { data: user } = useProfileQuery();
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) =>
+    pathname.split('/')[1] === path.split('/')[1];
 
   const filteredItems = navigationItems.filter(
     (item) => user && item.roles.includes(user.role)

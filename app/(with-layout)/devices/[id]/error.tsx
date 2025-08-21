@@ -1,10 +1,11 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-const DeviceNotFound = () => {
+const Error = () => {
   return (
-    <div className="p-4 sm:p-6">
+    <div className="flex h-full items-center justify-center p-4 sm:p-6">
       <div className="py-12 text-center">
         <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
         <h3 className="mb-2 text-lg font-medium">Device not found</h3>
@@ -22,4 +23,4 @@ const DeviceNotFound = () => {
   );
 };
 
-export default DeviceNotFound;
+export default Error;
