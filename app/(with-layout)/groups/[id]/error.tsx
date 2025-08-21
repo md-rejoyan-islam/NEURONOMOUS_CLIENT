@@ -1,9 +1,11 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-const GroupNotFound = () => {
+
+const GroupError = () => {
   return (
-    <div className="p-4 sm:p-6">
+    <div className="flex h-full flex-col items-center justify-center p-4 sm:p-6">
       <div className="py-12 text-center">
         <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
         <h3 className="mb-2 text-lg font-medium">Group not found</h3>
@@ -22,4 +24,4 @@ const GroupNotFound = () => {
   );
 };
 
-export default GroupNotFound;
+export default GroupError;

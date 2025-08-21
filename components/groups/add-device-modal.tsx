@@ -11,7 +11,7 @@ import {
 } from '@/lib/validations';
 import { useAddDeviceToGroupMutation } from '@/queries/group';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Wifi } from 'lucide-react';
+import { PackagePlus, Plus, Wifi } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -40,7 +40,7 @@ const AddDeviceModal = ({
     setIsOpen(false);
   };
 
-  const [addDevice] = useAddDeviceToGroupMutation();
+  const [addDevice, { isLoading }] = useAddDeviceToGroupMutation();
 
   const onSubmit = async (data: AddDeviceToGroupInput) => {
     try {
@@ -69,18 +69,15 @@ const AddDeviceModal = ({
 
   return (
     <>
-      <Button
-        onClick={() => setIsOpen(true)}
-        className="bg-green-600 hover:bg-green-700"
-      >
-        <Plus className="mr-2 h-4 w-4" />
+      <Button onClick={() => setIsOpen(true)}>
+        <PackagePlus className="mr-2 h-4 w-4" />
         Add Device
       </Button>
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
+          <DialogHeader className="pb-3">
             <DialogTitle className="flex items-center gap-2">
-              <Plus className="h-5 w-5 text-green-600" />
+              <PackagePlus className="h-5 w-5 text-green-600" />
               Add New Device
             </DialogTitle>
           </DialogHeader>
@@ -94,6 +91,7 @@ const AddDeviceModal = ({
                 type="text"
                 error={errors.deviceId?.message}
                 props={register('deviceId')}
+                disabled={isLoading}
                 isOptional={false}
               />
               <p className="text-muted-foreground text-xs">
@@ -107,6 +105,7 @@ const AddDeviceModal = ({
                 placeholder="Enter device name"
                 type="text"
                 error={errors.name?.message}
+                disabled={isLoading}
                 props={register('name')}
                 isOptional={false}
               />
@@ -121,7 +120,7 @@ const AddDeviceModal = ({
               type="text"
               error={errors.location?.message}
               props={register('location')}
-              isOptional={true}
+              disabled={isLoading}
               placeholder="e.g. Living Room, Office"
             />
 
@@ -152,11 +151,7 @@ const AddDeviceModal = ({
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={saving}
-                className="flex-1 bg-green-600 hover:bg-green-700"
-              >
+              <Button type="submit" disabled={saving} className="flex-1">
                 {saving ? (
                   <>
                     <Plus className="mr-2 h-4 w-4 animate-pulse" />

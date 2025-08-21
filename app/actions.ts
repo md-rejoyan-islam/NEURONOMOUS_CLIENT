@@ -51,6 +51,25 @@ export const getDeviceById = async (id: string) => {
   return result.data;
 };
 
+export const getUserById = async (id: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await getCookie('accessToken')}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch user');
+  }
+  const result = await res.json();
+  return result.data;
+};
+
 export const getCookie = async (name: string) => {
   const cookieStore = await cookies();
   const cookie = cookieStore.get(name);

@@ -26,7 +26,7 @@ interface CreateAdminModalProps {
   onClose: () => void;
   devices: IDevice[];
   groupId: string;
-  groupUserRefetch: () => void;
+  groupUserRefetch?: () => void;
 }
 
 export function CreateUserModal({
@@ -86,7 +86,7 @@ export function CreateUserModal({
       }).unwrap();
 
       if (result?.success) {
-        groupUserRefetch();
+        groupUserRefetch?.();
         reset();
         onClose();
         toast.success('User Created Successfully', {

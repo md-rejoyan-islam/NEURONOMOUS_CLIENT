@@ -4,113 +4,32 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useProfileQuery } from '@/queries/auth';
-import {
-  Activity,
-  BarChart3,
-  Bell,
-  ChevronLeft,
-  ChevronRight,
-  Cpu,
-  FileText,
-  HardDrive,
-  Layers,
-  LayoutDashboard,
-  User,
-  UserCheck,
-  Users,
-  Zap,
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import { useState } from 'react';
+import navigationItems from './navigation-items';
 
-interface SidebarProps {
-  className?: string;
-}
+export function DashboardSidebar({ className }: { className?: string }) {
+  const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
 
-export function DashboardSidebar({ className }: SidebarProps) {
   const { data: user } = useProfileQuery();
 
-  const [collapsed, setCollapsed] = useState(false);
-  const pathname = usePathname();
-
   const isActive = (path: string) => pathname === path;
-
-  const navigationItems = [
-    {
-      name: 'Dashboard',
-      href: '/',
-      icon: LayoutDashboard,
-      roles: ['superadmin', 'admin', 'user'],
-    },
-    {
-      name: 'Groups',
-      href: '/groups',
-      icon: Layers,
-      roles: ['superadmin'],
-    },
-    {
-      name: 'Devices',
-      href: '/devices',
-      icon: Cpu,
-      roles: ['superadmin', 'admin', 'user'],
-    },
-    {
-      name: 'Users',
-      href: '/users',
-      icon: Users,
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Firmware',
-      href: '/firmware',
-      icon: HardDrive,
-      roles: ['superadmin'],
-    },
-    {
-      name: 'Create User',
-      href: '/create-user',
-      icon: UserCheck,
-      roles: ['superadmin'],
-    },
-    {
-      name: 'Notifications',
-      href: '/notifications',
-      icon: Bell,
-      roles: ['superadmin', 'admin', 'user'],
-    },
-    {
-      name: 'Analytics',
-      href: '/analytics',
-      icon: BarChart3,
-      roles: ['superadmin', 'admin'],
-    },
-
-    {
-      name: 'Activity Logs',
-      href: '/user-activity',
-      icon: Activity,
-      roles: ['superadmin'],
-    },
-    {
-      name: 'System Logs',
-      href: '/system-logs',
-      icon: FileText,
-      roles: ['superadmin'],
-    },
-    {
-      name: 'Profile',
-      href: '/profile',
-      icon: User,
-      roles: ['superadmin', 'admin', 'user'],
-    },
-  ];
 
   const filteredItems = navigationItems.filter(
     (item) => user && item.roles.includes(user.role)
   );
 
-  if (!user) return null;
+  if (
+    user &&
+    navigationItems.some(
+      (item) => item.href === pathname && !item.roles.includes(user.role)
+    )
+  ) {
+    redirect('/');
+  }
 
   return (
     <div
@@ -175,17 +94,17 @@ export function DashboardSidebar({ className }: SidebarProps) {
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full">
             <span className="text-primary text-sm font-medium">
-              {user.first_name[0]}
-              {user.last_name[0]}
+              {user?.first_name[0]}
+              {user?.last_name[0]}
             </span>
           </div>
           {!collapsed && (
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">
-                {user.first_name} {user.last_name}
+              <p className="truncate text-sm font-medium capitalize">
+                {user?.first_name} {user?.last_name}
               </p>
-              <Badge variant="outline" className="text-xs">
-                {user.role === 'superadmin' ? 'Super Admin' : user.role}
+              <Badge variant="outline" className="text-xs capitalize">
+                {user?.role === 'superadmin' ? 'Super Admin' : user?.role}
               </Badge>
             </div>
           )}

@@ -32,7 +32,9 @@ export function DashboardHeader() {
   const handleLogout = async () => {
     await logout();
     clientLogout();
-    toast.success('Logged out successfully');
+    toast.success('Logged out', {
+      description: 'You have been logged out successfully.',
+    });
     router.push('/login');
   };
 
@@ -61,7 +63,7 @@ export function DashboardHeader() {
       <div className="flex h-full items-center justify-between px-4 sm:px-6">
         {/* Mobile Menu & Search */}
         <div className="flex max-w-md flex-1 items-center gap-4">
-          <MobileDrawer user={user} />
+          <MobileDrawer />
           <div className="relative hidden w-full sm:block">
             <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
@@ -136,7 +138,7 @@ export function DashboardHeader() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">
+                  <p className="text-sm font-medium capitalize">
                     {user?.first_name} {user?.last_name}
                   </p>
                   <p className="text-muted-foreground text-xs">{user?.email}</p>

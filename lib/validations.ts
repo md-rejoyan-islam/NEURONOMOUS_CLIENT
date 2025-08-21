@@ -106,13 +106,10 @@ export const userSchema = z.object({
 export const userUpdateSchema = z.object({
   first_name: z.string().min(2, 'First name must be at least 2 characters'),
   last_name: z.string().min(2, 'Last name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  role: z.enum(['user', 'admin', 'superAdmin']),
-  status: z.enum(['active', 'inactive', 'banned']),
+  email: z.email('Invalid email address'),
   phone: z.string().optional(),
   notes: z.string().optional(),
-  deviceAccess: z.array(z.string()).min(1, 'Select at least one device'),
-  group: z.string().optional(), // Group ID if the user is part of a group
+  address: z.string().optional(),
 });
 
 export const createUserSchema = z.object({

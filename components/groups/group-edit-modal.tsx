@@ -22,7 +22,6 @@ const GroupEditModal = ({
 }) => {
   const [group, setGroup] = useState({ _id, name, description });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
   const {
     register,
     handleSubmit,
@@ -37,11 +36,10 @@ const GroupEditModal = ({
     },
   });
 
-  const [updateGroupById] = useUpdateGroupByIdMutation();
+  const [updateGroupById, { isLoading }] = useUpdateGroupByIdMutation();
 
   const onSubmit = async (data: GroupInput) => {
     try {
-      setSaving(true);
       const response = await updateGroupById({
         id: group._id,
         data: {
@@ -63,8 +61,6 @@ const GroupEditModal = ({
       toast.error('Group Update Failed', {
         description: error?.data?.message || 'Failed to update group.',
       });
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -83,7 +79,7 @@ const GroupEditModal = ({
         variant="ghost"
         size="sm"
         onClick={() => setIsModalOpen(true)}
-        className="h-8 w-8 p-0"
+        className="bg-primary/5 hover:bg-primary/10 h-8 w-8 p-2 dark:text-white/70 dark:hover:text-white"
       >
         <Edit className="h-4 w-4" />
       </Button>
@@ -106,7 +102,7 @@ const GroupEditModal = ({
               props={register('group_name')}
               isOptional={false}
               name="groupName"
-              disabled={saving}
+              disabled={isLoading}
             />
 
             <TextField
@@ -115,7 +111,7 @@ const GroupEditModal = ({
               placeholder="Brief description of this group..."
               props={register('group_description')}
               error={errors.group_description?.message}
-              disabled={saving}
+              disabled={isLoading}
             />
 
             <div className="flex gap-3 pt-4">
@@ -124,16 +120,12 @@ const GroupEditModal = ({
                 variant="outline"
                 onClick={closeModal}
                 className="flex-1"
-                disabled={saving}
+                disabled={isLoading}
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={saving}
-                className={`flex-1 bg-green-600 hover:bg-green-700`}
-              >
-                {saving ? (
+              <Button type="submit" disabled={isLoading} className={`flex-1`}>
+                {isLoading ? (
                   <>
                     <Plus className="mr-2 h-4 w-4 animate-pulse" />
                     Updating...

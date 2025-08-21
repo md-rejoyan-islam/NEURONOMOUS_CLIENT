@@ -1,7 +1,4 @@
 'use client';
-import { Plus } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '../ui/button';
 
 import {
   CreateGroupWithAdminInput,
@@ -9,16 +6,19 @@ import {
 } from '@/lib/validations';
 import { useAddAdminWithGroupMutation } from '@/queries/group';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FolderPlus, Plus } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import InputField from '../form/input-field';
 import PasswordField from '../form/password-field';
 import TextField from '../form/text-field';
+import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 
 const GroupCreateModal = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -31,29 +31,22 @@ const GroupCreateModal = () => {
     },
   });
 
-  const [addAdminWithGroup] = useAddAdminWithGroupMutation();
+  const [addAdminWithGroup, { isLoading }] = useAddAdminWithGroupMutation();
   const onSubmit = async (data: CreateGroupWithAdminInput) => {
     try {
-      setSaving(true);
-      const response = await addAdminWithGroup(data).unwrap();
-      console.log(response);
+      await addAdminWithGroup(data).unwrap();
 
-      if (response.success) {
-        toast.success('Group Created', {
-          description: `Group ${data.group_name} has been created with admin ${data.first_name} ${data.last_name}.`,
-        });
-        reset();
-        setIsCreateModalOpen(false);
-      }
+      toast.success('Group Created', {
+        description: `Group ${data.group_name} has been created with admin ${data.first_name} ${data.last_name}.`,
+      });
+      reset();
+      setIsCreateModalOpen(false);
+
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log('Error creating group:', error);
-
       toast.error('Group Creation Failed', {
         description: error?.data?.message || 'Invalid email or password.',
       });
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -65,9 +58,9 @@ const GroupCreateModal = () => {
     <>
       <Button
         onClick={() => setIsCreateModalOpen(true)}
-        className="w-full bg-green-600 hover:bg-green-700 sm:w-auto"
+        className="w-full sm:w-auto"
       >
-        <Plus className="mr-2 h-4 w-4" />
+        <FolderPlus className="h-4 w-4" />
         Create Group
       </Button>
       <Dialog open={isCreateModalOpen} onOpenChange={closeModal}>
@@ -88,6 +81,7 @@ const GroupCreateModal = () => {
               props={register('group_name')}
               isOptional={false}
               name="groupName"
+              disabled={isLoading}
             />
 
             <TextField
@@ -96,6 +90,7 @@ const GroupCreateModal = () => {
               label="Description"
               props={register('group_description')}
               error={errors.group_description?.message}
+              disabled={isLoading}
             />
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -107,7 +102,7 @@ const GroupCreateModal = () => {
                 props={register('first_name')}
                 isOptional={false}
                 name="first_name"
-                disabled={saving}
+                disabled={isLoading}
               />
               <InputField
                 label="Last Name"
@@ -117,7 +112,7 @@ const GroupCreateModal = () => {
                 props={register('last_name')}
                 isOptional={false}
                 name="last_name"
-                disabled={saving}
+                disabled={isLoading}
               />
             </div>
             <InputField
@@ -127,7 +122,7 @@ const GroupCreateModal = () => {
               error={errors.email?.message}
               props={register('email')}
               isOptional={false}
-              disabled={saving}
+              disabled={isLoading}
               name="email"
             />
 
@@ -136,7 +131,7 @@ const GroupCreateModal = () => {
               placeholder="Enter admin password"
               error={errors.password?.message}
               props={register('password')}
-              disabled={saving}
+              disabled={isLoading}
             />
 
             <div className="flex gap-3 pt-4">
@@ -145,23 +140,19 @@ const GroupCreateModal = () => {
                 variant="outline"
                 onClick={closeModal}
                 className="flex-1"
-                disabled={saving}
+                disabled={isLoading}
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={saving}
-                className={`flex-1 bg-green-600 hover:bg-green-700`}
-              >
-                {saving ? (
+              <Button type="submit" disabled={isLoading} className={`flex-1`}>
+                {isLoading ? (
                   <>
-                    <Plus className="mr-2 h-4 w-4 animate-pulse" />
+                    <FolderPlus className="mr-2 h-4 w-4 animate-pulse" />
                     Creating...
                   </>
                 ) : (
                   <>
-                    <Plus className="mr-2 h-4 w-4" />
+                    <FolderPlus className="mr-2 h-4 w-4" />
                     Create Group
                   </>
                 )}

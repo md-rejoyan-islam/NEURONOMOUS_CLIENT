@@ -9,84 +9,22 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { IUser } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import {
-  Activity,
-  BarChart3,
-  Bell,
-  TabletsIcon as Devices,
-  FileText,
-  Home,
-  LogOut,
-  Menu,
-  Settings,
-  Shield,
-  UserCheck,
-  Users,
-  Zap,
-} from 'lucide-react';
+import { useProfileQuery } from '@/queries/auth';
+import { LogOut, Menu, Settings, Shield, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { redirect, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import navigationItems from '../navigation-items';
 
-export function MobileDrawer({ user }: { user?: IUser | null }) {
+export function MobileDrawer() {
+  const { data: user } = useProfileQuery();
+
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
   const isActive = (path: string) => pathname === path;
-
-  const navigationItems = [
-    {
-      name: 'Dashboard',
-      href: '/',
-      icon: Home,
-      roles: ['superadmin', 'admin', 'user'],
-    },
-    {
-      name: 'Devices',
-      href: '/devices',
-      icon: Devices,
-      roles: ['superadmin', 'admin', 'user'],
-    },
-    {
-      name: 'Users',
-      href: '/users',
-      icon: Users,
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Analytics',
-      href: '/analytics',
-      icon: BarChart3,
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Notifications',
-      href: '/notifications',
-      icon: Bell,
-      roles: ['superadmin', 'admin', 'user'],
-    },
-    {
-      name: 'Activity Logs',
-      href: '/user-activity',
-      icon: Activity,
-      roles: ['superadmin'],
-    },
-    {
-      name: 'System Logs',
-      href: '/system-logs',
-      icon: FileText,
-      roles: ['superadmin'],
-    },
-    {
-      name: 'Create User',
-      href: '/create-user',
-      icon: UserCheck,
-      roles: ['superadmin'],
-    },
-  ];
 
   const filteredItems = navigationItems.filter(
     (item) => user && item.roles.includes(user.role)
@@ -97,7 +35,14 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
     router.push('/login');
   };
 
-  if (!user) return null;
+  if (
+    user &&
+    navigationItems.some(
+      (item) => item.href === pathname && !item.roles.includes(user.role)
+    )
+  ) {
+    redirect('/');
+  }
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -123,14 +68,14 @@ export function MobileDrawer({ user }: { user?: IUser | null }) {
               <Shield className="text-primary h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">
-                {user.first_name} {user.last_name}
+              <p className="truncate text-sm font-medium capitalize">
+                {user?.first_name} {user?.last_name}
               </p>
               <p className="text-muted-foreground truncate text-xs">
-                {user.email}
+                {user?.email}
               </p>
-              <Badge variant="outline" className="mt-1 text-xs">
-                {user.role === 'superadmin' ? 'Super Admin' : user.role}
+              <Badge variant="outline" className="mt-1 text-xs capitalize">
+                {user?.role === 'superadmin' ? 'Super Admin' : user?.role}
               </Badge>
             </div>
           </div>

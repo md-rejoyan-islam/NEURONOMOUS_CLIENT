@@ -1,3 +1,4 @@
+import { Settings, Wifi, WifiOff, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const dateTimeDurationValidation = ({
@@ -67,6 +68,19 @@ export const dateTimeDurationValidation = ({
     }
   }
   return true;
+};
+
+export const getStatusIcon = (status: string) => {
+  switch (status) {
+    case 'online':
+      return <Wifi className="h-4 w-4" />;
+    case 'offline':
+      return <WifiOff className="h-4 w-4" />;
+    case 'maintenance':
+      return <Settings className="h-4 w-4" />;
+    default:
+      return <XCircle className="h-4 w-4" />;
+  }
 };
 
 export const getRoleColor = (role: 'admin' | 'superadmin' | 'user') => {

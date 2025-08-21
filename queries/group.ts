@@ -63,13 +63,18 @@ export const groupApi = createApi({
             ]
           : ['Group'],
     }),
-    addAdminWithGroup: builder.mutation<IGroupResponse, IAddGroupRequest>({
+    addAdminWithGroup: builder.mutation<
+      IGroupWithPopulatedData[],
+      IAddGroupRequest
+    >({
       query: (payload) => ({
         url: '/users/create-admin',
         method: 'POST',
         body: payload,
       }),
       invalidatesTags: ['Group'],
+      transformResponse: (response) =>
+        (response as ISuccessResponse<IGroupWithPopulatedData[]>).data,
     }),
     updateGroupById: builder.mutation<
       IGroupResponse,
@@ -145,12 +150,27 @@ export const groupApi = createApi({
     //   (response as ISuccessResponse<IUse    []>).data,
     // invalidatesTags
     getAllGroupDevices: builder.query<IDevice[], string>({
-      query: (id) => ({
-        url: `/groups/${id}/devices`,
-        method: 'GET',
-      }),
+      query: (id) => {
+        console.log('Fetching devices for group ID:', id);
+
+        return {
+          url: `/groups/${id}/devices`,
+          method: 'GET',
+        };
+      },
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice[]>).data,
+    }),
+    // remove a device from group
+    removeDeviceFromGroup: builder.mutation<
+      void,
+      { id: string; deviceId: string }
+    >({
+      query: ({ id, deviceId }) => ({
+        url: `/groups/${id}/remove-device/${deviceId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
     }),
   }),
 });
@@ -164,4 +184,5 @@ export const {
   useGetAllUsersInGroupQuery,
   useAddUserToGroupWithDevicesMutation,
   useGetAllGroupDevicesQuery,
+  useRemoveDeviceFromGroupMutation,
 } = groupApi;

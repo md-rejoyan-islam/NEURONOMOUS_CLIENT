@@ -2,13 +2,18 @@
 
 import { useProfileQuery } from '@/queries/auth';
 import { Loader2 } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 export function AuthGuard({
   children,
 }: {
   readonly children: React.ReactNode;
 }) {
-  const { isLoading } = useProfileQuery();
+  const { isLoading, error } = useProfileQuery();
+
+  if (error) {
+    redirect('/login');
+  }
 
   if (isLoading) {
     return (

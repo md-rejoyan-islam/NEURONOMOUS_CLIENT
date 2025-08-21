@@ -217,7 +217,11 @@ const BulkOperationModel = ({
   };
   return (
     <>
-      <Button onClick={() => setIsOpen(true)} variant="outline">
+      <Button
+        onClick={() => setIsOpen(true)}
+        variant="outline"
+        disabled={devices.length === 0}
+      >
         <Settings className="mr-2 h-4 w-4" />
         Bulk Operations
       </Button>

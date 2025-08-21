@@ -95,6 +95,29 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ['User'],
     }),
+    updateUserById: builder.mutation<
+      void,
+      {
+        userId: string;
+        data: {
+          first_name?: string;
+          last_name?: string;
+          email?: string;
+          address?: string;
+          phone?: string;
+          notes?: string;
+        };
+      }
+    >({
+      query: ({ userId, data }) => ({
+        url: `/users/${userId}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'User', id: userId },
+      ],
+    }),
   }),
 });
 
@@ -105,4 +128,5 @@ export const {
   useUnbanUserByIdMutation,
   useChangeUserPasswordByIdMutation,
   useGetUserByIdQuery,
+  useUpdateUserByIdMutation,
 } = usersApi;

@@ -1,13 +1,11 @@
 'use client';
 import SimpleSummaryCard from '@/components/cards/simple-summary-card';
 import AddDeviceModal from '@/components/groups/add-device-modal';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import UsersTable from '@/components/users/users-table';
 import { IDevice } from '@/lib/types';
-import { formatLastSeen, formatUptime } from '@/lib/utils';
 import {
   useGetAllUsersInGroupQuery,
   useGetGroupdByIdQuery,
@@ -15,18 +13,17 @@ import {
 import {
   ArrowLeft,
   Bell,
-  Clock,
-  Plus,
   Search,
   TabletsIcon,
+  UserPlus,
   Wifi,
   WifiOff,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import SmallLoading from '../loading/small-loading';
-import GroupNotFound from '../not-found/group-not-found';
+import GroupSkeleton from '../loading/group-skeleton';
 import BulkOperationModel from './bulk-operation-model';
+import SingleGroupDevice from './single-group-device';
 
 const SingleGroupComponent = ({ _id }: { _id: string }) => {
   const {
@@ -68,11 +65,11 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
   }, [group?.devices]);
 
   if (isLoading || isUserLoading) {
-    return <SmallLoading />;
+    return <GroupSkeleton />;
   }
 
   if (error) {
-    return <GroupNotFound />;
+    throw new Error('Failed to fetch group data');
   }
 
   return (
@@ -91,16 +88,14 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
               <TabletsIcon className="text-primary h-6 w-6 sm:h-8 sm:w-8" />
               {group?.name}
             </h1>
-            <p className="text-muted-foreground mt-1">
-              {`Devices in ${group?.name} group`}
-            </p>
+
             <p className="text-muted-foreground mt-1">{group?.description}</p>
           </div>
           <div className="flex gap-2">
             <AddDeviceModal groupId={_id as string} />
             <Link href={'/create-user'}>
-              <Button className="w-full bg-green-600 hover:bg-green-700 sm:w-auto">
-                <Plus className="mr-2 h-4 w-4" />
+              <Button className="w-full sm:w-auto">
+                <UserPlus className="mr-2 h-4 w-4" />
                 Create User
               </Button>
             </Link>
@@ -170,6 +165,7 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
                   <Input
                     placeholder="Search devices..."
                     value={searchTerm}
+                    disabled={group?.devices.length === 0}
                     onChange={(e) => handleSearch(e.target.value)}
                     className="w-full pl-10 sm:w-64"
                   />
@@ -180,103 +176,11 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
           <CardContent>
             <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredDevices.map((device) => (
-                <Card
+                <SingleGroupDevice
                   key={device.id}
-                  className="transition-shadow duration-200 hover:shadow-lg"
-                >
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="min-w-0 flex-1">
-                        <CardTitle className="truncate text-lg font-semibold">
-                          {device.name}
-                        </CardTitle>
-                        <p className="text-muted-foreground text-sm">
-                          {device.id}
-                        </p>
-                      </div>
-                      <div className="ml-2 flex items-center gap-2">
-                        {device.status === 'online' ? (
-                          <Wifi className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <WifiOff className="h-4 w-4 text-red-500" />
-                        )}
-                        <Badge
-                          variant={
-                            device.status === 'online'
-                              ? 'default'
-                              : 'destructive'
-                          }
-                          className={
-                            device.status === 'online'
-                              ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                              : ''
-                          }
-                        >
-                          {device.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground text-sm">
-                        Mode:
-                      </span>
-                      <div className="flex items-center gap-1">
-                        {device.mode === 'clock' ? (
-                          <Clock className="h-4 w-4 text-blue-500" />
-                        ) : (
-                          <Bell className="h-4 w-4 text-orange-500" />
-                        )}
-                        <Badge variant="outline" className="capitalize">
-                          {device.mode}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground text-sm">
-                        Location:
-                      </span>
-                      <span className="text-sm font-medium">
-                        {device.location}
-                      </span>
-                    </div>
-
-                    {device.notice && (
-                      <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-800 dark:bg-orange-900/20">
-                        <p className="text-sm font-medium text-orange-800 dark:text-orange-400">
-                          Current Notice:
-                        </p>
-                        <p className="text-sm text-orange-700 dark:text-orange-300">
-                          {device.notice}
-                        </p>
-                      </div>
-                    )}
-
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Uptime:</span>
-                        <span className="font-medium">
-                          {formatUptime(device.uptime)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">
-                          Last Seen:
-                        </span>
-                        <span className="text-xs font-medium">
-                          {formatLastSeen(device.last_seen)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <Link href={`/devices/${device._id}`}>
-                      <Button className="w-full">View Details</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+                  device={device}
+                  groupId={_id}
+                />
               ))}
             </div>
 

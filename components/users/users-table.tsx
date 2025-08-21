@@ -16,6 +16,7 @@ import {
 import { getRoleColor, getStatusColor } from '@/lib/helper';
 import { IUser } from '@/lib/types';
 import { useProfileQuery } from '@/queries/auth';
+import { useGetAllGroupDevicesQuery } from '@/queries/group';
 import {
   useBanUserByIdMutation,
   useDeleteUserMutation,
@@ -26,6 +27,7 @@ import {
   KeyRound,
   Mail,
   MoreHorizontal,
+  Plus,
   Search,
   Shield,
   Trash2,
@@ -37,6 +39,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ChangePasswordModal } from '../change-password-modal';
+import { CreateUserModal } from '../create-user-modal';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -52,10 +55,14 @@ import { Input } from '../ui/input';
 const UsersTable = ({
   users = [],
   refetch,
+  groupUserRefetch,
 }: {
   users: IUser[];
   refetch?: () => void;
+  groupUserRefetch?: () => void;
 }) => {
+  const { data: user } = useProfileQuery();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState<IUser[]>(users);
 
@@ -152,6 +159,14 @@ const UsersTable = ({
     });
     setFilteredUsers(filtered);
   };
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  // Get all group devices
+  const { data: allGroupDevices } = useGetAllGroupDevicesQuery(
+    user?.group || '',
+    {
+      skip: user?.role !== 'admin' || !user?.group,
+    }
+  );
 
   useEffect(() => {
     setFilteredUsers(users);
@@ -166,14 +181,27 @@ const UsersTable = ({
               <Users className="text-primary h-5 w-5" />
               All Users
             </CardTitle>
-            <div className="relative w-full sm:w-64">
-              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
-              <Input
-                placeholder="Search users..."
-                value={searchTerm}
-                onChange={(e) => filterUsers(e.target.value)}
-                className="pl-10"
-              />
+
+            <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
+              {user?.role === 'admin' && (
+                <Button
+                  onClick={() => setIsCreateModalOpen(true)}
+                  className="w-full sm:w-auto"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add New User
+                </Button>
+              )}
+
+              <div className="relative w-full sm:w-64">
+                <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
+                <Input
+                  placeholder="Search users..."
+                  value={searchTerm}
+                  onChange={(e) => filterUsers(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -182,7 +210,7 @@ const UsersTable = ({
             <div className="min-w-[800px]">
               <Table>
                 <TableHeader>
-                  <TableRow>
+                  <TableRow className="bg-primary/5 dark:bg-primary/5">
                     <TableHead>Name</TableHead>
                     <TableHead className="hidden sm:table-cell">
                       Email
@@ -314,6 +342,15 @@ const UsersTable = ({
           )}
         </CardContent>
       </Card>
+
+      {/* Create Admin Modal */}
+      <CreateUserModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        devices={allGroupDevices || []}
+        groupId={user?.group || ''}
+        groupUserRefetch={groupUserRefetch}
+      />
 
       {/* Change Password Modal */}
       <ChangePasswordModal
