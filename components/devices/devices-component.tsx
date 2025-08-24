@@ -117,12 +117,7 @@ export default function DevicesComponent() {
           icon={<Wifi className="h-6 w-6 text-green-600 dark:text-green-400" />}
           valueColor="text-green-600 dark:text-green-400"
         />
-        <SimpleSummaryCard
-          label="Offline Devices"
-          value={filteredDevices.filter((d) => d.status === 'offline').length}
-          icon={<WifiOff className="h-6 w-6 text-red-600 dark:text-red-400" />}
-          valueColor="text-red-600 dark:text-red-400"
-        />
+
         <SimpleSummaryCard
           label="Notice Mode"
           value={filteredDevices.filter((d) => d.mode === 'notice').length}

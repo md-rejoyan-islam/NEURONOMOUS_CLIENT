@@ -51,10 +51,9 @@ const SingleGroupDevice = ({
             <div className="min-w-0 flex-1">
               <Link href={`/devices/${device._id}`}>
                 <CardTitle className="truncate text-lg font-semibold">
-                  {device.name}
+                  {device.name || device.id}
                 </CardTitle>
               </Link>
-              <p className="text-muted-foreground text-sm">{device.id}</p>
             </div>
             <div className="ml-2 flex items-center gap-2">
               {device.status === 'online' ? (
