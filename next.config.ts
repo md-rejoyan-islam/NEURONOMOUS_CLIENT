@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/v1/firmwares/:firmwareId/download',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/firmwares/:firmwareId/download`,
+        destination: `${process.env.API_URL}/api/v1/firmwares/:firmwareId/download`,
       },
     ];
   },
