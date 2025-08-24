@@ -6,23 +6,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
 import { socketManager } from '@/lib/socket';
+import { useProfileQuery } from '@/queries/auth';
 import {
   useGetAllScheduledNoticesQuery,
   useGetDeviceQuery,
 } from '@/queries/devices';
-import {
-  ArrowLeft,
-  Bell,
-  Clock,
-  Download,
-  RefreshCw,
-  Wifi,
-  WifiOff,
-} from 'lucide-react';
+import { ArrowLeft, Bell, Clock, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import SmallLoading from '../loading/small-loading';
 import DeviceAllowedUsers from './device-allowed-users';
+import FirmwareUpdate from './firmware-update';
 import FontChange from './font-change';
 import ModeChange from './mode-change';
 import NoticeMessage from './notice-message';
@@ -31,6 +25,8 @@ import TimeFormatChange from './time-format-change';
 
 export default function SingleDevice({ id }: { id: string }) {
   const router = useRouter();
+
+  const { data: user } = useProfileQuery();
 
   const {
     data: device,
@@ -113,13 +109,38 @@ export default function SingleDevice({ id }: { id: string }) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {user &&
+                  ['admin', 'superadmin'].includes(user?.role) &&
+                  device?.available_firmwares?.length > 0 && (
+                    <div>
+                      <FirmwareUpdate
+                        version={device.available_firmwares[0].version}
+                        id={id}
+                        firmwareId={device.available_firmwares[0]._id}
+                      />
+                    </div>
+                  )}
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <Label className="text-muted-foreground text-sm font-medium">
+                    Device ID
+                  </Label>
+                  <p className="font-semibold capitalize">{device?.id}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground text-sm font-medium">
+                    Device Name
+                  </Label>
+                  <p className="font-semibold capitalize">
+                    {device?.name || 'N/A'}
+                  </p>
+                </div>
                 <div>
                   <Label className="text-muted-foreground text-sm font-medium">
                     Status
                   </Label>
-                  <p className="text-lg font-semibold capitalize">
-                    {device?.status}
-                  </p>
+                  <p className="font-semibold capitalize">{device?.status}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground text-sm font-medium">
@@ -136,24 +157,20 @@ export default function SingleDevice({ id }: { id: string }) {
                     </span>
                   </div>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <Label className="text-muted-foreground text-sm font-medium">
-                    Location
-                  </Label>
-                  <p className="font-semibold">{device?.location}</p>
-                </div>
+                {device?.location && (
+                  <div>
+                    <Label className="text-muted-foreground text-sm font-medium">
+                      Location
+                    </Label>
+                    <p className="font-semibold">{device?.location}</p>
+                  </div>
+                )}
                 <div>
                   <Label className="text-muted-foreground text-sm font-medium">
                     Uptime
                   </Label>
                   <p className="font-semibold">{device?.uptime}</p>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <Label className="text-muted-foreground text-sm font-medium">
                     Current Font
@@ -172,30 +189,40 @@ export default function SingleDevice({ id }: { id: string }) {
                       : '24-Hour Format'}
                   </p>
                 </div>
-              </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <Label className="text-muted-foreground text-sm font-medium">
-                    Free Heap
-                  </Label>
-                  <p className="text-lg font-semibold">{device?.free_heap}</p>
-                </div>
                 <div>
                   <Label className="text-muted-foreground text-sm font-medium">
                     Last Seen
                   </Label>
                   <p className="text-sm font-semibold">{device?.last_seen}</p>
                 </div>
-              </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <Label className="text-muted-foreground text-sm font-medium">
-                    Version
+                    Current Version
                   </Label>
                   <p className="text-lg font-semibold">
-                    {device?.version || '0.0.0'}
+                    {device?.firmware_version || 'N/A'}
                   </p>
                 </div>
+                {user?.role === 'superadmin' && (
+                  <>
+                    <div>
+                      <Label className="text-muted-foreground text-sm font-medium">
+                        Mac ID
+                      </Label>
+                      <p className="text-lg font-semibold">
+                        {device?.mac_id || 'N/A'}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-muted-foreground text-sm font-medium">
+                        Free Heap
+                      </Label>
+                      <p className="text-lg font-semibold">
+                        {device?.free_heap}
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
 
               {device?.notice && (
@@ -213,14 +240,6 @@ export default function SingleDevice({ id }: { id: string }) {
                   )}
                 </div>
               )}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <Button className="group">
-                    <Download className="h-4 w-4 group-hover:animate-bounce" />
-                    <span>Update Firmware (v1.0.1 available)</span>
-                  </Button>
-                </div>
-              </div>
             </CardContent>
           </Card>
 

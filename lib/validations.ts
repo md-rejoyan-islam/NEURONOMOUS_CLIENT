@@ -203,9 +203,6 @@ export const firmwareSchema = z.object({
     .string()
     .min(1, 'Version is required')
     .regex(/^\d+\.\d+\.\d+$/, 'Version must be in format x.x.x (e.g., 2.1.0)'),
-  type: z.enum(['single', 'double'], {
-    message: 'Board type is required',
-  }),
   description: z.string().min(1, 'Description is required'),
   file: z
     .any()
@@ -216,8 +213,8 @@ export const firmwareSchema = z.object({
       'Only .bin files are allowed'
     )
     .refine((file) => {
-      return file?.size <= 0.5 * 1024 * 1024;
-    }, 'File size must be less than 0.5 MB'),
+      return file?.size <= 5 * 1024 * 1024;
+    }, 'File size must be less than 5 MB'),
 });
 
 // Type exports

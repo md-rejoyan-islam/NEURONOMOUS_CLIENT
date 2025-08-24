@@ -10,8 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -19,12 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Table,
   TableBody,
@@ -34,14 +26,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import SimpleSummaryCard from '@/components/cards/simple-summary-card';
 import DownloadFirmware from '@/components/firmware/download-firmware';
 import FirmwareCreateForm from '@/components/form/firmware-create-form';
 import {
   useDeleteFirmwareMutation,
   useGetFirmwareQuery,
 } from '@/queries/firmware';
-import { Cpu, HardDrive, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -79,13 +70,6 @@ export default function FirmwareContent() {
     }
   };
 
-  const formatFileSize = (bytes: number) => {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    if (bytes === 0) return '0 Bytes';
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i];
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -95,9 +79,6 @@ export default function FirmwareContent() {
       minute: '2-digit',
     });
   };
-
-  const singleBoardCount = firmware.filter((f) => f.type === 'single').length;
-  const doubleBoardCount = firmware.filter((f) => f.type === 'double').length;
 
   //   if (isLoading) {
   //     return (
@@ -114,30 +95,8 @@ export default function FirmwareContent() {
           Firmware Management
         </h1>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Manage firmware versions for single-board and double-board devices
+          Manage firmware versions for devices
         </p>
-      </div>
-
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <SimpleSummaryCard
-          icon={<HardDrive className="h-6 w-6 text-blue-600" />}
-          label="Total Firmware"
-          valueColor="text-gray-900 dark:text-white"
-          value={firmware.length}
-        />
-        <SimpleSummaryCard
-          icon={<Cpu className="h-6 w-6 text-purple-600" />}
-          label="Single Board"
-          valueColor="text-gray-900 dark:text-white"
-          value={singleBoardCount}
-        />
-        <SimpleSummaryCard
-          icon={<Cpu className="h-6 w-6 text-orange-600" />}
-          label="Double Board"
-          valueColor="text-gray-900 dark:text-white"
-          value={doubleBoardCount}
-        />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -168,7 +127,6 @@ export default function FirmwareContent() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Version</TableHead>
-                    <TableHead>Board Type</TableHead>
                     <TableHead>File Size</TableHead>
                     <TableHead>Upload Date</TableHead>
                     <TableHead>Actions</TableHead>
@@ -180,36 +138,18 @@ export default function FirmwareContent() {
                       <TableCell className="font-medium">
                         {fw.version}
                       </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            fw.type === 'single' ? 'default' : 'secondary'
-                          }
-                          className="capitalize"
-                        >
-                          {fw.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{formatFileSize(1024)}</TableCell>
+
+                      <TableCell>{fw.size}</TableCell>
                       <TableCell>{formatDate(fw.createdAt)}</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DownloadFirmware id={fw._id} />
-                            <DropdownMenuItem
-                              className="text-red-600"
-                              onClick={() => setDeleteId(fw._id)}
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell className="flex items-center gap-3">
+                        <button
+                          className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
+                          onClick={() => setDeleteId(fw._id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+
+                        <DownloadFirmware id={fw._id} />
                       </TableCell>
                     </TableRow>
                   ))}

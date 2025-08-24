@@ -225,6 +225,19 @@ export const devicesApi = createApi({
       invalidatesTags: (result, error, { deviceIds }) =>
         deviceIds.map((id) => ({ type: 'Device', id })),
     }),
+    updateDeviceFirmware: builder.mutation<
+      void,
+      { deviceId: string; firmwareId: string }
+    >({
+      query: ({ deviceId, firmwareId }) => ({
+        url: `/devices/${deviceId}/update-firmware`,
+        method: 'PATCH',
+        body: { firmwareId },
+      }),
+      invalidatesTags: (result, error, { deviceId }) => [
+        { type: 'Device', id: deviceId },
+      ],
+    }),
   }),
 });
 
@@ -245,4 +258,5 @@ export const {
   useChangeSelectedDeviceModeMutation,
   useSendNoticeToSelectedDevicesMutation,
   useSendScheduledNoticeToSelectedDevicesMutation,
+  useUpdateDeviceFirmwareMutation,
 } = devicesApi;

@@ -1,6 +1,5 @@
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
-import { DropdownMenuItem } from '../ui/dropdown-menu';
 
 const DownloadFirmware = ({ id }: { id: string }) => {
   const downloadFirmware = async () => {
@@ -56,10 +55,12 @@ const DownloadFirmware = ({ id }: { id: string }) => {
   };
 
   return (
-    <DropdownMenuItem onClick={downloadFirmware}>
-      <Download className="mr-2 h-4 w-4" />
-      Download
-    </DropdownMenuItem>
+    <button
+      onClick={downloadFirmware}
+      className="bg-primary/10 hover:bg-primary/20 group cursor-pointer items-center justify-center rounded-md p-2 text-black dark:text-white"
+    >
+      <Download className="h-4 w-4 group-hover:animate-bounce" />
+    </button>
   );
 };
 

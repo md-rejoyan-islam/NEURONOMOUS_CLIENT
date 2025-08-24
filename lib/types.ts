@@ -17,8 +17,8 @@ export interface IUser {
 export interface IFirmware {
   _id: string;
   version: number;
-  type: 'single' | 'double';
   file: Buffer;
+  size: string;
   description: string;
   createdAt: string;
   updatedAt: string;
@@ -27,23 +27,22 @@ export interface IFirmware {
 export interface IDevice {
   _id: string;
   id: string;
-  name: string | null;
+  mac_id: string | null;
   status: 'online' | 'offline';
-  location: string | null;
-  uptime: number;
   mode: 'clock' | 'notice';
-  last_seen: string;
   notice: string | null;
+  name: string | null;
+  uptime: number;
+  end_time: number | null; // Unix timestamp in milliseconds, can be null
+  firmware_version: string | null;
+  type: 'single' | 'double';
+  free_heap: number;
+  location: string | null;
+  last_seen: number; // Unix timestamp in milliseconds
   duration: number | null; // duration in minutes, can be null
   start_time: number | null; // Unix timestamp in milliseconds, can be null
-  end_time: number | null; // Unix timestamp in milliseconds, can be null
-  free_heap: number;
-  allowed_users: string[]; // Array of user IDs who can access this device
-  version: string; // Version of the device firmware
-  history: {
-    message: string;
-    timestamp: number;
-  }[];
+  last_firmware_update: number | null; // Unix timestamp in milliseconds, can be null
+  allowed_users?: string[]; // Array of user IDs allowed to access the device
   pending_notice: boolean; // Indicates if there is a pending notice to be sent
   scheduled_notices: {
     id: string; // Unique ID for the scheduled notice
@@ -54,6 +53,7 @@ export interface IDevice {
   font?: string;
   time_format?: string;
   group?: string;
+  available_firmwares: [{ _id: string; version: string }];
 }
 
 export interface IScheduledNotice {

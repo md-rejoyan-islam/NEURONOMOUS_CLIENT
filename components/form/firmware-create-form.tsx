@@ -2,13 +2,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { FirmwareFormData, firmwareSchema } from '@/lib/validations';
 import { useCreateFirmwareMutation } from '@/queries/firmware';
@@ -84,12 +77,11 @@ const FirmwareCreateForm = () => {
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('version', data.version);
-      formData.append('type', data.type);
       formData.append('description', data.description);
 
       await uploadFirmware(formData).unwrap();
       toast.success('Firmware uploaded successfully', {
-        description: `Version ${data.version} for ${data.type} has been uploaded.`,
+        description: `Version ${data.version} has been uploaded.`,
       });
 
       reset();
@@ -166,27 +158,6 @@ const FirmwareCreateForm = () => {
         error={errors.version?.message}
         props={{ ...register('version') }}
       />
-
-      {/* Board Type Selection */}
-      <div className="space-y-2">
-        <Label>Board Type</Label>
-        <Select
-          onValueChange={(value) =>
-            setValue('type', value as 'single' | 'double')
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select board type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="single">Single Board</SelectItem>
-            <SelectItem value="double">Double Board</SelectItem>
-          </SelectContent>
-        </Select>
-        {errors.type && (
-          <p className="text-sm text-red-600">{errors.type.message}</p>
-        )}
-      </div>
 
       {/* Description */}
       <TextField
