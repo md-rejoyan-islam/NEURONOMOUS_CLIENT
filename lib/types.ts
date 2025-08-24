@@ -42,7 +42,7 @@ export interface IDevice {
   duration: number | null; // duration in minutes, can be null
   start_time: number | null; // Unix timestamp in milliseconds, can be null
   last_firmware_update: number | null; // Unix timestamp in milliseconds, can be null
-  allowed_users?: string[]; // Array of user IDs allowed to access the device
+  allowed_users: string[]; // Array of user IDs allowed to access the device
   pending_notice: boolean; // Indicates if there is a pending notice to be sent
   scheduled_notices: {
     id: string; // Unique ID for the scheduled notice

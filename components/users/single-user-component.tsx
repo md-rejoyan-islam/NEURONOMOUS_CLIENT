@@ -255,7 +255,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                     <span className="font-medium">
                       {devices?.reduce(
                         (count, device) =>
-                          device.allowed_users.includes(user?._id || '')
+                          device?.allowed_users?.includes(user?._id || '')
                             ? count + 1
                             : count,
                         0
