@@ -6,8 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/v1/firmwares/:firmwareId/download',
-        destination: `https://eee.rejoyan.me/api/v1/firmwares/:firmwareId/download`,
-        // destination: `http://localhost:5050/api/v1/firmwares/:firmwareId/download`,
+        destination: `http://localhost:5050/api/v1/firmwares/:firmwareId/download`,
         // destination: `${process.env.API_URL}/api/v1/firmwares/:firmwareId/download`,
       },
     ];
