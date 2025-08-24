@@ -133,26 +133,34 @@ export default function FirmwareContent() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {firmware.map((fw) => (
-                    <TableRow key={fw._id}>
-                      <TableCell className="font-medium">
-                        {fw.version}
-                      </TableCell>
+                  {firmware.length > 0 ? (
+                    firmware.map((fw) => (
+                      <TableRow key={fw._id}>
+                        <TableCell className="font-medium">
+                          {fw.version}
+                        </TableCell>
 
-                      <TableCell>{fw.size}</TableCell>
-                      <TableCell>{formatDate(fw.createdAt)}</TableCell>
-                      <TableCell className="flex items-center gap-3">
-                        <button
-                          className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
-                          onClick={() => setDeleteId(fw._id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        <TableCell>{fw.size}</TableCell>
+                        <TableCell>{formatDate(fw.createdAt)}</TableCell>
+                        <TableCell className="flex items-center gap-3">
+                          <button
+                            className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
+                            onClick={() => setDeleteId(fw._id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
 
-                        <DownloadFirmware id={fw._id} />
+                          <DownloadFirmware id={fw._id} />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="py-3 text-center">
+                        No firmware versions available.
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </div>

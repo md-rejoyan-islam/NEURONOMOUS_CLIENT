@@ -92,11 +92,11 @@ const UserDeviceAccess = ({
               </div>
               <Switch
                 className="cursor-pointer"
-                checked={device.allowed_users.includes(userId)}
+                checked={device?.allowed_users?.includes(userId)}
                 onCheckedChange={() =>
                   handleDeviceAccessToggle(
                     device._id,
-                    device.allowed_users.includes(userId)
+                    device?.allowed_users?.includes(userId)
                   )
                 }
               />
