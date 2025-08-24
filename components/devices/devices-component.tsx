@@ -251,7 +251,7 @@ export default function DevicesComponent() {
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Last Seen:</span>
                       <span className="text-xs font-medium">
-                        {formatLastSeen(device.last_seen)}
+                        {formatLastSeen(device.last_seen.toString())}
                       </span>
                     </div>
                   </div>
