@@ -47,10 +47,6 @@ export default function DevicesComponent() {
     return matchesSearch;
   });
 
-  const formatLastSeen = (dateString: string) => {
-    return new Date(dateString).toLocaleString();
-  };
-
   useEffect(() => {
     const socket = socketManager.connect();
     if (!socket) return;
@@ -171,15 +167,12 @@ export default function DevicesComponent() {
                 key={device.id}
                 className="transition-shadow duration-200 hover:shadow-lg"
               >
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-1">
                   <div className="flex items-start justify-between">
                     <div className="min-w-0 flex-1">
                       <CardTitle className="truncate text-lg font-semibold">
-                        {device.name}
+                        {device.name || device.id}
                       </CardTitle>
-                      <p className="text-muted-foreground text-sm">
-                        {device.id}
-                      </p>
                     </div>
                     <div className="ml-2 flex items-center gap-2">
                       {device.status === 'online' ? (
@@ -220,15 +213,27 @@ export default function DevicesComponent() {
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      Location:
+                      Boards:
                     </span>
-                    <span className="text-sm font-medium">
-                      {device.location}
-                    </span>
+                    <Badge variant="outline" className="capitalize">
+                      {device.type}
+                    </Badge>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Uptime:</span>
+                      <span className="font-medium">{device.uptime}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Location:</span>
+                      <span className="text-xs font-medium">
+                        {device.location || 'N/A'}
+                      </span>
+                    </div>
                   </div>
 
                   {device.notice && (
-                    <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-800 dark:bg-orange-900/20">
+                    <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-500/30 dark:bg-orange-900/20">
                       <p className="text-sm font-medium text-orange-800 dark:text-orange-400">
                         Current Notice:
                       </p>
@@ -237,19 +242,6 @@ export default function DevicesComponent() {
                       </p>
                     </div>
                   )}
-
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Uptime:</span>
-                      <span className="font-medium">{device.uptime}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Last Seen:</span>
-                      <span className="text-xs font-medium">
-                        {formatLastSeen(device.last_seen.toString())}
-                      </span>
-                    </div>
-                  </div>
 
                   <Link href={`/devices/${device._id}`}>
                     <Button className="w-full">View Details</Button>

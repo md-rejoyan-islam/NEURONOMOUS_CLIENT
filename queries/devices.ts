@@ -238,6 +238,15 @@ export const devicesApi = createApi({
         { type: 'Device', id: deviceId },
       ],
     }),
+    deviceRestartById: builder.mutation<void, { deviceId: string }>({
+      query: ({ deviceId }) => ({
+        url: `/devices/${deviceId}/restart`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: (result, error, { deviceId }) => [
+        { type: 'Device', id: deviceId },
+      ],
+    }),
   }),
 });
 
@@ -259,4 +268,5 @@ export const {
   useSendNoticeToSelectedDevicesMutation,
   useSendScheduledNoticeToSelectedDevicesMutation,
   useUpdateDeviceFirmwareMutation,
+  useDeviceRestartByIdMutation,
 } = devicesApi;
