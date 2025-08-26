@@ -7,30 +7,32 @@ import {
 } from '@/components/ui/dialog';
 import { socketManager } from '@/lib/socket';
 import { useUpdateDeviceFirmwareMutation } from '@/queries/devices';
-import { Download } from 'lucide-react';
+import { Cog, Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { Progress } from '../ui/progress';
 
 const FirmwareUpdate = ({
   version,
   id,
   firmwareId,
+  disabled,
 }: {
   version: string;
   id: string;
   firmwareId: string;
+  disabled?: boolean;
 }) => {
   const [updateDeviceFirmware, { isLoading }] =
     useUpdateDeviceFirmwareMutation();
   const [updateMessage, setUpdateMessage] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const updateFirmware = async () => {
     try {
       await updateDeviceFirmware({ deviceId: id, firmwareId }).unwrap();
-
-      toast.success('Firmware updated successfully', {
-        description: `Device ${id} has been updated to version ${version}.`,
-      });
+      setIsOpen(false);
+      setIsOpenProcess(true);
 
       // eslint-disable-next-line
     } catch (error: any) {
@@ -39,28 +41,56 @@ const FirmwareUpdate = ({
       });
     }
   };
+
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenProcess, setIsOpenProcess] = useState(false);
   const handleClose = () => {
     setIsOpen(false);
   };
+
   useEffect(() => {
     if (!id) return;
     const socket = socketManager.connect();
     if (!socket) return;
-    const handler = (message: string) => {
-      console.log('Firmware update message:', message);
+    const handler = (message: { status: string }) => {
+      const { status } = message;
+      const messageValue = status.split(': ')[1];
+      const value = messageValue?.split('%')[0];
 
-      setUpdateMessage(message);
+      // if (messageValue === 'Started') {
+      //   setUpdateMessage('Starting update...');
+      // } else
+
+      if (typeof +value === 'number' && +value >= 0 && +value <= 100) {
+        setUpdateMessage('');
+        setProgress(+value);
+      } else if (messageValue === 'Rebooting') {
+        setProgress(100);
+        setUpdateMessage('Rebooting device...');
+        setTimeout(() => {
+          setIsOpenProcess(false);
+          setUpdateMessage(null);
+          setProgress(0);
+          toast.success('Firmware updated successfully', {
+            description: `Device ${id} has been updated to version ${version}.`,
+          });
+        }, 5000);
+      }
     };
     socket.on(`device:${id}:firmware`, handler);
     return () => {
       socket.off(`device:${id}:firmware`, handler);
     };
+    // eslint-disable-next-line
   }, [id]);
 
   return (
     <>
-      <Button className="group text-xs" onClick={() => setIsOpen(true)}>
+      <Button
+        className="group text-xs"
+        disabled={disabled || isLoading}
+        onClick={() => setIsOpen(true)}
+      >
         <Download className="h-4 w-4 group-hover:animate-bounce" />
         <span>Update Firmware (v{version} available)</span>
       </Button>
@@ -117,6 +147,35 @@ const FirmwareUpdate = ({
             <Button onClick={updateFirmware} disabled={isLoading}>
               Update Firmware
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={isOpenProcess}>
+        <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <p className="pr-2">
+                <Cog className="text-primary scale-150 animate-spin" />
+              </p>
+              <div>
+                <h3 className="text-xl">Firmware Update in Progress</h3>
+                <p className="text-xs">
+                  Please do not turn off or unplug the device during the update.
+                </p>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-3">
+            {/* show percentage */}
+            <div className="mb-2 flex justify-between text-xs opacity-80">
+              <p>Installed</p>
+              <p>{updateMessage ? updateMessage : `${progress}%`}</p>
+            </div>
+            <Progress value={progress} className="w-full" />
+
+            <p className="mt-4 animate-pulse text-center text-sm opacity-70">
+              This process may take several minutes. Please be patient.
+            </p>
           </div>
         </DialogContent>
       </Dialog>

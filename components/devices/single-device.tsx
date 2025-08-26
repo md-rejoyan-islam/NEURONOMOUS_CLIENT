@@ -123,6 +123,7 @@ export default function SingleDevice({ id }: { id: string }) {
                       version={device.available_firmwares[0].version}
                       id={id}
                       firmwareId={device.available_firmwares[0]._id}
+                      disabled={device.status !== 'online'}
                     />
                   </div>
                 )}
