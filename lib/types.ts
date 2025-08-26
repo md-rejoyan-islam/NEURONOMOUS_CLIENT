@@ -19,6 +19,7 @@ export interface IFirmware {
   version: number;
   file: Buffer;
   size: string;
+  status: 'active' | 'inactive';
   description: string;
   createdAt: string;
   updatedAt: string;

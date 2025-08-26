@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/table';
 
 import DownloadFirmware from '@/components/firmware/download-firmware';
+import FirmwareStatusChange from '@/components/firmware/firmware-status-change';
 import FirmwareCreateForm from '@/components/form/firmware-create-form';
 import {
   useDeleteFirmwareMutation,
@@ -49,7 +50,7 @@ export interface Firmware {
 export default function FirmwareContent() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data: firmware = [], isLoading } = useGetFirmwareQuery();
+  const { data: firmwares = [], isLoading } = useGetFirmwareQuery();
 
   const [deleteFirmware] = useDeleteFirmwareMutation();
 
@@ -63,6 +64,8 @@ export default function FirmwareContent() {
       });
 
       setDeleteId(null);
+
+      // eslint-disable-next-line
     } catch (error) {
       toast.error('Delete failed', {
         description: 'Failed to delete firmware. Please try again.',
@@ -128,19 +131,36 @@ export default function FirmwareContent() {
                   <TableRow>
                     <TableHead>Version</TableHead>
                     <TableHead>File Size</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Description</TableHead>
                     <TableHead>Upload Date</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {firmware.length > 0 ? (
-                    firmware.map((fw) => (
+                  {isLoading && (
+                    <TableRow>
+                      <TableCell colSpan={7} className="py-3 text-center">
+                        Loading firmware versions...
+                      </TableCell>
+                    </TableRow>
+                  )}
+
+                  {firmwares.length > 0 &&
+                    firmwares.map((fw) => (
                       <TableRow key={fw._id}>
                         <TableCell className="font-medium">
                           {fw.version}
                         </TableCell>
 
                         <TableCell>{fw.size}</TableCell>
+                        <TableCell>
+                          <FirmwareStatusChange
+                            status={fw.status}
+                            id={fw._id}
+                          />
+                        </TableCell>
+                        <TableCell>{fw.description}</TableCell>
                         <TableCell>{formatDate(fw.createdAt)}</TableCell>
                         <TableCell className="flex items-center gap-3">
                           <button
@@ -153,10 +173,11 @@ export default function FirmwareContent() {
                           <DownloadFirmware id={fw._id} />
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
+                    ))}
+
+                  {!isLoading && firmwares.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={4} className="py-3 text-center">
+                      <TableCell colSpan={7} className="py-3 text-center">
                         No firmware versions available.
                       </TableCell>
                     </TableRow>

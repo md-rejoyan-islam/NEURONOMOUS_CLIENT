@@ -93,6 +93,17 @@ export const firmwareApi = createApi({
       },
       invalidatesTags: ['Firmware'],
     }),
+    firmwareStatusChange: builder.mutation<
+      void,
+      { id: string; status: 'active' | 'inactive' }
+    >({
+      query: ({ id, status }) => ({
+        url: `/firmwares/${id}/status`,
+        method: 'PATCH',
+        body: { status },
+      }),
+      invalidatesTags: ['Firmware'],
+    }),
   }),
 });
 
@@ -101,4 +112,5 @@ export const {
   useDeleteFirmwareMutation,
   useCreateFirmwareMutation,
   useLazyDownloadFirmwareQuery,
+  useFirmwareStatusChangeMutation,
 } = firmwareApi;

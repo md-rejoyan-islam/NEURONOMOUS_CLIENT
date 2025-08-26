@@ -5,9 +5,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { socketManager } from '@/lib/socket';
 import { useUpdateDeviceFirmwareMutation } from '@/queries/devices';
 import { Download } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 const FirmwareUpdate = ({
@@ -21,6 +22,7 @@ const FirmwareUpdate = ({
 }) => {
   const [updateDeviceFirmware, { isLoading }] =
     useUpdateDeviceFirmwareMutation();
+  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
 
   const updateFirmware = async () => {
     try {
@@ -41,6 +43,21 @@ const FirmwareUpdate = ({
   const handleClose = () => {
     setIsOpen(false);
   };
+  useEffect(() => {
+    if (!id) return;
+    const socket = socketManager.connect();
+    if (!socket) return;
+    const handler = (message: string) => {
+      console.log('Firmware update message:', message);
+
+      setUpdateMessage(message);
+    };
+    socket.on(`device:${id}:firmware`, handler);
+    return () => {
+      socket.off(`device:${id}:firmware`, handler);
+    };
+  }, [id]);
+
   return (
     <>
       <Button className="group text-xs" onClick={() => setIsOpen(true)}>
