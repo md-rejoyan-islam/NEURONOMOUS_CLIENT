@@ -8,6 +8,7 @@ import { socketManager } from '@/lib/socket';
 import { useProfileQuery } from '@/queries/auth';
 import { useGetAllDevicesQuery } from '@/queries/devices';
 import {
+  ArrowDown,
   Bell,
   Clock,
   TabletsIcon as Devices,
@@ -37,6 +38,41 @@ export default function DevicesComponent() {
   }, 0);
 
   const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSummaryDownload = () => {
+    // Logic to generate and download the summary report
+    console.log('Downloading summary report...');
+
+    const data = devices.map((device) => ({
+      id: device.id,
+      mac_id: device.mac_id,
+      name: device.name,
+      type: device.type,
+      firmware: device.firmware_version,
+    }));
+
+    // download json format of devices
+    const headers = Object.keys(data[0]).join(',') + '\n';
+    const rows = data
+      .map((obj) =>
+        Object.values(obj)
+          .map((v) => `"${v}"`)
+          .join(',')
+      )
+      .join('\n');
+
+    const csv = headers + rows;
+
+    // Create data URI
+    const dataStr = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute('href', dataStr);
+    downloadAnchorNode.setAttribute('download', 'devices_summary.csv');
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
 
   const filteredDevices = devices.filter((device) => {
     const matchesSearch =
@@ -143,6 +179,12 @@ export default function DevicesComponent() {
               All Devices
             </CardTitle>
             <div className="flex items-center gap-3">
+              <div className="flex gap-2">
+                <Button variant={'outline'} onClick={handleSummaryDownload}>
+                  <ArrowDown className="text-primary animate-bounce" />
+                  Summary
+                </Button>
+              </div>
               <div className="flex gap-2">
                 <BulkOperationModel devices={devices || []} />
               </div>
