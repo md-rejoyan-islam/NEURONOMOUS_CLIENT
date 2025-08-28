@@ -49,6 +49,7 @@ export default function DevicesComponent() {
       name: device.name,
       type: device.type,
       firmware: device.firmware_version,
+      location: device.location,
     }));
 
     // download json format of devices
