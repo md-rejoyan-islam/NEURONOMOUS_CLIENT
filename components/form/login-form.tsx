@@ -29,16 +29,14 @@ const LoginForm = () => {
       if (result?.success) {
         const socket = socketManager.connect();
 
-        console.log('Socket connection status:', socketManager.isConnected());
-
-        if (socket && socketManager.isConnected()) {
+        if (socket) {
+          socket.emit('auth:login', { userId: result.data.user._id });
+          // socket.auth = { userId: result.data.user._id };
           console.log('Socket connected successfully.');
-
-          // socket.emit('auth:login', { userId: result.data.user._id });
         }
 
         toast.success('Login Successful', {
-          description: `Welcome back2, ${
+          description: `Welcome back, ${
             result.data.user.first_name + ' ' + result.data.user.last_name
           }!`,
         });
@@ -80,6 +78,7 @@ const LoginForm = () => {
             message: 'Password must be at least 6 characters',
           },
         })}
+        disabled={isLoading}
       />
 
       <div className="flex items-center justify-between">
@@ -87,12 +86,17 @@ const LoginForm = () => {
         <Link
           href="/forgot-password"
           className="text-primary text-sm hover:underline"
+          aria-disabled={isLoading}
         >
           Forgot password?
         </Link>
       </div>
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="h-10 w-full uppercase"
+        disabled={isLoading}
+      >
         {isLoading ? 'Signing in...' : 'Sign In'}
       </Button>
     </form>

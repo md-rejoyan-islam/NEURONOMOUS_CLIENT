@@ -23,7 +23,7 @@ const InputField = ({
 }) => {
   return (
     <div className="space-y-2">
-      <Label htmlFor={name}>
+      <Label htmlFor={name} className="gap-1">
         {label} {!isOptional && <span className="text-red-500">*</span>}
       </Label>
       <Input

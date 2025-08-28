@@ -20,7 +20,7 @@ const PasswordField = ({
   const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="space-y-2">
-      <Label htmlFor="password">
+      <Label htmlFor="password" className="gap-1">
         {label ? label : 'Password'}
         <span className="text-red-500">*</span>
       </Label>
