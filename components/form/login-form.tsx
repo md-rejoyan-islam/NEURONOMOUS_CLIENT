@@ -32,7 +32,7 @@ const LoginForm = () => {
         if (socket) {
           socket.emit('auth:login', { userId: result.data.user._id });
           // socket.auth = { userId: result.data.user._id };
-          console.log('Socket connected successfully.');
+          console.log('Socket connected successfully.', socket.id);
         }
 
         toast.success('Login Successful', {

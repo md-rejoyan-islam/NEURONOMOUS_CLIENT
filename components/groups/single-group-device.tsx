@@ -2,7 +2,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { IDevice } from '@/lib/types';
-import { formatLastSeen, formatUptime } from '@/lib/utils';
 import { useRemoveDeviceFromGroupMutation } from '@/queries/group';
 import { Bell, Clock, Wifi, WifiOff } from 'lucide-react';
 import Link from 'next/link';
@@ -94,6 +93,16 @@ const SingleGroupDevice = ({
             <span className="text-muted-foreground text-sm">Location:</span>
             <span className="text-sm font-medium">{device.location}</span>
           </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground text-sm">Boards:</span>
+            <Badge variant="outline" className="capitalize">
+              {device.type}
+            </Badge>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Uptime:</span>
+            <span className="font-medium">{device.uptime}</span>
+          </div>
 
           {device.notice && (
             <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-800 dark:bg-orange-900/20">
@@ -105,19 +114,6 @@ const SingleGroupDevice = ({
               </p>
             </div>
           )}
-
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Uptime:</span>
-              <span className="font-medium">{formatUptime(device.uptime)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Last Seen:</span>
-              <span className="text-xs font-medium">
-                {formatLastSeen(device.last_seen.toString())}
-              </span>
-            </div>
-          </div>
 
           <div className="grid grid-cols-2 gap-3">
             <Link href={`/devices/${device._id}`}>

@@ -49,12 +49,12 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/proxy/api/v1',
-    responseHandler: async (response) => {
-      if (response.status === 301) {
-        window.location.reload();
-      }
-      return response.json();
-    },
+    // responseHandler: async (response) => {
+    //   if (response.status === 301) {
+    //     window.location.reload();
+    //   }
+    //   return response.json();
+    // },
   }),
   keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
   tagTypes,

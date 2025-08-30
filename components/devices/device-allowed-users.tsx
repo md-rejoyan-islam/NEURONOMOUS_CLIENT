@@ -80,84 +80,89 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
     ) || [];
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Users className="text-primary h-5 w-5" />
-              Allowed Users
-            </div>
-            <Button
-              variant="default"
-              className="text-sm"
-              onClick={() => setIsOpen(true)}
-            >
-              Add Allowed User
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600 overflow-x-auto">
-            <div className="min-w-[800px]">
-              {(allowedUsers?.length ?? 0) > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>#</TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Name
-                      </TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
+      {allowedUsers && allowedUsers.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Users className="text-primary h-5 w-5" />
+                Allowed Users
+              </div>
+              <Button
+                variant="default"
+                className="text-sm"
+                onClick={() => setIsOpen(true)}
+              >
+                Add Allowed User
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600 overflow-x-auto">
+              <div className="min-w-[800px]">
+                {(allowedUsers?.length ?? 0) > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>#</TableHead>
+                        <TableHead className="hidden sm:table-cell">
+                          Name
+                        </TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Role</TableHead>
 
-                      <TableHead className="hidden md:table-cell">
-                        Revoke Access
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {allowedUsers?.map((user, index) => (
-                      <TableRow key={user._id}>
-                        <TableCell className="font-medium">
-                          <div>
-                            <div>{index + 1}</div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          {user?.first_name} {user?.last_name}
-                        </TableCell>
-                        <TableCell>{user?.email}</TableCell>
-                        <TableCell>{user?.role}</TableCell>
-
-                        <TableCell
-                          className="text-muted-foreground hidden text-sm md:table-cell"
-                          // title="Remove User from Allowed List"
-                        >
-                          <button
-                            disabled={user.role === 'admin'}
-                            onClick={() => handleRevokeAccess(user._id)}
-                            className="cursor-pointer text-red-500 hover:text-red-600 disabled:cursor-default disabled:text-red-200"
-                          >
-                            <LogOut className="h-5 w-5" />
-                          </button>
-                        </TableCell>
+                        <TableHead className="hidden md:table-cell">
+                          Revoke Access
+                        </TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <div className="py-12 text-center">
-                  <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
-                  <h3 className="mb-2 text-lg font-medium">No Allowed Users</h3>
-                  <p className="text-muted-foreground">
-                    There are currently no users allowed to access this device.
-                  </p>
-                </div>
-              )}
+                    </TableHeader>
+                    <TableBody>
+                      {allowedUsers?.map((user, index) => (
+                        <TableRow key={user._id}>
+                          <TableCell className="font-medium">
+                            <div>
+                              <div>{index + 1}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell">
+                            {user?.first_name} {user?.last_name}
+                          </TableCell>
+                          <TableCell>{user?.email}</TableCell>
+                          <TableCell>{user?.role}</TableCell>
+
+                          <TableCell
+                            className="text-muted-foreground hidden text-sm md:table-cell"
+                            // title="Remove User from Allowed List"
+                          >
+                            <button
+                              disabled={user.role === 'admin'}
+                              onClick={() => handleRevokeAccess(user._id)}
+                              className="cursor-pointer text-red-500 hover:text-red-600 disabled:cursor-default disabled:text-red-200"
+                            >
+                              <LogOut className="h-5 w-5" />
+                            </button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="py-12 text-center">
+                    <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+                    <h3 className="mb-2 text-lg font-medium">
+                      No Allowed Users
+                    </h3>
+                    <p className="text-muted-foreground">
+                      There are currently no users allowed to access this
+                      device.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
       <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
         <DialogContent className="sm:max-w-md">
           <AlertDialogHeader>

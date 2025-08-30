@@ -43,6 +43,8 @@ export default function SingleDevice({ id }: { id: string }) {
     const socket = socketManager.connect();
     if (!socket) return;
     const handler = () => refetchDevice();
+    console.log('mode change for device:', device.id);
+
     socket.on(`device:${device.id}:status`, handler);
     return () => {
       socket.off(`device:${device.id}:status`, handler);
@@ -171,6 +173,16 @@ export default function SingleDevice({ id }: { id: string }) {
                 </Label>
                 <p className="font-semibold">{device?.location || 'N/A'}</p>
               </div>
+              <div>
+                <Label className="text-muted-foreground text-sm font-medium">
+                  Last Timestamp
+                </Label>
+                <p className="font-semibold">
+                  {device?.timestamp
+                    ? new Date(device?.timestamp).toLocaleString()
+                    : 'N/A'}
+                </p>
+              </div>
 
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
@@ -254,14 +266,15 @@ export default function SingleDevice({ id }: { id: string }) {
         {/* time format    */}
         <TimeFormatChange device={device} />
       </div>
-      <div className="space-y-6">
-        {/* Scheduled Notices */}
-        <ScheduledNotice id={id} schedules={schedules} />
-      </div>
-      <div className="space-y-6">
-        {/* allowed users */}
-        <DeviceAllowedUsers id={id} group={device.group} />
-      </div>
+      {/* Scheduled Notices */}
+      {schedules && schedules.length > 0 && (
+        <div className="space-y-6">
+          <ScheduledNotice id={id} schedules={schedules} />
+        </div>
+      )}
+
+      {/* allowed users */}
+      <DeviceAllowedUsers id={id} group={device.group} />
     </div>
   );
 }

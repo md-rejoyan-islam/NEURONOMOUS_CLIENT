@@ -1,8 +1,14 @@
 'use client';
 
+import ActiveDevice from '@/components/dashboard/active-device';
+import ActiveUsers from '@/components/dashboard/active-users';
+import CpuUsage from '@/components/dashboard/cpu-usage';
+import MemoryUsage from '@/components/dashboard/memory-usage';
+import TotalDevices from '@/components/dashboard/total-devices';
+import TotalGroups from '@/components/dashboard/total-groups';
+import TotalUsers from '@/components/dashboard/total-users';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import {
   useGetRecentActivityQuery,
   useGetSystemMetricsQuery,
@@ -14,12 +20,8 @@ import {
   Bell,
   CheckCircle,
   Clock,
-  Server,
   Shield,
-  TrendingDown,
-  TrendingUp,
   Users,
-  Wifi,
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -29,39 +31,9 @@ export default function DashboardPage() {
     data: metrics,
     isLoading: metricsLoading,
     error: metricsError,
-    refetch: refetchMetrics,
   } = useGetSystemMetricsQuery();
-  const {
-    data: recentActivity = [],
-    isLoading: activityLoading,
-    refetch: refetchActivity,
-  } = useGetRecentActivityQuery();
-
-  // useEffect(() => {
-  //   // Connect to socket for real-time updates (optional)
-  //   const socket = socketManager.connect();
-
-  //   if (socket && socketManager.isConnected()) {
-  //     // Listen for system metrics updates
-  //     socket.on("metrics:updated", (updatedMetrics) => {
-  //       console.log("Metrics updated via socket:", updatedMetrics);
-  //       refetchMetrics();
-  //     });
-
-  //     // Listen for new activity
-  //     socket.on("activity:new", (newActivity) => {
-  //       console.log("New activity via socket:", newActivity);
-  //       refetchActivity();
-  //     });
-
-  //     return () => {
-  //       socket.off("metrics:updated");
-  //       socket.off("activity:new");
-  //     };
-  //   } else {
-  //     console.log("Running in offline mode - real-time updates disabled");
-  //   }
-  // }, [refetchMetrics, refetchActivity]);
+  const { data: recentActivity = [], isLoading: activityLoading } =
+    useGetRecentActivityQuery();
 
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -141,94 +113,13 @@ export default function DashboardPage() {
 
       {/* System Overview */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">CPU Usage</CardTitle>
-            <Activity className="text-muted-foreground h-4 w-4" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metrics.cpuUsage}%</div>
-            <Progress value={metrics.cpuUsage} className="mt-2" />
-            <p className="text-muted-foreground mt-2 text-xs">
-              {metrics.cpuUsage < 50 ? (
-                <span className="flex items-center gap-1 text-green-500">
-                  <TrendingDown className="h-3 w-3" /> Normal
-                </span>
-              ) : (
-                <span className="flex items-center gap-1 text-yellow-500">
-                  <TrendingUp className="h-3 w-3" /> Elevated
-                </span>
-              )}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Memory Usage</CardTitle>
-            <Server className="text-muted-foreground h-4 w-4" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metrics.memoryUsage}%</div>
-            <Progress value={metrics.memoryUsage} className="mt-2" />
-            <p className="text-muted-foreground mt-2 text-xs">
-              {metrics.memoryUsage < 70 ? (
-                <span className="flex items-center gap-1 text-green-500">
-                  <CheckCircle className="h-3 w-3" /> Good
-                </span>
-              ) : (
-                <span className="flex items-center gap-1 text-orange-500">
-                  <AlertTriangle className="h-3 w-3" /> High
-                </span>
-              )}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Devices
-            </CardTitle>
-            <Wifi className="text-muted-foreground h-4 w-4" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {metrics.activeDevices}/{metrics.totalDevices}
-            </div>
-            <Progress
-              value={(metrics.activeDevices / metrics.totalDevices) * 100}
-              className="mt-2"
-            />
-            <p className="text-muted-foreground mt-2 text-xs">
-              <span className="flex items-center gap-1 text-green-500">
-                <CheckCircle className="h-3 w-3" /> {metrics.activeDevices}{' '}
-                online
-              </span>
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-            <Users className="text-muted-foreground h-4 w-4" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {metrics.activeUsers}/{metrics.totalUsers}
-            </div>
-            <Progress
-              value={(metrics.activeUsers / metrics.totalUsers) * 100}
-              className="mt-2"
-            />
-            <p className="text-muted-foreground mt-2 text-xs">
-              <span className="flex items-center gap-1 text-blue-500">
-                <Users className="h-3 w-3" /> {metrics.activeUsers} online
-              </span>
-            </p>
-          </CardContent>
-        </Card>
+        <CpuUsage />
+        <MemoryUsage />
+        <ActiveDevice />
+        <ActiveUsers />
+        <TotalGroups />
+        <TotalDevices />
+        <TotalUsers />
       </div>
 
       {/* Recent Activity & System Status */}

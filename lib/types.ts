@@ -25,6 +25,18 @@ export interface IFirmware {
   updatedAt: string;
 }
 
+export interface IMemory {
+  total: number; // in bytes
+  free: number; // in bytes
+  used: number; // in bytes
+  memoryUsagePercent: string; // percentage of used memory
+}
+
+export interface ICpu {
+  cores: number;
+  cpuUsagePercent: string; // percentage of CPU usage
+}
+
 export interface IDevice {
   _id: string;
   id: string;
@@ -45,6 +57,7 @@ export interface IDevice {
   last_firmware_update: number | null; // Unix timestamp in milliseconds, can be null
   allowed_users: string[]; // Array of user IDs allowed to access the device
   pending_notice: boolean; // Indicates if there is a pending notice to be sent
+  timestamp: string;
   scheduled_notices: {
     id: string; // Unique ID for the scheduled notice
     notice: string;

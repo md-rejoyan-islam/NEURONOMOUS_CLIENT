@@ -4,6 +4,7 @@ import { devicesApi } from '@/queries/devices';
 import { firmwareApi } from '@/queries/firmware';
 import { groupApi } from '@/queries/group';
 import { notificationsApi } from '@/queries/notifications';
+import { systemApi } from '@/queries/system';
 import { usersApi } from '@/queries/users';
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
@@ -17,6 +18,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [groupApi.reducerPath]: groupApi.reducer,
     [firmwareApi.reducerPath]: firmwareApi.reducer,
+    [systemApi.reducerPath]: systemApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -30,7 +32,8 @@ export const store = configureStore({
       analyticsApi.middleware,
       authApi.middleware,
       groupApi.middleware,
-      firmwareApi.middleware
+      firmwareApi.middleware,
+      systemApi.middleware
     ),
 });
 

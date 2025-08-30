@@ -201,6 +201,7 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
         </Card>
 
         {/* users table  */}
+
         <UsersTable users={usersData ?? []} refetch={refetch} />
       </div>
     </>

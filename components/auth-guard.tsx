@@ -13,8 +13,6 @@ export function AuthGuard({
 }) {
   const { isLoading, error, data } = useProfileQuery();
 
-  console.log('login user data:', data);
-
   useEffect(() => {
     if (!data) return;
 
@@ -28,12 +26,6 @@ export function AuthGuard({
     } else {
       console.log('Running without socket connection (offline mode)');
     }
-
-    return () => {
-      // Cleanup socket connection when app unmounts
-      console.log('Cleaning up socket connection');
-      socketManager.disconnect();
-    };
   }, [data]);
 
   if (error) {

@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { socketManager } from '@/lib/socket';
 import { useLogoutMutation, useProfileQuery } from '@/queries/auth';
 import { useGetNotificationsQuery } from '@/queries/notifications';
 import { Bell, LogOut, Search, User, User2 } from 'lucide-react';
@@ -30,12 +31,19 @@ export function DashboardHeader() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const handleLogout = async () => {
-    await logout();
     clientLogout();
+    await logout();
     toast.success('Logged out', {
       description: 'You have been logged out successfully.',
     });
-    router.push('/login');
+
+    const socket = socketManager.connect();
+    if (socket) {
+      socket.auth = {};
+      socket.disconnect();
+    }
+
+    // router.push('/login');
   };
 
   const formatTime = (timestamp: string) => {

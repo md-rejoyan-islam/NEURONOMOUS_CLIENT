@@ -180,12 +180,14 @@ export default function DevicesComponent() {
               All Devices
             </CardTitle>
             <div className="flex items-center gap-3">
-              <div className="flex gap-2">
-                <Button variant={'outline'} onClick={handleSummaryDownload}>
-                  <ArrowDown className="text-primary animate-bounce" />
-                  Summary
-                </Button>
-              </div>
+              {user?.role === 'superadmin' && (
+                <div className="flex gap-2">
+                  <Button variant={'outline'} onClick={handleSummaryDownload}>
+                    <ArrowDown className="text-primary animate-bounce" />
+                    Summary
+                  </Button>
+                </div>
+              )}
               <div className="flex gap-2">
                 <BulkOperationModel devices={devices || []} />
               </div>

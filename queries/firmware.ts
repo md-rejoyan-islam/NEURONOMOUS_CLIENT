@@ -1,4 +1,3 @@
-import { getApiUrl } from '@/lib/config';
 import { IFirmware } from '@/lib/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
@@ -16,17 +15,6 @@ export interface FirmwareCreateInput {
   description: string;
 }
 
-export const baseQuery = fetchBaseQuery({
-  baseUrl: getApiUrl('AUTH').replace('/auth', ''),
-  prepareHeaders: (headers) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers.set('authorization', `Bearer ${token}`);
-    }
-    return headers;
-  },
-});
-
 interface ISuccessResponse<T> {
   success: boolean;
   message: string;
@@ -37,12 +25,12 @@ export const firmwareApi = createApi({
   reducerPath: 'firmwareApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/proxy/api/v1',
-    responseHandler: async (response) => {
-      if (response.status === 301) {
-        window.location.reload();
-      }
-      return response.json();
-    },
+    // responseHandler: async (response) => {
+    //   if (response.status === 301) {
+    //     window.location.reload();
+    //   }
+    //   return response.json();
+    // },
   }),
   tagTypes: ['Firmware'],
   endpoints: (builder) => ({
