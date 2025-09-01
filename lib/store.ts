@@ -1,8 +1,10 @@
 import { analyticsApi } from '@/queries/analytics';
 import { authApi } from '@/queries/auth';
+import { contactApi } from '@/queries/contact';
 import { devicesApi } from '@/queries/devices';
 import { firmwareApi } from '@/queries/firmware';
 import { groupApi } from '@/queries/group';
+import { logsApi } from '@/queries/logs';
 import { notificationsApi } from '@/queries/notifications';
 import { systemApi } from '@/queries/system';
 import { usersApi } from '@/queries/users';
@@ -19,6 +21,8 @@ export const store = configureStore({
     [groupApi.reducerPath]: groupApi.reducer,
     [firmwareApi.reducerPath]: firmwareApi.reducer,
     [systemApi.reducerPath]: systemApi.reducer,
+    [contactApi.reducerPath]: contactApi.reducer,
+    [logsApi.reducerPath]: logsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -33,7 +37,9 @@ export const store = configureStore({
       authApi.middleware,
       groupApi.middleware,
       firmwareApi.middleware,
-      systemApi.middleware
+      systemApi.middleware,
+      contactApi.middleware,
+      logsApi.middleware
     ),
 });
 

@@ -217,10 +217,37 @@ export const firmwareSchema = z.object({
     }, 'File size must be less than 5 MB'),
 });
 
+// New validation schemas
+export const contactFormSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  subject: z.string().min(1, 'Subject is required'),
+  priority: z.enum(['low', 'medium', 'high', 'urgent']),
+  category: z.enum([
+    'technical',
+    'billing',
+    'feature-request',
+    'bug-report',
+    'other',
+  ]),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+});
+
+export const logFilterSchema = z.object({
+  level: z.enum(['all', 'error', 'warning', 'info', 'success']).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  search: z.string().optional(),
+  sortBy: z.enum(['timestamp', 'level', 'message']).optional(),
+  sortOrder: z.enum(['asc', 'desc']).optional(),
+});
+
 // Type exports
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+export type ContactFormInput = z.infer<typeof contactFormSchema>;
+export type LogFilterInput = z.infer<typeof logFilterSchema>;
 
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;

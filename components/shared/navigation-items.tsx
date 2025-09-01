@@ -1,7 +1,6 @@
 import {
-  Activity,
-  BarChart3,
   Bell,
+  CircleQuestionMark,
   Cpu,
   FileText,
   HardDrive,
@@ -56,22 +55,15 @@ const navigationItems = [
     roles: ['superadmin', 'admin', 'user'],
   },
   {
-    name: 'Analytics',
-    href: '/analytics',
-    icon: BarChart3,
-    roles: ['superadmin', 'admin'],
-  },
-
-  {
-    name: 'Activity Logs',
-    href: '/user-activity',
-    icon: Activity,
-    roles: ['superadmin'],
-  },
-  {
     name: 'System Logs',
     href: '/system-logs',
     icon: FileText,
+    roles: ['superadmin'],
+  },
+  {
+    name: 'Support',
+    href: '/support',
+    icon: CircleQuestionMark,
     roles: ['superadmin'],
   },
   {
