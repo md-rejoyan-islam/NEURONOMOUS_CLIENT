@@ -7,7 +7,7 @@ import SimpleSummaryCard from '../cards/simple-summary-card';
 
 const TotalDevices = () => {
   const { data: user } = useProfileQuery();
-  const { data: devices = [] } = useGetAllDevicesQuery();
+  const { data: devices = [] } = useGetAllDevicesQuery({});
   return (
     <>
       {user?.role !== 'user' && (
