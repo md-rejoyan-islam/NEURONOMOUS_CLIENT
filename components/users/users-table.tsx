@@ -207,7 +207,7 @@ const UsersTable = ({
         </CardHeader>
         <CardContent>
           <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600 overflow-x-auto">
-            <div className="min-w-[800px]">
+            <div className="">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-primary/5 dark:bg-primary/5">

@@ -22,9 +22,9 @@ export const devicesApi = createApi({
   keepUnusedDataFor: 0,
   tagTypes: ['Device', 'ScheduledNotice'],
   endpoints: (builder) => ({
-    getAllDevices: builder.query<IDevice[], void>({
-      query: () => ({
-        url: '/devices',
+    getAllDevices: builder.query<IDevice[], { query?: string }>({
+      query: ({ query }) => ({
+        url: `/devices?${query}`,
         method: 'GET',
       }),
       transformResponse: (response) =>
