@@ -7,7 +7,9 @@ import { CheckCircle, Wifi } from 'lucide-react';
 import { useEffect } from 'react';
 
 const ActiveDevice = () => {
-  const { data: devices, refetch: refetchAllDevices } = useGetAllDevicesQuery();
+  const { data: devices, refetch: refetchAllDevices } = useGetAllDevicesQuery(
+    {}
+  );
   const activeDevices =
     devices?.filter((d) => d.status === 'online').length || 0;
 
