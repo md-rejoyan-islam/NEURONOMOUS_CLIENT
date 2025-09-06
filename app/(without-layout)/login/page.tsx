@@ -10,6 +10,16 @@ export const metadata: Metadata = {
     title: 'Login | IoT Control Hub',
     description:
       'Access your IoT Control Hub account securely and manage your devices.',
+    images: [
+      {
+        url: '/warning.png',
+        width: 1200,
+        height: 630,
+        alt: 'IoT Control Hub',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
   },
 };
 

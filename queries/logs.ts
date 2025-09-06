@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export interface SystemLog {
@@ -28,6 +29,27 @@ export interface LogsResponse {
   total: number;
   page: number;
   totalPages: number;
+}
+
+export interface ILog {
+  data: {
+    _id: string;
+    timestamp: string;
+    level: 'error' | 'warning' | 'info' | 'success';
+    message: string;
+    metadata: {
+      status: number;
+      timestamp: string;
+      label?: string;
+      stack?: string;
+    };
+  }[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+    limit: number;
+  };
 }
 
 export const logsApi = createApi({
@@ -101,6 +123,14 @@ export const logsApi = createApi({
       //     },
       //   ],
     }),
+    getAllLogs: builder.query<ILog, LogFilters>({
+      query: (filters) => ({
+        url: '/logs',
+        params: filters,
+      }),
+
+      providesTags: ['SystemLog'],
+    }),
     // getSystemLogs: builder.query<LogsResponse, LogFilters>({
     //   // Only use query for RTK Query, not queryFn
     //   query: (filters) => ({
@@ -119,4 +149,8 @@ export const logsApi = createApi({
   }),
 });
 
-export const { useGetSystemLogsQuery, useExportLogsMutation } = logsApi;
+export const {
+  useGetSystemLogsQuery,
+  useExportLogsMutation,
+  useGetAllLogsQuery,
+} = logsApi;

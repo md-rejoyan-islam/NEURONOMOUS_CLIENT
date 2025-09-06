@@ -234,7 +234,7 @@ export const contactFormSchema = z.object({
 });
 
 export const logFilterSchema = z.object({
-  level: z.enum(['all', 'error', 'warning', 'info', 'success']).optional(),
+  level: z.enum(['error', 'warning', 'info']).optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   search: z.string().optional(),

@@ -28,12 +28,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { LogFilterInput, logFilterSchema } from '@/lib/validations';
-import { useExportLogsMutation, useGetSystemLogsQuery } from '@/queries/logs';
+import { useExportLogsMutation, useGetAllLogsQuery } from '@/queries/logs';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   AlertTriangle,
   CheckCircle,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Download,
   Eye,
@@ -49,7 +51,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export interface LogFilters {
-  level?: 'all' | 'error' | 'warning' | 'info' | 'success';
+  level?: 'error' | 'warning' | 'info';
   startDate?: string;
   endDate?: string;
   search?: string;
@@ -76,7 +78,7 @@ const levelIcons = {
 
 export default function SystemLogsPage() {
   const [filters, setFilters] = useState<LogFilters>({
-    level: 'all',
+    level: 'error',
     sortBy: 'timestamp',
     sortOrder: 'desc',
     page: 1,
@@ -84,9 +86,20 @@ export default function SystemLogsPage() {
   });
   const [selectedLog, setSelectedLog] = useState<any>(null);
 
-  const { data: logsData, isLoading, refetch } = useGetSystemLogsQuery(filters);
+  // const { data: logsData, isLoading, refetch } = useGetSystemLogsQuery(filters);
+  const { data, isLoading, refetch } = useGetAllLogsQuery(filters);
 
-  console.log('Logs Data:', logsData);
+  const { pagination, data: logsData } = data || {
+    pagination: {
+      total: 0,
+      page: 1,
+      pages: 1,
+      limit: 10,
+    },
+    data: [],
+  };
+
+  console.log('Logs Data:', logsData, pagination, data);
 
   const [exportLogs, { isLoading: isExporting }] = useExportLogsMutation();
 
@@ -196,11 +209,9 @@ export default function SystemLogsPage() {
                     <SelectValue placeholder="Select level" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Levels</SelectItem>
                     <SelectItem value="error">Error</SelectItem>
                     <SelectItem value="warning">Warning</SelectItem>
                     <SelectItem value="info">Info</SelectItem>
-                    <SelectItem value="success">Success</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -302,7 +313,7 @@ export default function SystemLogsPage() {
             <div className="space-y-4">
               {logsData?.map((log) => (
                 <div
-                  key={log.id}
+                  key={log._id}
                   className="rounded-lg border p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   <div className="flex items-start justify-between">
@@ -318,21 +329,8 @@ export default function SystemLogsPage() {
                           <Clock className="h-3 w-3" />
                           {formatTimestamp(log.timestamp)}
                         </span>
-                        <span className="text-sm text-gray-500">
-                          Source: {log.source}
-                        </span>
                       </div>
                       <p className="mb-1 text-sm font-medium">{log.message}</p>
-                      {log.userId && (
-                        <p className="text-xs text-gray-500">
-                          User ID: {log.userId}
-                        </p>
-                      )}
-                      {log.deviceId && (
-                        <p className="text-xs text-gray-500">
-                          Device ID: {log.deviceId}
-                        </p>
-                      )}
                     </div>
                     <Dialog>
                       <DialogTrigger asChild>
@@ -345,17 +343,17 @@ export default function SystemLogsPage() {
                           Details
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
+                      <DialogContent>
                         <DialogHeader>
                           <DialogTitle className="flex items-center gap-2">
                             {getLevelIcon(log.level)}
                             Log Details
                           </DialogTitle>
                           <DialogDescription>
-                            {formatTimestamp(log.timestamp)} - {log.source}
+                            {formatTimestamp(log.timestamp)}
                           </DialogDescription>
                         </DialogHeader>
-                        <div className="space-y-4">
+                        <div className="space-y-4 overflow-hidden">
                           <div>
                             <Label className="text-sm font-medium">Level</Label>
                             <Badge className={`${levelColors[log.level]} mt-1`}>
@@ -367,27 +365,14 @@ export default function SystemLogsPage() {
                               Message
                             </Label>
                             <p className="mt-1 text-sm">{log.message}</p>
+                            <div className="mt-4">
+                              {log.metadata?.stack && (
+                                <pre className="mt-2 overflow-auto rounded bg-gray-100 p-2 text-xs text-red-800">
+                                  {log.metadata.stack}
+                                </pre>
+                              )}
+                            </div>
                           </div>
-                          {log.details && (
-                            <div>
-                              <Label className="text-sm font-medium">
-                                Details
-                              </Label>
-                              <pre className="mt-1 overflow-x-auto rounded bg-gray-100 p-3 text-xs dark:bg-gray-800">
-                                {JSON.stringify(log.details, null, 2)}
-                              </pre>
-                            </div>
-                          )}
-                          {log.stackTrace && (
-                            <div>
-                              <Label className="text-sm font-medium">
-                                Stack Trace
-                              </Label>
-                              <pre className="mt-1 overflow-x-auto rounded bg-red-50 p-3 text-xs text-red-800 dark:bg-red-900/20 dark:text-red-300">
-                                {log.stackTrace}
-                              </pre>
-                            </div>
-                          )}
                         </div>
                       </DialogContent>
                     </Dialog>
@@ -398,17 +383,17 @@ export default function SystemLogsPage() {
           )}
 
           {/* Pagination */}
-          {/* {logsData && logsData.totalPages > 1 && (
+          {pagination && pagination.pages > 1 && (
             <div className="mt-6 flex items-center justify-between">
               <p className="text-sm text-gray-500">
-                Page {logsData.page} of {logsData.totalPages}
+                Page {pagination.page} of {pagination.pages}
               </p>
               <div className="flex gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlePageChange(logsData.page - 1)}
-                  disabled={logsData.page === 1}
+                  onClick={() => handlePageChange(pagination.page - 1)}
+                  disabled={pagination.page === 1}
                 >
                   <ChevronLeft className="mr-1 h-4 w-4" />
                   Previous
@@ -416,15 +401,15 @@ export default function SystemLogsPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlePageChange(logsData.page + 1)}
-                  disabled={logsData.page === logsData.totalPages}
+                  onClick={() => handlePageChange(pagination.page + 1)}
+                  disabled={pagination.page === pagination.pages}
                 >
                   Next
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
             </div>
-          )} */}
+          )}
         </CardContent>
       </Card>
     </div>
