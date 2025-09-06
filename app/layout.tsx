@@ -7,10 +7,34 @@ import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
+const clientUrl =
+  process.env.NEXT_PUBLIC_CLIENT_URL || 'https://neuronomous.net';
+
 export const metadata: Metadata = {
   title: 'IoT Control Hub',
   description: 'Advanced IoT device management and control system',
-  generator: 'v0.dev',
+  metadataBase: new URL(clientUrl),
+  openGraph: {
+    title: 'IoT Control Hub',
+    description: 'Advanced IoT device management and control system',
+    siteName: 'IoT Control Hub',
+    images: [
+      {
+        url: '/warning.png',
+        width: 1200,
+        height: 630,
+        alt: 'IoT Control Hub',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'IoT Control Hub',
+    description: 'Advanced IoT device management and control system',
+    images: ['/warning.png'],
+  },
 };
 
 export default function RootLayout({

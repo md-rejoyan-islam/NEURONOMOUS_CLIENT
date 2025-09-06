@@ -7,8 +7,9 @@ export const metadata: Metadata = {
   title: 'Login',
   description: 'Login to your IoT Control Hub account',
   openGraph: {
-    title: 'Login',
-    description: 'Login to your IoT Control Hub account',
+    title: 'Login | IoT Control Hub',
+    description:
+      'Access your IoT Control Hub account securely and manage your devices.',
   },
 };
 
