@@ -24,7 +24,7 @@ export const devicesApi = createApi({
   endpoints: (builder) => ({
     getAllDevices: builder.query<IDevice[], { query?: string }>({
       query: ({ query }) => ({
-        url: `/devices?${query}`,
+        url: `/devices?${query ? query : ''}`,
         method: 'GET',
       }),
       transformResponse: (response) =>

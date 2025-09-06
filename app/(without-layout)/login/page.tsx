@@ -6,6 +6,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Login',
   description: 'Login to your IoT Control Hub account',
+  openGraph: {
+    title: 'Login',
+    description: 'Login to your IoT Control Hub account',
+  },
 };
 
 export default function LoginPage() {
