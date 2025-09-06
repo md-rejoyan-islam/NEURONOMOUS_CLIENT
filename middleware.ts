@@ -31,5 +31,7 @@ export function middleware(request: NextRequest) {
  * except for API routes, static files, and internal Next.js paths.
  */
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|svg|css|js|woff|woff2)).*)',
+  ],
 };
