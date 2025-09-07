@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const publicRoutes = ['/login', '/forgot-password'];
+  const publicRoutes = ['/', '/forgot-password', '/login'];
 
   // Get the authentication token from the request cookies.
   const token = request.cookies.get('accessToken')?.value;
@@ -11,15 +11,20 @@ export function middleware(request: NextRequest) {
 
   const isPublicRoute = publicRoutes.includes(pathname);
 
+  console.log(pathname, 'pathname');
+  console.log(isPublicRoute, 'isPublicRoute');
+  console.log(token, 'token');
+
   // If the user is authenticated and trying to access a public route,
   if (token && isPublicRoute) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   // If the user is not authenticated and trying to access a protected route,
   if (!isPublicRoute && !token) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
+  console.log('here');
 
   // If the user is authenticated and trying to access a protected route,
   return NextResponse.next();

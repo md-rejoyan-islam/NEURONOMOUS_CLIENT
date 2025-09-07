@@ -29,6 +29,8 @@ export function AuthGuard({
   }, [data]);
 
   if (error) {
+    // console.log('ewew');
+
     redirect('/login');
   }
 

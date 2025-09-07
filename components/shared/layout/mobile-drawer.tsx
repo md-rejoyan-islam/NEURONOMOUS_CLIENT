@@ -57,7 +57,7 @@ export function MobileDrawer() {
             <div className="bg-primary rounded-lg p-2">
               <Zap className="text-primary-foreground h-5 w-5" />
             </div>
-            IoT Hub
+            Neuronomous
           </SheetTitle>
         </SheetHeader>
 

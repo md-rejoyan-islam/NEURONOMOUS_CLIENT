@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
@@ -11,16 +10,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import clsx from 'clsx';
 
-export function ThemeToggle() {
+export function ThemeToggle({ size }: { size?: string }) {
   const { setTheme, theme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-9 w-9 px-0">
-          <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-9 w-9 px-0 [&_svg:not([class*='size-'])]:size-[18px]"
+        >
+          <Sun
+            className={clsx(
+              'scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90',
+              size ? size : ''
+            )}
+          />
+          <Moon
+            className={clsx(
+              'bl absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0',
+              size ? size : ''
+            )}
+          />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

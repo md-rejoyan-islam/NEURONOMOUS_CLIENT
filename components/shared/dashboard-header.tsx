@@ -17,14 +17,12 @@ import { useLogoutMutation, useProfileQuery } from '@/queries/auth';
 import { useGetNotificationsQuery } from '@/queries/notifications';
 import { Bell, LogOut, Search, User, User2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { MobileDrawer } from './layout/mobile-drawer';
 import { ThemeToggle } from './theme-toggle';
 
 export function DashboardHeader() {
   const { data: user } = useProfileQuery();
-  const router = useRouter();
   const { data: notifications = [] } = useGetNotificationsQuery();
   const [clientLogout] = useLogoutMutation();
 

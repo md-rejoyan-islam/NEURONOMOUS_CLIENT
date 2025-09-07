@@ -14,7 +14,7 @@ import {
 const navigationItems = [
   {
     name: 'Dashboard',
-    href: '/',
+    href: '/dashboard',
     icon: LayoutDashboard,
     roles: ['superadmin', 'admin', 'user'],
   },

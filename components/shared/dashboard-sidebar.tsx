@@ -4,7 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useProfileQuery } from '@/queries/auth';
-import { ChevronLeft, ChevronRight, Zap } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { redirect, usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -41,14 +42,19 @@ export function DashboardSidebar({ className }: { className?: string }) {
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b p-4">
+      <div className="flex items-center justify-between border-b px-4 py-3.5">
         {!collapsed && (
-          <Link href="/" className="block">
+          <Link href="/dashboard" className="block">
             <div className="flex items-center gap-2">
-              <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
-                <Zap className="text-primary-foreground h-4 w-4" />
-              </div>
-              <span className="text-lg font-bold">IoT Hub</span>
+              <Image
+                src={'/logo.png'}
+                alt="Logo"
+                width={36}
+                height={36}
+                className="h-9 w-9"
+              />
+
+              <span className="text-lg font-bold">Neuronomous</span>
             </div>
           </Link>
         )}
