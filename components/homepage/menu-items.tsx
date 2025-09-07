@@ -17,6 +17,7 @@ import {
   UserCheck,
   Wifi,
 } from 'lucide-react';
+import Image from 'next/image';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -467,8 +468,10 @@ const HomepageMenuItems = () => {
               variants={itemVariants}
               className="rounded-xl border border-slate-200 bg-white/60 p-4 backdrop-blur-md dark:border-slate-800/50 dark:bg-slate-900/50"
             >
-              <img
-                src="https://storage.googleapis.com/uxpilot-auth.appspot.com/778727428a-5888e14d2286c8411ce3.png"
+              <Image
+                src="/images/classroom.webp"
+                width={600}
+                height={400}
                 alt="A modern, smart classroom"
                 className="h-full max-h-[350px] w-full rounded-lg object-cover"
               />
@@ -489,9 +492,11 @@ const HomepageMenuItems = () => {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <motion.div variants={itemVariants}>
-              <div className="rounded-xl border border-slate-200 bg-white/60 p-4 backdrop-blur-md md:p-8 dark:border-slate-800/50 dark:bg-slate-900/50">
-                <img
-                  src="https://storage.googleapis.com/uxpilot-auth.appspot.com/c051c733b8-61c071b0a1e98cf9b7dc.png"
+              <div className="rounded-xl border border-slate-200 bg-white/60 p-4 backdrop-blur-md dark:border-slate-800/50 dark:bg-slate-900/50">
+                <Image
+                  src="/images/clock.webp"
+                  width={600}
+                  height={400}
                   alt="Smart Clock"
                   className="max-h-[300px] w-full rounded-lg object-cover"
                 />
@@ -532,10 +537,12 @@ const HomepageMenuItems = () => {
           </div>
           <div className="mt-16 grid items-center gap-12 md:mt-20 lg:grid-cols-2">
             <motion.div variants={itemVariants} className="lg:order-2">
-              <div className="rounded-xl border border-slate-200 bg-white/60 p-4 backdrop-blur-md md:p-8 dark:border-slate-800/50 dark:bg-slate-900/50">
-                <img
-                  src="https://storage.googleapis.com/uxpilot-auth.appspot.com/ebdbc969c9-729c39bbb3a6ccbd5126.png"
+              <div className="rounded-xl border border-slate-200 bg-white/60 p-4 backdrop-blur-md dark:border-slate-800/50 dark:bg-slate-900/50">
+                <Image
+                  src="/images/device.webp"
                   alt="Attendance Terminal"
+                  width={600}
+                  height={400}
                   className="max-h-[300px] w-full rounded-lg object-cover"
                 />
               </div>
