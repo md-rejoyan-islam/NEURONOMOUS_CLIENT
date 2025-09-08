@@ -171,14 +171,15 @@ export default function DevicesComponent({
 
       <div className="flex w-full flex-col gap-6 py-3">
         <Tabs defaultValue="clock">
-          <TabsList className="">
-            <TabsTrigger value="clock">
+          <TabsList className="w-full sm:w-fit">
+            <TabsTrigger value="clock" className="w-full sm:w-fit">
               <Clock className="mr-2 h-4 w-4" />
-              Clock & Notice Device
+              Clock & Notice
+              <span className="hidden sm:block">&nbsp;Device </span>
             </TabsTrigger>
-            <TabsTrigger value="attendance">
+            <TabsTrigger value="attendance" className="w-full sm:w-fit">
               <UserCheck className="mr-2 h-4 w-4" />
-              Attendance Device
+              Attendance <span className="hidden sm:block">&nbsp;Device </span>
             </TabsTrigger>
           </TabsList>
           <TabsContent value="clock">

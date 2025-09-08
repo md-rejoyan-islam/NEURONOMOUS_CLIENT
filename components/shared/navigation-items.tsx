@@ -2,6 +2,7 @@ import {
   Bell,
   CircleQuestionMark,
   Cpu,
+  FileChartColumn,
   FileText,
   HardDrive,
   Layers,
@@ -9,6 +10,7 @@ import {
   User,
   UserCheck,
   Users,
+  UserStar,
 } from 'lucide-react';
 
 const navigationItems = [
@@ -29,6 +31,18 @@ const navigationItems = [
     href: '/devices',
     icon: Cpu,
     roles: ['superadmin', 'admin', 'user'],
+  },
+  {
+    name: 'Courses',
+    href: '/courses',
+    icon: FileChartColumn,
+    roles: ['superadmin', 'admin', 'user'],
+  },
+  {
+    name: 'Students Overview',
+    href: '/students-overview',
+    icon: UserStar,
+    roles: ['superadmin', 'admin'],
   },
   {
     name: 'Users',

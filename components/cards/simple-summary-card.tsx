@@ -12,7 +12,7 @@ const SimpleSummaryCard = ({
   readonly valueColor: string;
 }) => {
   return (
-    <Card>
+    <Card className="transition-all duration-300 hover:-translate-y-1">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-center justify-between">
           <div>

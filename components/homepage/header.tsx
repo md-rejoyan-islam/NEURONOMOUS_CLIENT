@@ -56,7 +56,7 @@ const HomepageHeader = () => {
           </a>
         </nav>
         <div className="flex items-center space-x-2">
-          <Link href={'/login'}>
+          <Link href={'/login'} aria-label="Dashboard Login">
             <motion.span
               className="hidden rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white sm:inline-block"
               whileHover={{

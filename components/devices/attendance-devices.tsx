@@ -117,15 +117,13 @@ const AttendanceDevices = () => {
                       <div className="text-2xl font-bold text-indigo-600">
                         36
                       </div>
-                      <div className="text-xs text-gray-500">Total Classes</div>
+                      <div className="text-xs text-gray-500">Total Courses</div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-gray-900">
-                        Last Update
-                      </div>
-                      <div className="text-xs text-gray-500">
+                    <div className="flex flex-col items-center text-right">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
                         Sep 7, 09:45 PM
                       </div>
+                      <div className="text-xs text-gray-500">Last Update</div>
                     </div>
                   </div>
                 </div>
