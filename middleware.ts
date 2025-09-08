@@ -11,10 +11,6 @@ export function middleware(request: NextRequest) {
 
   const isPublicRoute = publicRoutes.includes(pathname);
 
-  console.log(pathname, 'pathname');
-  console.log(isPublicRoute, 'isPublicRoute');
-  console.log(token, 'token');
-
   // If the user is authenticated and trying to access a public route,
   if (token && isPublicRoute) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
@@ -24,9 +20,7 @@ export function middleware(request: NextRequest) {
   if (!isPublicRoute && !token) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
-  console.log('here');
 
-  // If the user is authenticated and trying to access a protected route,
   return NextResponse.next();
 }
 
