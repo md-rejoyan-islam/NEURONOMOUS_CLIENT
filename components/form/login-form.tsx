@@ -40,7 +40,7 @@ const LoginForm = () => {
             result.data.user.first_name + ' ' + result.data.user.last_name
           }!`,
         });
-        router.push('/');
+        router.push('/dashboard');
       }
       // eslint-disable-next-line
     } catch (error: any) {
