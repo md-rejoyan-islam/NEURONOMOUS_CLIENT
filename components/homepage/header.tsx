@@ -71,6 +71,7 @@ const HomepageHeader = () => {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="cursor-pointer p-2 lg:hidden"
+            aria-label="Open menu"
           >
             {isMenuOpen ? <X /> : <Menu />}
           </button>
@@ -107,7 +108,7 @@ const HomepageHeader = () => {
         >
           Contact
         </a>
-        <Link href={'/login'}>
+        <Link href={'/login'} aria-label="Dashboard Login">
           <motion.span
             className="block w-full rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white sm:hidden"
             whileHover={{
