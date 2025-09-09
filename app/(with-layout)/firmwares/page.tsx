@@ -17,18 +17,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 
 import DownloadFirmware from '@/components/firmware/download-firmware';
 import FirmwareStatusChange from '@/components/firmware/firmware-status-change';
 import FirmwareCreateForm from '@/components/form/firmware-create-form';
+import NormalTable from '@/components/table/normal-table';
 import {
   useDeleteFirmwareMutation,
   useGetFirmwareQuery,
@@ -106,7 +99,7 @@ export default function FirmwareContent() {
         {/* Upload Form */}
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle>Upload New Firmware</CardTitle>
+            <CardTitle className="sm:text-lg">Upload New Firmware</CardTitle>
             <CardDescription>
               Upload a new firmware version for your devices
             </CardDescription>
@@ -119,72 +112,53 @@ export default function FirmwareContent() {
         {/* Firmware List */}
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Firmware Versions</CardTitle>
+            <CardTitle className="sm:text-lg">Firmware Versions</CardTitle>
             <CardDescription>
               Manage all uploaded firmware versions
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Version</TableHead>
-                    <TableHead>File Size</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Upload Date</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {isLoading && (
-                    <TableRow>
-                      <TableCell colSpan={7} className="py-3 text-center">
-                        Loading firmware versions...
-                      </TableCell>
-                    </TableRow>
-                  )}
+            <NormalTable
+              headers={[
+                '#',
+                'Version',
+                'File Size',
+                'Status',
+                'Device Type',
+                'Description',
+                'Upload Date',
+                'Actions',
+              ]}
+              isLoading={isLoading}
+              noDataMessage="No firmware versions available."
+              data={firmwares.map((fw, index) => [
+                index + 1,
+                <span key="version" className="font-medium">
+                  {fw.version}
+                </span>,
+                <span key="size">{fw.size}</span>,
+                <FirmwareStatusChange
+                  key="status"
+                  status={fw.status}
+                  id={fw._id}
+                />,
+                <span key="device_type" className="capitalize">
+                  {fw.device_type}
+                </span>,
+                <span key="description">{fw.description}</span>,
+                <span key="createdAt">{formatDate(fw.createdAt)}</span>,
+                <div key="actions" className="flex items-center gap-3">
+                  <button
+                    className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
+                    onClick={() => setDeleteId(fw._id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
 
-                  {firmwares.length > 0 &&
-                    firmwares.map((fw) => (
-                      <TableRow key={fw._id}>
-                        <TableCell className="font-medium">
-                          {fw.version}
-                        </TableCell>
-
-                        <TableCell>{fw.size}</TableCell>
-                        <TableCell>
-                          <FirmwareStatusChange
-                            status={fw.status}
-                            id={fw._id}
-                          />
-                        </TableCell>
-                        <TableCell>{fw.description}</TableCell>
-                        <TableCell>{formatDate(fw.createdAt)}</TableCell>
-                        <TableCell className="flex items-center gap-3">
-                          <button
-                            className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
-                            onClick={() => setDeleteId(fw._id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-
-                          <DownloadFirmware id={fw._id} />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-
-                  {!isLoading && firmwares.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={7} className="py-3 text-center">
-                        No firmware versions available.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+                  <DownloadFirmware id={fw._id} />
+                </div>,
+              ])}
+            />
           </CardContent>
         </Card>
       </div>

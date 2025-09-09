@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import NormalTable from '@/components/table/normal-table';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
@@ -9,16 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 
-import { DoorClosedLocked, Plus } from 'lucide-react';
+import { DoorClosedLocked } from 'lucide-react';
 import Link from 'next/link';
 
 const Page = () => {
@@ -114,10 +106,9 @@ const Page = () => {
       <Card className="mt-4 py-3 shadow-xs">
         <CardContent className="flex flex-col items-center justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <Button>
-              <Plus className="h-4 w-4" />
-              Add New Course
-            </Button>
+            <h2 className="text-lg font-medium">
+              Total Courses: {courses.length}
+            </h2>
           </div>
 
           <div className="flex items-center gap-4">
@@ -129,8 +120,8 @@ const Page = () => {
                 <SelectGroup>
                   <SelectItem value="apple">Session</SelectItem>
                   <SelectItem value="banana">Course Code</SelectItem>
-                  <SelectItem value="blueberry">Teacher Name</SelectItem>
-                  <SelectItem value="grapes">Teacher Email</SelectItem>
+                  <SelectItem value="blueberry">Instructor Name</SelectItem>
+                  <SelectItem value="grapes">Instructor Email</SelectItem>
                   <SelectItem value="pineapple">Course Name</SelectItem>
                 </SelectGroup>
               </SelectContent>
@@ -147,49 +138,46 @@ const Page = () => {
         </CardContent>
       </Card>
 
-      <Card className="mt-4 py-2">
+      <Card className="mt-4">
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Course Name</TableHead>
-                <TableHead>Course Code</TableHead>
-                <TableHead>Students Enrolled</TableHead>
-                <TableHead>Classes Taken</TableHead>
-                <TableHead>Last Updated</TableHead>
-                <TableHead>Author</TableHead>
-                <TableHead>Session</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {courses.map((course) => (
-                <TableRow key={course.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">
-                    <Link
-                      href={'/devices/attendance/001/courses/' + course.id}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {course.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{course.courseCode}</TableCell>
-                  <TableCell>{course.studentsEnrolled}</TableCell>
-                  <TableCell>{course.classTaken}</TableCell>
-                  <TableCell>
-                    {new Date(course.lastUpdated).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    {course.author} ({course.authorEmail})
-                  </TableCell>
-                  <TableCell>{course.session}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <NormalTable
+            headers={[
+              '#',
+              'Course Name',
+              'Course Code',
+              'Session',
+              'Enrolled',
+              'Classes Taken',
+              'Instructor',
+              'Last Updated',
+            ]}
+            isLoading={false}
+            data={
+              courses.map((course, index) => [
+                index + 1,
+                <Link
+                  key={course.id}
+                  href={'/devices/attendance/001/courses/' + course.id}
+                  className="text-blue-600 hover:underline"
+                >
+                  {course.name}
+                </Link>,
+                course.session,
+                course.courseCode,
+                course.studentsEnrolled,
+                course.classTaken,
+                <p key={course.author}>
+                  {course.author} ({course.authorEmail})
+                </p>,
+                new Date(course.lastUpdated).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                }),
+              ]) || []
+            }
+            noDataMessage="No courses found."
+          />
         </CardContent>
       </Card>
     </div>

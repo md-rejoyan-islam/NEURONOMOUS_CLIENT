@@ -41,6 +41,8 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
     isLoading: isUserLoading,
   } = useGetAllUsersInGroupQuery(_id as string);
 
+  console.log(usersData);
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = (term: string) => {

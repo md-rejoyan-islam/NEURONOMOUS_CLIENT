@@ -10,6 +10,13 @@ import { Upload } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 import InputField from './input-field';
 import TextField from './text-field';
 
@@ -21,6 +28,7 @@ const FirmwareCreateForm = () => {
     handleSubmit,
     watch,
     setValue,
+    clearErrors,
     reset,
     formState: { errors },
   } = useForm<FirmwareFormData>({
@@ -44,13 +52,12 @@ const FirmwareCreateForm = () => {
       setDragActive(false);
 
       const files = Array.from(e.dataTransfer.files);
-      // const binFile = files.find((file) => file.name.endsWith('.bin'));
-      const binFile = files.find(
-        (file) => file.name.endsWith('pdf') || file.name.endsWith('.bin')
-      );
+
+      const binFile = files.find((file) => file.name.endsWith('.bin'));
 
       if (binFile) {
         setValue('file', binFile);
+        clearErrors('file');
         toast.success('File selected: ', {
           description: `Selected: ${binFile.name}`,
         });
@@ -60,7 +67,7 @@ const FirmwareCreateForm = () => {
         });
       }
     },
-    [setValue]
+    [setValue, clearErrors]
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,6 +85,7 @@ const FirmwareCreateForm = () => {
       formData.append('file', data.file);
       formData.append('version', data.version);
       formData.append('description', data.description);
+      formData.append('device_type', data.device_type);
 
       await uploadFirmware(formData).unwrap();
       toast.success('Firmware uploaded successfully', {
@@ -99,7 +107,10 @@ const FirmwareCreateForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {/* File Upload Area */}
       <div className="space-y-2">
-        <Label>Firmware File (.bin)</Label>
+        <Label>
+          Firmware File (.bin)
+          <span className="text-red-500">*</span>
+        </Label>
         <div
           className={cn(
             'rounded-lg border-2 border-dashed p-6 text-center transition-colors',
@@ -114,7 +125,10 @@ const FirmwareCreateForm = () => {
         >
           <Upload className="mx-auto h-12 w-12 text-gray-400" />
           <div className="mt-4">
-            <Label htmlFor="file-upload" className="cursor-pointer">
+            <Label
+              htmlFor="file-upload"
+              className="cursor-pointer justify-center"
+            >
               <span className="text-blue-600 hover:text-blue-500">
                 Click to upload
               </span>
@@ -130,7 +144,7 @@ const FirmwareCreateForm = () => {
             />
           </div>
           <p className="mt-2 text-xs text-gray-500">
-            Only .bin files up to 10MB
+            Only .bin files up to 5MB
           </p>
           {watch('file') && (
             <p className="mt-2 text-sm text-green-600">
@@ -158,6 +172,30 @@ const FirmwareCreateForm = () => {
         error={errors.version?.message}
         props={{ ...register('version') }}
       />
+      <div className="space-y-2">
+        <Label>
+          Device Type
+          <span className="text-red-500">*</span>
+        </Label>
+        <Select
+          onValueChange={(value) =>
+            setValue('device_type', value as 'clock' | 'attendance', {
+              shouldValidate: true,
+            })
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select device type..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="clock">Clock</SelectItem>
+            <SelectItem value="attendance">Attendance</SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.device_type && (
+          <p className="text-sm text-red-600">{errors.device_type.message}</p>
+        )}
+      </div>
 
       {/* Description */}
       <TextField
@@ -166,6 +204,7 @@ const FirmwareCreateForm = () => {
         placeholder="Brief description of this firmware version..."
         error={errors.description?.message}
         props={{ ...register('description') }}
+        isOptional={false}
       />
 
       <Button type="submit" className="w-full" disabled={isUploading}>

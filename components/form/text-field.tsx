@@ -9,6 +9,7 @@ const TextField = ({
   error,
   disabled = false,
   placeholder,
+  isOptional = false,
 }: {
   name: string;
   label: string;
@@ -16,10 +17,14 @@ const TextField = ({
   error?: string;
   disabled?: boolean;
   placeholder: string;
+  isOptional?: boolean;
 }) => {
   return (
     <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={name}>
+        {label}
+        {!isOptional && <span className="text-red-500">*</span>}
+      </Label>
       <Textarea
         id={name}
         placeholder={placeholder}

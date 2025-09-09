@@ -11,6 +11,16 @@ export const userCreateSchema = z.object({
   last_name: z.string().min(2, 'Last name must be at least 2 characters'),
   email: z.email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
+  is_guest: z.boolean({
+    error: (iss) => {
+      if (iss.input === undefined) {
+        return 'is_guest is required.';
+      } else if (typeof iss.input !== iss.expected) {
+        return 'is_guest must be a boolean.';
+      }
+      return 'Invalid value for is_guest.';
+    },
+  }),
   phone: z.string().optional(),
   notes: z.string().optional(),
 });
@@ -117,6 +127,7 @@ export const createUserSchema = z.object({
   last_name: z.string().min(2, 'Last name must be at least 2 characters'),
   email: z.email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
+
   // role: z.enum(["superadmin", "user", "admin"]),
   department: z.string().optional(),
   phoneNumber: z.string().optional(),
@@ -204,12 +215,21 @@ export const firmwareSchema = z.object({
     .min(1, 'Version is required')
     .regex(/^\d+\.\d+\.\d+$/, 'Version must be in format x.x.x (e.g., 2.1.0)'),
   description: z.string().min(1, 'Description is required'),
+  device_type: z.enum(['clock', 'attendance'], {
+    error: (iss) => {
+      if (!iss.input) {
+        return 'Device type is required.';
+      } else if (typeof iss.input !== iss.expected) {
+        return 'Device type must be either "clock" or "attendance".';
+      }
+      return 'Invalid device type.';
+    },
+  }),
   file: z
     .any()
     .refine((file) => file instanceof File, 'File is required')
     .refine(
-      (file) => file?.name?.endsWith('.pdf') || file?.name?.endsWith('.bin'),
-      // (file) => file?.name?.endsWith('.bin'),
+      (file) => file?.name?.endsWith('.bin'),
       'Only .bin files are allowed'
     )
     .refine((file) => {

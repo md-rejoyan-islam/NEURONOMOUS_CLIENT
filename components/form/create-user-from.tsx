@@ -34,6 +34,7 @@ const CreateUserFrom = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<UserCreateInput>({
     resolver: zodResolver(userCreateSchema),
@@ -102,18 +103,6 @@ const CreateUserFrom = () => {
         router.push('/users');
       }
 
-      console.log(payload, selectedGroup?._id);
-
-      //   const result = { success: true, data: {} };
-
-      //   if (result?.success) {
-      //     toast.success("Login Successful", {
-      //       description: `Welcome back, ${
-      //         result.data.user.first_name + " " + result.data.user.last_name
-      //       }!`,
-      //     });
-      //     router.push("/");
-      //   }
       // eslint-disable-next-line
     } catch (error: any) {
       toast.error('Login Failed', {
@@ -161,14 +150,35 @@ const CreateUserFrom = () => {
                   props={{ ...register('last_name') }}
                 />
               </div>
-              <InputField
-                name="email"
-                label="Email Address"
-                placeholder="Enter email address"
-                isOptional={false}
-                error={errors.email?.message}
-                props={{ ...register('email') }}
-              />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="is_guest">Is Guest User?</Label>
+                  <Select
+                    onValueChange={(value) =>
+                      value === 'true'
+                        ? setValue('is_guest', true, { shouldValidate: true })
+                        : setValue('is_guest', false, { shouldValidate: true })
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select an option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="true">Yes</SelectItem>
+                      <SelectItem value="false">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <InputField
+                  name="email"
+                  label="Email Address"
+                  placeholder="Enter email address"
+                  isOptional={false}
+                  error={errors.email?.message}
+                  props={{ ...register('email') }}
+                />
+              </div>
+
               <PasswordField
                 label="Password"
                 placeholder="Enter password"

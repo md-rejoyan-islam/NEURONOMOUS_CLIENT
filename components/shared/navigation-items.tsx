@@ -51,8 +51,8 @@ const navigationItems = [
     roles: ['superadmin', 'admin'],
   },
   {
-    name: 'Firmware',
-    href: '/firmware',
+    name: 'Firmwares',
+    href: '/firmwares',
     icon: HardDrive,
     roles: ['superadmin'],
   },

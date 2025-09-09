@@ -20,6 +20,7 @@ export interface IFirmware {
   file: Buffer;
   size: string;
   status: 'active' | 'inactive';
+  device_type: 'clock' | 'attendance';
   description: string;
   createdAt: string;
   updatedAt: string;
@@ -92,5 +93,7 @@ export interface IGroupWithPopulatedData {
   description: string;
   createdAt: string;
   devices: IDevice[]; // Populated device data
-  members: IUser[]; // Populated user data
+  members: (IUser & {
+    is_guest: boolean;
+  })[]; // Populated user data
 }
