@@ -83,6 +83,16 @@ const GroupCreateModal = () => {
               name="groupName"
               disabled={isLoading}
             />
+            <InputField
+              label="Group EIIN"
+              placeholder="Enter group EIIN"
+              type="text"
+              error={errors.group_eiin?.message}
+              props={register('group_eiin')}
+              isOptional={false}
+              name="groupEiin"
+              disabled={isLoading}
+            />
 
             <TextField
               name="groupDescription"

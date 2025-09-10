@@ -63,6 +63,31 @@ export const groupApi = createApi({
             ]
           : ['Group'],
     }),
+    getAllGroupsForCourseCreation: builder.query<
+      { name: string; eiin: string; _id: string }[],
+      void
+    >({
+      query: () => ({
+        url: '/groups//all-groups',
+        method: 'GET',
+      }),
+      transformResponse: (response) =>
+        (
+          response as ISuccessResponse<
+            { name: string; eiin: string; _id: string }[]
+          >
+        ).data,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({
+                type: 'Group' as const,
+                id: _id,
+              })),
+              'Group',
+            ]
+          : ['Group'],
+    }),
     addAdminWithGroup: builder.mutation<
       IGroupWithPopulatedData[],
       IAddGroupRequest
@@ -96,6 +121,13 @@ export const groupApi = createApi({
         (response as ISuccessResponse<IGroupWithPopulatedData>).data,
       providesTags: (result, error, id) => [{ type: 'Group', id }],
     }),
+    deleteGroupById: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/groups/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Group'],
+    }),
     getAllUsersInGroup: builder.query<IUser[], string>({
       query: (id) => ({
         url: `/groups/${id}/users`,
@@ -117,7 +149,23 @@ export const groupApi = createApi({
       }
     >({
       query: ({ id, payload }) => ({
-        url: `/groups/${id}/add-device`,
+        url: `/groups/${id}/add-clock-device`,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+    }),
+    addAttendanceDeviceToGroup: builder.mutation<
+      IGroupResponse,
+      {
+        id: string;
+        payload: {
+          deviceId: string;
+        };
+      }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/groups/${id}/add-attendace-device`,
         method: 'POST',
         body: payload,
       }),
@@ -134,6 +182,7 @@ export const groupApi = createApi({
           email: string;
           password: string;
           deviceIds: string[];
+          deviceType: 'clock' | 'attendance';
           phone?: string;
           notes?: string;
         };
@@ -185,4 +234,7 @@ export const {
   useAddUserToGroupWithDevicesMutation,
   useGetAllGroupDevicesQuery,
   useRemoveDeviceFromGroupMutation,
+  useAddAttendanceDeviceToGroupMutation,
+  useDeleteGroupByIdMutation,
+  useGetAllGroupsForCourseCreationQuery,
 } = groupApi;

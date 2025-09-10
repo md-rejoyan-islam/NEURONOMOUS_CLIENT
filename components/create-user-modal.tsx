@@ -78,6 +78,7 @@ export function CreateUserModal({
         phone: data.phone || '',
         notes: data.notes || '',
         deviceIds: selectedDevices,
+        deviceType: 'clock' as const,
       };
 
       const result = await createUserWithDevices({

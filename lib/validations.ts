@@ -6,21 +6,19 @@ export const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+export const createCourseSchema = z.object({
+  name: z.string().min(2, 'Course name must be at least 2 characters'),
+  code: z.string().min(2, 'Course code must be at least 2 characters'),
+  department: z.string().min(2, 'Department must be at least 2 characters'),
+  instructor: z.string().min(2, 'Instructor is required'),
+  session: z.string().min(4, 'Session must be at least 4 characters'),
+});
+
 export const userCreateSchema = z.object({
   first_name: z.string().min(2, 'First name must be at least 2 characters'),
   last_name: z.string().min(2, 'Last name must be at least 2 characters'),
   email: z.email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-  is_guest: z.boolean({
-    error: (iss) => {
-      if (iss.input === undefined) {
-        return 'is_guest is required.';
-      } else if (typeof iss.input !== iss.expected) {
-        return 'is_guest must be a boolean.';
-      }
-      return 'Invalid value for is_guest.';
-    },
-  }),
   phone: z.string().optional(),
   notes: z.string().optional(),
 });
@@ -137,7 +135,10 @@ export const createUserSchema = z.object({
 
 export const groupSchema = z.object({
   group_name: z.string().min(2, 'Group name must be at least 2 characters'),
-  group_description: z.string().optional(),
+  group_description: z
+    .string()
+    .min(10, 'Group description must be at least 10 characters'),
+  group_eiin: z.string().min(2, 'Group EIIN must be at least 2 characters'),
 });
 
 export const addDeviceToGroupSchema = z.object({
@@ -178,6 +179,20 @@ export const addDeviceToGroupSchema = z.object({
     })
     .min(4, 'Location must be at least 4 characters long'),
 });
+export const addAttendanceDeviceToGroupSchema = z.object({
+  deviceId: z
+    .string({
+      error: (iss) => {
+        if (!iss.input) {
+          return 'Device ID is required.';
+        } else if (typeof iss.input !== iss.expected) {
+          return 'Device ID must be a string.';
+        }
+        return 'Invalid device ID.';
+      },
+    })
+    .min(4, 'Device ID must be at least 4 characters long'),
+});
 
 export const createGroupWithAdminSchema = createUserSchema
   .pick({
@@ -189,7 +204,10 @@ export const createGroupWithAdminSchema = createUserSchema
   .extend({
     role: z.literal('admin'),
     group_name: z.string().min(2, 'Group name must be at least 2 characters'),
-    group_description: z.string().optional(),
+    group_eiin: z.string().min(2, 'Group EIIN must be at least 2 characters'),
+    group_description: z
+      .string()
+      .min(10, 'Group description must be at least 10 characters'),
   });
 
 // Notification schemas
@@ -287,3 +305,7 @@ export type UserCreateInput = z.infer<typeof userCreateSchema>;
 export type AuthChangePasswordInput = z.infer<typeof authChangePasswordSchema>;
 export type UserUpdateInput = z.infer<typeof userUpdateSchema>;
 export type FirmwareFormData = z.infer<typeof firmwareSchema>;
+export type AddAttendanceDeviceToGroupInput = z.infer<
+  typeof addAttendanceDeviceToGroupSchema
+>;
+export type CourseInput = z.infer<typeof createCourseSchema>;

@@ -38,6 +38,58 @@ export interface ICpu {
   cpuUsagePercent: string; // percentage of CPU usage
 }
 
+export interface ICourse {
+  _id: string;
+  code: string;
+  name: string;
+  session: string;
+  enroll_link: string;
+  instructor: IUser;
+  studentsEnrolled: {
+    _id: string;
+    registration_number: string;
+    name: string;
+    email: string;
+    session: string;
+  }[];
+  completedClasses: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IAttendanceDevice {
+  _id: string;
+  id: string;
+  mac_id: string | null;
+  status: 'online' | 'offline';
+  free_heap: number;
+  firmware_version: string | null;
+  last_seen: number;
+  allowed_users?: {
+    _id: string;
+    role: 'admin' | 'user' | 'superadmin';
+    first_name: string;
+    last_name: string;
+    email: string;
+  }[];
+  group: {
+    _id: string;
+    name: string;
+    admin: IUser;
+  };
+  courses: {
+    _id: string;
+    code: string;
+    name: string;
+    session: string;
+    enroll_link: string;
+    instructor: IUser;
+    studentsEnrolled: number;
+    completedClasses: number;
+    updatedAt: string;
+  }[];
+}
+
 export interface IDevice {
   _id: string;
   id: string;
@@ -82,6 +134,7 @@ export interface IGroup {
   _id: string;
   name: string;
   description: string;
+  eiin: string;
   createdAt: string;
   devices: string[]; // Array of device IDs
   members: string[]; // Array of user IDs
@@ -90,10 +143,9 @@ export interface IGroup {
 export interface IGroupWithPopulatedData {
   _id: string;
   name: string;
+  eiin: string;
   description: string;
   createdAt: string;
   devices: IDevice[]; // Populated device data
-  members: (IUser & {
-    is_guest: boolean;
-  })[]; // Populated user data
+  members: IUser[]; // Populated user data
 }

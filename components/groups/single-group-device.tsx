@@ -75,6 +75,14 @@ const SingleGroupDevice = ({
         </CardHeader>
 
         <CardContent className="space-y-4">
+          {device.name && (
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-sm">Id:</span>
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-medium">{device.id}</span>
+              </div>
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground text-sm">Mode:</span>
             <div className="flex items-center gap-1">
@@ -100,8 +108,10 @@ const SingleGroupDevice = ({
             </Badge>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Uptime:</span>
-            <span className="font-medium">{device.uptime}</span>
+            <span className="text-muted-foreground">Last Timestamp:</span>
+            <span className="text-xs font-medium">
+              {new Date(device.timestamp).toLocaleString()}
+            </span>
           </div>
 
           {device.notice && (

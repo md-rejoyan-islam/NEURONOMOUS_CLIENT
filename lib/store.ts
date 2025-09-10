@@ -1,6 +1,8 @@
 import { analyticsApi } from '@/queries/analytics';
+import { attendanceDevicesApi } from '@/queries/attendance-device';
 import { authApi } from '@/queries/auth';
 import { contactApi } from '@/queries/contact';
+import { courseApi } from '@/queries/course';
 import { devicesApi } from '@/queries/devices';
 import { firmwareApi } from '@/queries/firmware';
 import { groupApi } from '@/queries/group';
@@ -23,6 +25,8 @@ export const store = configureStore({
     [systemApi.reducerPath]: systemApi.reducer,
     [contactApi.reducerPath]: contactApi.reducer,
     [logsApi.reducerPath]: logsApi.reducer,
+    [attendanceDevicesApi.reducerPath]: attendanceDevicesApi.reducer,
+    [courseApi.reducerPath]: courseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -39,7 +43,9 @@ export const store = configureStore({
       firmwareApi.middleware,
       systemApi.middleware,
       contactApi.middleware,
-      logsApi.middleware
+      logsApi.middleware,
+      attendanceDevicesApi.middleware,
+      courseApi.middleware
     ),
 });
 

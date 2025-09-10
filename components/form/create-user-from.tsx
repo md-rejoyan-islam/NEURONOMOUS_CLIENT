@@ -89,6 +89,7 @@ const CreateUserFrom = () => {
         phone: data.phone || '',
         notes: data.notes || '',
         deviceIds: selectedDevices,
+        deviceType: 'clock' as const,
       };
 
       const result = await createUserWithDevices({
@@ -150,34 +151,14 @@ const CreateUserFrom = () => {
                   props={{ ...register('last_name') }}
                 />
               </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="is_guest">Is Guest User?</Label>
-                  <Select
-                    onValueChange={(value) =>
-                      value === 'true'
-                        ? setValue('is_guest', true, { shouldValidate: true })
-                        : setValue('is_guest', false, { shouldValidate: true })
-                    }
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select an option" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="true">Yes</SelectItem>
-                      <SelectItem value="false">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <InputField
-                  name="email"
-                  label="Email Address"
-                  placeholder="Enter email address"
-                  isOptional={false}
-                  error={errors.email?.message}
-                  props={{ ...register('email') }}
-                />
-              </div>
+              <InputField
+                name="email"
+                label="Email"
+                placeholder="Enter email address"
+                isOptional={false}
+                error={errors.email?.message}
+                props={{ ...register('email') }}
+              />
 
               <PasswordField
                 label="Password"

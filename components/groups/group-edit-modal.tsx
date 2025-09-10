@@ -15,7 +15,9 @@ const GroupEditModal = ({
   _id,
   name,
   description,
+  eiin,
 }: {
+  eiin: string;
   _id: string;
   name: string;
   description: string;
@@ -33,6 +35,7 @@ const GroupEditModal = ({
     defaultValues: {
       group_name: name,
       group_description: description,
+      group_eiin: eiin,
     },
   });
 
@@ -45,6 +48,7 @@ const GroupEditModal = ({
         data: {
           name: data.group_name,
           description: data.group_description,
+          eiin: data.group_eiin,
         },
       }).unwrap();
       if (response.success) {
@@ -102,6 +106,16 @@ const GroupEditModal = ({
               props={register('group_name')}
               isOptional={false}
               name="groupName"
+              disabled={isLoading}
+            />
+            <InputField
+              label="Group EIIN"
+              placeholder="Enter group EIIN"
+              type="text"
+              error={errors.group_eiin?.message}
+              props={register('group_eiin')}
+              isOptional={false}
+              name="groupEiin"
               disabled={isLoading}
             />
 

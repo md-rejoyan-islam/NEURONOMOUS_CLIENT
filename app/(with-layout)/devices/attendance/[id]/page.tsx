@@ -1,71 +1,41 @@
+'use client';
+
+import AddCourseModel from '@/components/devices/attendance-device/add-new-course-modal';
+import TeacherAssignModel from '@/components/devices/attendance-device/teacher-assign-model';
+import NormalTable from '@/components/table/normal-table';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { useGetAttendanceDeviceByIdQuery } from '@/queries/attendance-device';
 import {
   Calendar,
+  Cpu,
   DoorClosedLocked,
+  IdCardLanyard,
   Link2,
   Mail,
-  Plus,
-  Printer,
+  NotebookTabs,
   School,
   User,
   Wifi,
   WifiOff,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 const Page = () => {
-  const teacher = {
-    name: 'Prof. John Doe',
-    email: 'jogn@gmail.com',
-    department: 'Computer Science Department',
-    lastUpdate: '2025-09-07T21:45:00Z',
-    status: 'online', // or 'offline'
-    deviceId: 'auth-001',
-  };
+  const { id } = useParams();
 
-  const courses = [
-    {
-      id: '001',
-      name: 'Data Structures',
-      studentsEnrolled: 45,
-      classTaken: 30,
-      courseCode: 'CSE201',
-      courseEnrollUrl: '/abcd/enroll',
-      lastUpdated: '2025-09-07T20:00:00Z',
-      session: '2023-2024',
-    },
-    {
-      id: '002',
-      name: 'Algorithms',
-      studentsEnrolled: 50,
-      classTaken: 28,
-      courseCode: 'CSE202',
-      courseEnrollUrl: '/abcd/enroll',
-      lastUpdated: '2025-09-06T18:30:00Z',
-      session: '2023-2024',
-    },
-    {
-      id: '003',
-      name: 'Operating Systems',
-      studentsEnrolled: 40,
-      classTaken: 25,
-      courseCode: 'CSE301',
-      courseEnrollUrl: '/abcd/enroll',
-      lastUpdated: '2025-09-05T17:15:00Z',
-      session: '2023-2024',
-    },
-  ];
+  const {
+    data: attendanceDevice,
+    isLoading,
+    refetch,
+  } = useGetAttendanceDeviceByIdQuery({
+    id: id as string,
+  });
+
+  const assignedUser =
+    attendanceDevice?.allowed_users?.find((u) => u.role !== 'admin') || null;
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -108,25 +78,29 @@ const Page = () => {
             <h1 className="flex items-center text-2xl font-bold">
               <User className="mr-2 inline-block h-6 w-6" />
 
-              {teacher.name}
+              {assignedUser
+                ? assignedUser.first_name + ' ' + assignedUser.last_name
+                : 'No teacher assigned'}
             </h1>
             <div className="ml-2 flex items-center gap-2">
-              {teacher.status === 'online' ? (
+              {attendanceDevice?.status === 'online' ? (
                 <Wifi className="h-4 w-4 text-green-500" />
               ) : (
                 <WifiOff className="h-4 w-4 text-red-500" />
               )}
               <Badge
                 variant={
-                  teacher.status === 'online' ? 'default' : 'destructive'
+                  attendanceDevice?.status === 'online'
+                    ? 'default'
+                    : 'destructive'
                 }
                 className={
-                  teacher.status === 'online'
+                  attendanceDevice?.status === 'online'
                     ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
                     : ''
                 }
               >
-                {teacher.status}
+                {attendanceDevice?.status || 'N/A'}
               </Badge>
             </div>
           </div>
@@ -135,30 +109,59 @@ const Page = () => {
             <p className="text-muted-foreground mt-2 flex items-center">
               <School className="mr-2 inline-block h-4 w-4" />
               <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Department:
+                Group:
               </span>
-              <span>Computer Science Department</span>
+              <span>
+                {attendanceDevice?.group?.name ||
+                  'Devices not assigned to any group'}
+              </span>
             </p>
             <p className="text-muted-foreground mt-2 flex items-center">
               <Mail className="mr-2 inline-block h-4 w-4" />
               <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
                 Mail:
               </span>
-              John@gmail.com
+              {attendanceDevice?.group
+                ? attendanceDevice?.allowed_users?.find(
+                    (u) => u.role === 'admin'
+                  )?.email
+                : 'N/A'}
+            </p>
+            <p className="text-muted-foreground mt-2 flex items-center">
+              <NotebookTabs className="mr-2 inline-block h-4 w-4" />
+              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
+                Mac Address:
+              </span>
+              {attendanceDevice?.mac_id || 'N/A'}
+            </p>
+            <p className="text-muted-foreground mt-2 flex items-center">
+              <IdCardLanyard className="mr-2 inline-block h-4 w-4" />
+              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
+                Id:
+              </span>
+              {attendanceDevice?.id || 'N/A'}
+            </p>
+            <p className="text-muted-foreground mt-2 flex items-center">
+              <Cpu className="mr-2 inline-block h-4 w-4" />
+              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
+                Firmware:
+              </span>
+              {attendanceDevice?.firmware_version || 'N/A'}
             </p>
             <p className="text-muted-foreground mt-2 flex items-center">
               <Calendar className="mr-2 inline-block h-4 w-4" />
               <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
                 Last Update:
               </span>
-              Sep 7, 09:45 PM
-            </p>
-            <p className="text-muted-foreground mt-2 flex items-center">
-              <Printer className="mr-2 inline-block h-4 w-4" />
-              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Last Update:
-              </span>
-              auth-001
+              {attendanceDevice?.last_seen
+                ? new Date(attendanceDevice.last_seen).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })
+                : 'N/A'}
             </p>
           </div>
         </CardContent>
@@ -173,68 +176,70 @@ const Page = () => {
               className="max-w-md sm:w-sm"
             />
           </div>
-          <Link href="/devices/attendance/new" className="ml-2">
-            <Button>
-              <Plus className="h-4 w-4" />
-              Add New Course
-            </Button>
-          </Link>
+
+          {attendanceDevice?.group &&
+            (assignedUser ? (
+              <AddCourseModel
+                isLoading={isLoading}
+                groupId={attendanceDevice?.group?._id as string}
+                instructorId={assignedUser?._id as string}
+                refetch={refetch}
+              />
+            ) : (
+              <TeacherAssignModel
+                isLoading={isLoading}
+                groupId={attendanceDevice?.group?._id as string}
+                deviceId={attendanceDevice?._id as string}
+              />
+            ))}
         </CardHeader>
 
         <CardContent>
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[50px]">#</TableHead>
-                <TableHead>Course Name</TableHead>
-                <TableHead>Course Code</TableHead>
-                <TableHead className="text-center">Enrolled</TableHead>
-                <TableHead className="text-center">Classes Taken</TableHead>
-                <TableHead className="text-center">Session</TableHead>
-                <TableHead className="text-center">Last Updated</TableHead>
-                <TableHead className="text-center">Enroll Link</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {courses.map((course, index) => (
-                <TableRow key={course.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>
-                    <Link
-                      href={`/devices/attendance/${teacher.deviceId}/courses/${course.id}`}
-                      className="font-medium text-blue-600 hover:underline"
-                    >
-                      {course.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{course.courseCode}</TableCell>
-                  <TableCell className="text-center">
-                    {course.studentsEnrolled}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {course.classTaken}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {course.session}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {new Date(course.lastUpdated).toLocaleString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Link href={course.courseEnrollUrl} target="_blank">
-                      <Link2 className="inline-block h-4 w-4 text-blue-500 hover:text-blue-600" />
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <NormalTable
+            headers={[
+              '#',
+              'Course Name',
+              'Course Code',
+              'Enrolled',
+              'Completed Classes',
+              'Session',
+              'Last Updated',
+              'Enroll Link',
+            ]}
+            isLoading={isLoading}
+            noDataMessage="No courses available."
+            data={
+              attendanceDevice?.courses?.map((course, index) => [
+                index + 1,
+                <Link
+                  href={`/devices/attendance/${id}/courses/${course._id}`}
+                  key={course._id}
+                >
+                  <span className="font-medium text-blue-600 hover:underline">
+                    {course.name}
+                  </span>
+                </Link>,
+                course.code,
+                <>{course.studentsEnrolled}</>,
+                <>{course.completedClasses}</>,
+                <>{course.session}</>,
+                <>
+                  {new Date(course.updatedAt).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </>,
+                <>
+                  <Link href={course.enroll_link} target="_blank">
+                    <Link2 className="inline-block h-4 w-4 text-blue-500 hover:text-blue-600" />
+                  </Link>
+                </>,
+              ]) || []
+            }
+          />
         </CardContent>
       </Card>
     </div>

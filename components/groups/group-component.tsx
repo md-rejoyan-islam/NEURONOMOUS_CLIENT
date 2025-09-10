@@ -3,7 +3,10 @@
 import GroupEditModal from '@/components/groups/group-edit-modal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useGetAllGroupsQuery } from '@/queries/group';
+import {
+  useDeleteGroupByIdMutation,
+  useGetAllGroupsQuery,
+} from '@/queries/group';
 import {
   TabletsIcon as Devices,
   FolderOpen,
@@ -18,11 +21,21 @@ import NormalTable from '../table/normal-table';
 
 const GroupComponent = () => {
   const { data: groups = [], isLoading, error } = useGetAllGroupsQuery();
+  const [deleteGroup] = useDeleteGroupByIdMutation();
 
-  const handleDeleteGroup = () => {
-    toast.success('Group Deleted', {
-      description: `Group  has been deleted.`,
-    });
+  const handleDeleteGroup = (id: string) => {
+    try {
+      deleteGroup(id).unwrap();
+
+      toast.success('Group Deleted', {
+        description: `Group  has been deleted.`,
+      });
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error('Group Deletion Failed', {
+        description: error?.data?.message || 'Could not delete the group.',
+      });
+    }
   };
 
   if (isLoading) {
@@ -79,6 +92,7 @@ const GroupComponent = () => {
             headers={[
               '#',
               'Name',
+              'EIIN',
               'Devices',
               'Regular Users',
               'Guests Users',
@@ -93,25 +107,13 @@ const GroupComponent = () => {
                   {group.name}
                 </span>
               </Link>,
+              group.eiin,
               `${group.devices.length} device${group.devices.length !== 1 ? 's' : ''}`,
               <>
-                {(() => {
-                  const count = group.members.reduce(
-                    (acc, m) => acc + (!m.is_guest ? 1 : 0),
-                    0
-                  );
-                  return `${count} user${count !== 1 ? 's' : ''}`;
-                })()}
+                {group.members.length}
+                {group.members.length > 0 ? ' users' : ' user'}
               </>,
-              <>
-                {(() => {
-                  const count = group.members.reduce(
-                    (acc, m) => acc + (m.is_guest ? 1 : 0),
-                    0
-                  );
-                  return `${count} user${count !== 1 ? 's' : ''}`;
-                })()}
-              </>,
+              'not set',
               new Date(group.createdAt).toLocaleDateString(),
 
               <div className="flex items-center gap-2" key={'actions'}>
@@ -119,12 +121,12 @@ const GroupComponent = () => {
                   name={group.name}
                   description={group.description}
                   _id={group._id}
+                  eiin={group.eiin} // to be added later
                 />
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleDeleteGroup()}
-                  disabled={true}
+                  onClick={() => handleDeleteGroup(group._id)}
                   className="h-8 w-8 cursor-pointer bg-red-200/50 p-1 text-red-600 hover:text-red-700 dark:bg-red-200/10"
                 >
                   <Trash2 className="h-4 w-4" />
