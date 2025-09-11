@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-const publicRoutes = ['/', '/forgot-password', '/login'];
+const publicRoutes = ['/forgot-password', '/login'];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('accessToken')?.value;
@@ -9,6 +9,10 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   const isPublicRoute = publicRoutes.includes(pathname);
+
+  if (pathname === '/') {
+    return NextResponse.next();
+  }
 
   if (token && isPublicRoute) {
     return NextResponse.redirect(new URL('/dashboard', request.url));

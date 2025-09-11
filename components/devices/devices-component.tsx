@@ -33,7 +33,6 @@ export default function DevicesComponent({
     return <DeviceSkeleton />;
   }
 
-  // Regular Device List View (for admins or when viewing specific group/all devices)
   return (
     <div>
       {/* Header */}
