@@ -35,9 +35,9 @@ const NormalTable = ({
   noDataMessage?: string;
   isLoading?: boolean;
   data: React.ReactNode[][];
-  currentPage: number;
-  itemsPerPage: number;
-  totalItems: number;
+  currentPage?: number;
+  itemsPerPage?: number;
+  totalItems?: number;
   limitOptions?: number[];
 }) => {
   const router = useRouter();
@@ -92,7 +92,7 @@ const NormalTable = ({
           )}
         </TableBody>
       </Table>
-      {!isLoading && (
+      {!isLoading && currentPage && (
         <Pagination
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}

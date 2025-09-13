@@ -59,7 +59,7 @@ export const groupApi = createApi({
     },
   }),
   keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
-  tagTypes: ['Group', 'Device'],
+  tagTypes: ['Group', 'Device', 'GroupCourse'],
   endpoints: (builder) => ({
     getAllGroups: builder.query<IGetAllGroups[], string>({
       query: (query) => ({
@@ -78,6 +78,91 @@ export const groupApi = createApi({
               'Group',
             ]
           : ['Group'],
+    }),
+    createCourseForDepartment: builder.mutation<
+      { success: boolean; message?: string },
+      {
+        name: string;
+        code: string;
+        groupId: string;
+      }
+    >({
+      query: (payload) => ({
+        url: `/groups/${payload.groupId}/courses/`,
+        method: 'POST',
+        body: {
+          name: payload.name,
+          code: payload.code,
+        },
+      }),
+      invalidatesTags: ['GroupCourse'],
+      transformResponse: (response) =>
+        (response as ISuccessResponse<{ success: boolean; message?: string }>)
+          .data,
+    }),
+    removeCourseForDepartment: builder.mutation<
+      {
+        success: boolean;
+        message?: string;
+      },
+      {
+        name: string;
+        code: string;
+        groupId: string;
+      }
+    >({
+      query: (payload) => ({
+        url: `/groups/${payload.groupId}/courses/`,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['GroupCourse'],
+      transformResponse: (response) =>
+        (
+          response as ISuccessResponse<{
+            success: boolean;
+            message?: string;
+          }>
+        ).data,
+    }),
+    getDepartmentCourses: builder.query<
+      {
+        _id: string;
+        name: string;
+        eiin: string;
+        description: string;
+        createdAt: string;
+        courses: {
+          name: string;
+          code: string;
+          _id: string;
+        }[];
+      },
+      string
+    >({
+      query: (id) => ({
+        url: `/groups/${id}/courses`,
+        method: 'GET',
+      }),
+      transformResponse: (response) =>
+        (
+          response as ISuccessResponse<{
+            _id: string;
+            name: string;
+            eiin: string;
+            description: string;
+            createdAt: string;
+            courses: {
+              name: string;
+              code: string;
+              _id: string;
+            }[];
+          }>
+        ).data,
+      providesTags: (result, error, id) => [
+        { type: 'GroupCourse', id },
+        'GroupCourse',
+      ],
     }),
     getAllGroupsForCourseCreation: builder.query<
       { name: string; eiin: string; _id: string }[],
@@ -315,4 +400,7 @@ export const {
   useAddAttendanceDeviceToGroupMutation,
   useDeleteGroupByIdMutation,
   useGetAllGroupsForCourseCreationQuery,
+  useCreateCourseForDepartmentMutation,
+  useGetDepartmentCoursesQuery,
+  useRemoveCourseForDepartmentMutation,
 } = groupApi;

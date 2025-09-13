@@ -44,8 +44,12 @@ const navigationItems = [
     name: 'Courses',
     href: '/courses',
     icon: FileChartColumn,
-    isCollapsible: false,
+    isCollapsible: true,
     roles: ['superadmin', 'admin', 'user'],
+    collapse: [
+      { name: 'All Courses', href: '/courses/all', icon: FileChartColumn },
+      { name: 'Create Course', href: '/courses/create', icon: UserCheck },
+    ],
   },
   {
     name: 'Students Overview',

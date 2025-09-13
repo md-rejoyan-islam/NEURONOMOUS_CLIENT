@@ -7,6 +7,7 @@ import {
   useGetAllUsersInGroupQuery,
   useGetAttendanceDevicesInGroupQuery,
   useGetClocksInGroupQuery,
+  useGetDepartmentCoursesQuery,
   useGetGroupdByIdQuery,
 } from '@/queries/group';
 import {
@@ -22,7 +23,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import GroupSkeleton from '../loading/group-skeleton';
-import { Card, CardContent, CardTitle } from '../ui/card';
+import NormalTable from '../table/normal-table';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
 import {
   Select,
@@ -54,6 +56,12 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
 
   const searchParams = useSearchParams();
   const deviceTypeParam = searchParams.get('deviceType');
+
+  const { data: courses } = useGetDepartmentCoursesQuery(_id, {
+    skip: !_id,
+  });
+
+  console.log(courses);
 
   const [deviceType, setDeviceType] = useState<'clock' | 'attendance'>(
     deviceTypeParam === 'attendance' ? 'attendance' : 'clock'
@@ -271,6 +279,37 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
         {/* users table  */}
 
         <UsersTable users={usersData ?? []} refetch={refetch} />
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <TabletsIcon className="text-primary h-5 w-5" />
+              Department Courses
+            </CardTitle>
+            <Input
+              placeholder={`Search courses ...`}
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full sm:w-64"
+            />
+          </CardHeader>
+
+          <CardContent>
+            <NormalTable
+              headers={['# ', 'Course Name', 'Course Code', 'Action']}
+              isLoading={isLoading}
+              noDataMessage="No courses found."
+              data={
+                courses?.courses.map((course, index) => [
+                  index + 1,
+                  course.name,
+                  course.code,
+                  'delete, edit',
+                ]) ?? []
+              }
+            />
+          </CardContent>
+        </Card>
       </div>
     </>
   );

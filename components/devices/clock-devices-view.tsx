@@ -305,8 +305,7 @@ const ClockDevicesView = ({
                   </p>
                 </div>
               )}
-
-              <Link href={`/devices/${device._id}`}>
+              <Link href={`/devices/clock/${device._id}`}>
                 <Button className="w-full">View Details</Button>
               </Link>
             </CardContent>

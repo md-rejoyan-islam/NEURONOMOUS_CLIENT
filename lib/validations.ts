@@ -14,6 +14,23 @@ export const createCourseSchema = z.object({
   session: z.string().min(4, 'Session must be at least 4 characters'),
 });
 
+export const createCourseForDepartmentSchema = z.object({
+  name: z.string().min(2, 'Course name must be at least 2 characters'),
+  code: z.string().min(2, 'Course code must be at least 2 characters'),
+  department: z
+    .string({
+      error: (iss) => {
+        if (!iss.input) {
+          return 'Department is required.';
+        } else if (typeof iss.input !== iss.expected) {
+          return 'Department must be a string.';
+        }
+        return 'Invalid department.';
+      },
+    })
+    .min(2, 'Department must be at least 2 characters'),
+});
+
 export const userCreateSchema = z.object({
   first_name: z.string().min(2, 'First name must be at least 2 characters'),
   last_name: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -309,3 +326,6 @@ export type AddAttendanceDeviceToGroupInput = z.infer<
   typeof addAttendanceDeviceToGroupSchema
 >;
 export type CourseInput = z.infer<typeof createCourseSchema>;
+export type CreateCourseForDepartmentInput = z.infer<
+  typeof createCourseForDepartmentSchema
+>;

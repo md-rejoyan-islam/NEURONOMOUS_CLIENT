@@ -118,7 +118,7 @@ export function DashboardSidebar({ className }: { className?: string }) {
                     >
                       <div className="flex items-center gap-3">
                         <User className="h-4 w-4 flex-shrink-0" />
-                        {!collapsed && <span>Group</span>}
+                        {!collapsed && <span>{item.name}</span>}
                       </div>
                       <ChevronsUpDown />
                     </Button>
