@@ -35,18 +35,18 @@ const TeacherAssignModel = ({
   isLoading,
   groupId,
   deviceId,
+  refetch,
 }: {
   isLoading: boolean;
   groupId: string;
   deviceId: string;
+  refetch: () => void;
 }) => {
   const [open, setOpen] = useState(false);
 
   const { data: groupUsers } = useGetAllUsersInGroupQuery(groupId, {
     skip: !groupId,
   });
-
-  console.log(groupUsers);
 
   const {
     register,
@@ -78,6 +78,8 @@ const TeacherAssignModel = ({
           description: `Teacher has been assigned successfully.`,
         });
         setOpen(false);
+        reset();
+        refetch?.();
       }
       // eslint-disable-next-line
     } catch (error: any) {

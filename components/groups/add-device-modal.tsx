@@ -5,10 +5,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Clock, PackagePlus, UserCheck } from 'lucide-react';
+import { PackagePlus } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '../ui/button';
+import { Label } from '../ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 import AttendanceDeviceAdd from './attendance-device-add';
 import ClockDeviceAdd from './clock-device-add';
 
@@ -20,6 +27,35 @@ const AddDeviceModal = ({
   refetchAllDevices?: () => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [deviceType, setDeviceType] = useState<'clock' | 'attendance' | null>(
+    null
+  );
+
+  // const onSubmit = async (data: AddDeviceToGroupInput) => {
+  //   try {
+  //     setSaving(true);
+  //     const response = await addDevice({ id: groupId, payload: data }).unwrap();
+  //     refetchAllDevices?.();
+
+  //     if (response.success) {
+  //       toast.success('Device Added', {
+  //         description: `Device ${data.deviceId} has been added successfully.`,
+  //       });
+  //       reset();
+  //       setIsOpen(false);
+  //     }
+  //     // eslint-disable-next-line
+  //   } catch (error: any) {
+  //     console.log('Error creating group:', error);
+
+  //     toast.error('Failed to add device', {
+  //       description: error?.data?.message || 'Invalid email or password.',
+  //     });
+  //   } finally {
+  //     setSaving(false);
+  //   }
+  // };
 
   const handleClose = () => {
     setIsOpen(false);
@@ -39,34 +75,44 @@ const AddDeviceModal = ({
               Add New Device
             </DialogTitle>
           </DialogHeader>
-          <Tabs defaultValue="clock">
-            <TabsList className="w-full">
-              <TabsTrigger value="clock" className="w-full">
-                <Clock className="mr-2 h-4 w-4" />
-                Clock & Notice
-                <span className="hidden sm:block">&nbsp;Device </span>
-              </TabsTrigger>
-              <TabsTrigger value="attendance" className="w-full">
-                <UserCheck className="mr-2 h-4 w-4" />
-                Attendance{' '}
-                <span className="hidden sm:block">&nbsp;Device </span>
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="clock" className="mt-5">
-              <ClockDeviceAdd
-                refetchAllDevices={refetchAllDevices}
-                groupId={groupId}
-                setIsOpen={setIsOpen}
-              />
-            </TabsContent>
-            <TabsContent value="attendance" className="mt-5">
-              <AttendanceDeviceAdd
-                refetchAllDevices={refetchAllDevices}
-                groupId={groupId}
-                setIsOpen={setIsOpen}
-              />
-            </TabsContent>
-          </Tabs>
+
+          <div>
+            <Label className="mb-2 block">Select Device Type</Label>
+            <Select
+              onValueChange={(value) =>
+                setDeviceType(value as 'clock' | 'attendance')
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select device type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="clock">Clock Device</SelectItem>
+                <SelectItem value="attendance">Attendance Device</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {deviceType === null && (
+            <p className="text-muted-foreground mt-4 text-sm">
+              Please select a device type to proceed.
+            </p>
+          )}
+
+          {deviceType === 'clock' && (
+            <ClockDeviceAdd
+              refetchAllDevices={refetchAllDevices}
+              groupId={groupId}
+              setIsOpen={setIsOpen}
+            />
+          )}
+          {deviceType === 'attendance' && (
+            <AttendanceDeviceAdd
+              refetchAllDevices={refetchAllDevices}
+              groupId={groupId}
+              setIsOpen={setIsOpen}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </>

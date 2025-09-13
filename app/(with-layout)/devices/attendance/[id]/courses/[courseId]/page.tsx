@@ -1,3 +1,4 @@
+'use client';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Table,
@@ -7,10 +8,23 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useGetCourseByIdQuery } from '@/queries/course';
 import { DoorClosedLocked, Eye, Trash } from 'lucide-react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 const Page = () => {
+  const params = useParams();
+  const courseId = params?.courseId as string;
+  const id = params?.id as string;
+
+  const { data: coursee, isLoading } = useGetCourseByIdQuery(
+    { id: courseId },
+    { skip: !courseId }
+  );
+
+  console.log(coursee);
+
   const course = {
     id: '001',
     name: 'Introduction to Computer Science',
@@ -31,13 +45,17 @@ const Page = () => {
     { date: '2025-09-10T09:00:00Z', present: 120 },
   ];
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="flex items-center gap-2 text-2xl font-bold sm:text-3xl">
             <DoorClosedLocked className="text-primary h-6 w-6 sm:h-8 sm:w-8" />
-            Attendance Records for M-401
+            Attendance Records for {coursee?.name}
           </h1>
           <p className="text-muted-foreground mt-1">
             Manage and monitor attendance records for this course
@@ -51,40 +69,50 @@ const Page = () => {
               <h3 className="text-muted-foreground text-sm font-medium">
                 Course Name
               </h3>
-              <p className="mt-1 text-sm font-semibold">{course.name}</p>
+              <p className="mt-1 text-sm font-semibold">{coursee?.name}</p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Course Code
               </h3>
-              <p className="mt-1 text-sm font-semibold">{course.courseCode}</p>
+              <p className="mt-1 text-sm font-semibold">{coursee?.code}</p>
+            </div>
+            <div className="">
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Department
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {coursee?.department}
+              </p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Students Enrolled
               </h3>
               <p className="mt-1 text-sm font-semibold">
-                {course.studentsEnrolled}
+                {coursee?.studentsEnrolled}
               </p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Classes Taken
               </h3>
-              <p className="mt-1 text-sm font-semibold">{course.classTaken}</p>
+              <p className="mt-1 text-sm font-semibold">
+                {coursee?.completedClasses || 0}
+              </p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Session
               </h3>
-              <p className="mt-1 text-sm font-semibold">{course.session}</p>
+              <p className="mt-1 text-sm font-semibold">{coursee?.session}</p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Attendance Rate
               </h3>
               <p className="mt-1 text-sm font-semibold">
-                {course.attendanceRate}%
+                {coursee?.attendanceRate}
               </p>
             </div>
             <div className="">
@@ -92,27 +120,40 @@ const Page = () => {
                 Last Updated
               </h3>
               <p className="mt-1 text-sm font-semibold">
-                {new Date(course.lastUpdated).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {coursee?.updatedAt
+                  ? new Date(coursee?.updatedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  : 'N/A'}
               </p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Enroll Link
               </h3>
-              <a
-                href={course.courseEnrollUrl}
+              <Link
+                href={coursee?.enroll_link || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-1 font-semibold text-blue-600 hover:underline"
               >
-                {course.courseEnrollUrl}
-              </a>
+                {coursee?.enroll_link ? 'Link' : 'N/A'}
+              </Link>
+            </div>
+            <div className="">
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Enrolled List
+              </h3>
+              <Link
+                href={`/devices/attendance/${id}/courses/${coursee?._id}/students`}
+                className="mt-1 font-semibold text-blue-600 hover:underline"
+              >
+                View Students
+              </Link>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">

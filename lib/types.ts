@@ -90,6 +90,13 @@ export interface IAttendanceDevice {
   }[];
 }
 
+export interface IPagination {
+  page: number;
+  totalPages: number;
+  limit: number;
+  items: number;
+}
+
 export interface IDevice {
   _id: string;
   id: string;
@@ -146,6 +153,21 @@ export interface IGroupWithPopulatedData {
   eiin: string;
   description: string;
   createdAt: string;
-  devices: IDevice[]; // Populated device data
+  devices: {
+    clocks: IDevice[];
+    attendance: IAttendanceDevice[];
+  }; // Populated device data
   members: IUser[]; // Populated user data
+}
+
+export interface ISuccessResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+export interface ISuccessResponseWithPagination<T> {
+  success: boolean;
+  message: string;
+  pagination: IPagination;
+  data: T;
 }

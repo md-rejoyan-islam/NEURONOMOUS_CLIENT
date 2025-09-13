@@ -75,9 +75,10 @@ const AddCourseModel = ({
       refetch();
 
       setOpen(false);
-      toast.success('Teacher created & Assigned', {
-        description: `Teacher has been assigned successfully.`,
+      toast.success('Course Created', {
+        description: `Course ${data.name} has been created successfully.`,
       });
+      reset();
       setOpen(false);
 
       // eslint-disable-next-line

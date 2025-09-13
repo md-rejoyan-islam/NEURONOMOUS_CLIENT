@@ -93,6 +93,7 @@ const FirmwareCreateForm = () => {
       });
 
       reset();
+
       // eslint-disable-next-line
     } catch (error: any) {
       toast.error('Upload failed', {

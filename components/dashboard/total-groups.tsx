@@ -7,7 +7,7 @@ import SimpleSummaryCard from '../cards/simple-summary-card';
 
 const TotalGroups = () => {
   const { data: user } = useProfileQuery();
-  const { data: groups = [] } = useGetAllGroupsQuery();
+  const { data: groups = [] } = useGetAllGroupsQuery('');
   return (
     <>
       {user?.role === 'superadmin' && (

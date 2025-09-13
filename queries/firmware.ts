@@ -1,4 +1,4 @@
-import { IFirmware } from '@/lib/types';
+import { IFirmware, ISuccessResponseWithPagination } from '@/lib/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export interface Firmware {
@@ -25,26 +25,21 @@ export const firmwareApi = createApi({
   reducerPath: 'firmwareApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/proxy/api/v1',
-    // responseHandler: async (response) => {
-    //   if (response.status === 301) {
-    //     window.location.reload();
-    //   }
-    //   return response.json();
-    // },
   }),
   tagTypes: ['Firmware'],
   endpoints: (builder) => ({
-    getFirmware: builder.query<IFirmware[], void>({
-      query: () => ({
-        url: '/firmwares',
+    getAllFirmware: builder.query<
+      ISuccessResponseWithPagination<IFirmware[]>,
+      string
+    >({
+      query: (query) => ({
+        url: `/firmwares${query ? `?${query}` : ''}`,
         method: 'GET',
       }),
-      transformResponse: (response: ISuccessResponse<IFirmware[]>) =>
-        response.data,
       providesTags: (result) =>
-        result
+        result && result.data
           ? [
-              ...result.map(({ _id }) => ({
+              ...result.data.map(({ _id }) => ({
                 type: 'Firmware' as const,
                 id: _id,
               })),
@@ -96,7 +91,7 @@ export const firmwareApi = createApi({
 });
 
 export const {
-  useGetFirmwareQuery,
+  useGetAllFirmwareQuery,
   useDeleteFirmwareMutation,
   useCreateFirmwareMutation,
   useLazyDownloadFirmwareQuery,

@@ -1,5 +1,4 @@
 import GroupComponent from '@/components/groups/group-component';
-import GroupCreateModal from '@/components/groups/group-create-modal';
 import { FolderOpen } from 'lucide-react';
 import type { Metadata } from 'next';
 
@@ -22,7 +21,7 @@ export default function GroupPage() {
             Create and manage device groups for better organization
           </p>
         </div>
-        <GroupCreateModal />
+        {/* <GroupCreateModal /> */}
       </div>
       <GroupComponent />
     </div>

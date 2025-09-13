@@ -24,9 +24,10 @@ import FirmwareCreateForm from '@/components/form/firmware-create-form';
 import NormalTable from '@/components/table/normal-table';
 import {
   useDeleteFirmwareMutation,
-  useGetFirmwareQuery,
+  useGetAllFirmwareQuery,
 } from '@/queries/firmware';
 import { Trash2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -43,7 +44,15 @@ export interface Firmware {
 export default function FirmwareContent() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data: firmwares = [], isLoading } = useGetFirmwareQuery();
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') || '1';
+  const limit = searchParams.get('limit') || '10';
+
+  const { data, isFetching } = useGetAllFirmwareQuery(
+    `page=${page}&limit=${limit}`
+  );
+  const firmwares = data?.data || [];
+  const pagination = data?.pagination;
 
   const [deleteFirmware] = useDeleteFirmwareMutation();
 
@@ -119,6 +128,9 @@ export default function FirmwareContent() {
           </CardHeader>
           <CardContent>
             <NormalTable
+              currentPage={pagination?.page || 1}
+              itemsPerPage={pagination?.limit || 10}
+              totalItems={pagination?.items || 0}
               headers={[
                 '#',
                 'Version',
@@ -129,10 +141,12 @@ export default function FirmwareContent() {
                 'Upload Date',
                 'Actions',
               ]}
-              isLoading={isLoading}
+              isLoading={isFetching}
               noDataMessage="No firmware versions available."
-              data={firmwares.map((fw, index) => [
-                index + 1,
+              data={firmwares?.map((fw, index) => [
+                index +
+                  1 +
+                  ((pagination?.page || 1) - 1) * (pagination?.limit || 10),
                 <span key="version" className="font-medium">
                   {fw.version}
                 </span>,

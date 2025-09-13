@@ -2,7 +2,7 @@ import {
   AddDeviceToGroupInput,
   addDeviceToGroupSchema,
 } from '@/lib/validations';
-import { useAddDeviceToGroupMutation } from '@/queries/group';
+import { useAddClockDeviceToGroupMutation } from '@/queries/group';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Wifi } from 'lucide-react';
 import { useState } from 'react';
@@ -30,7 +30,7 @@ const ClockDeviceAdd = ({
     resolver: zodResolver(addDeviceToGroupSchema),
   });
 
-  const [addDevice, { isLoading }] = useAddDeviceToGroupMutation();
+  const [addDevice, { isLoading }] = useAddClockDeviceToGroupMutation();
 
   const onSubmit = async (data: AddDeviceToGroupInput) => {
     try {

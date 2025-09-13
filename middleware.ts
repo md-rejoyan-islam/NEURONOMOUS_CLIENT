@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
 
   const isPublicRoute = publicRoutes.includes(pathname);
 
-  if (pathname === '/') {
+  if (pathname === '/' || pathname.startsWith('/course-enroll')) {
     return NextResponse.next();
   }
 

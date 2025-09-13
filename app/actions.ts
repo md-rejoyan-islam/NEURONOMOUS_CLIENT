@@ -34,7 +34,7 @@ export const getGroupById = async (id: string) => {
 
 export const getDeviceById = async (id: string) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/devices/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clock-devices/${id}`,
     {
       method: 'GET',
       headers: {

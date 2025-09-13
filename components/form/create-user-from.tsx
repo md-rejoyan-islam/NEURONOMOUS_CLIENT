@@ -40,7 +40,7 @@ const CreateUserFrom = () => {
     resolver: zodResolver(userCreateSchema),
   });
 
-  const { data: groups } = useGetAllGroupsQuery();
+  const { data: groups } = useGetAllGroupsQuery('');
   const [selectedGroup, setSelectedGroup] =
     useState<IGroupWithPopulatedData | null>(null);
 
@@ -51,9 +51,9 @@ const CreateUserFrom = () => {
   const handleGroupSelect = (id: string) => {
     const group = groups?.find((group) => group._id === id);
 
-    if (group) {
-      setSelectedGroup(group);
-    }
+    // if (group) {
+    //   setSelectedGroup(group);
+    // }
   };
 
   const handleDeviceToggle = (deviceId: string) => {
@@ -65,11 +65,11 @@ const CreateUserFrom = () => {
   };
 
   const handleSelectAllDevices = () => {
-    if (selectedDevices.length === selectedGroup?.devices.length) {
+    if (selectedDevices.length === selectedGroup?.devices.clocks.length) {
       setSelectedDevices([]);
     } else {
       setSelectedDevices(
-        selectedGroup?.devices.map((device) => device.id) || []
+        selectedGroup?.devices.clocks.map((device) => device.id) || []
       );
     }
   };
@@ -214,7 +214,7 @@ const CreateUserFrom = () => {
         {/* Device Access */}
         <div>
           <DeviceAccess
-            devices={selectedGroup?.devices || []}
+            devices={selectedGroup?.devices.clocks || []}
             selectedDevices={selectedDevices}
             handleSelectAllDevices={handleSelectAllDevices}
             handleDeviceToggle={handleDeviceToggle}

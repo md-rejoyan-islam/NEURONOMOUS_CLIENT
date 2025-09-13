@@ -126,7 +126,7 @@ const SingleGroupDevice = ({
           )}
 
           <div className="grid grid-cols-2 gap-3">
-            <Link href={`/devices/${device._id}`}>
+            <Link href={`/devices/clock/${device._id}`}>
               <Button className="w-full">View Details</Button>
             </Link>
             <Button

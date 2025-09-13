@@ -46,7 +46,7 @@ export const attendanceDevicesApi = createApi({
     // You can add more endpoints like create, update, delete if needed
     getDevices: builder.query<IDevice, { id: string }>({
       query: ({ id }) => ({
-        url: `/devices/${id}`,
+        url: `/clock-devices/${id}`,
         method: 'GET',
       }),
       transformResponse: (response) =>

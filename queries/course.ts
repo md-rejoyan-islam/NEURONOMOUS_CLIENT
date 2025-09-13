@@ -19,6 +19,35 @@ interface courseQuery {
   sortOrder?: 'asc' | 'desc';
 }
 
+interface ISigleCourse {
+  _id: string;
+  name: string;
+  code: string;
+  is_active: boolean;
+  enroll_link: string;
+  session: string;
+  studentsEnrolled: number;
+  instructor: string;
+  instructor_email: string;
+  department: string;
+  updatedAt: string;
+  completedClasses: number;
+  attendanceRate: string;
+}
+
+interface IEnrolledStudent {
+  _id: string;
+  name: string;
+  code: string;
+  session: string;
+  department: string;
+  students: {
+    name: string;
+    registration_number: string;
+    session: string;
+  }[];
+}
+
 export const courseApi = createApi({
   reducerPath: 'courseApi',
   baseQuery: fetchBaseQuery({
@@ -65,15 +94,26 @@ export const courseApi = createApi({
             ]
           : ['Course'],
     }),
-    getCourseById: builder.query<ICourse, { id: string }>({
+    getCourseById: builder.query<ISigleCourse, { id: string }>({
       query: ({ id }) => ({
         url: `/courses/${id}`,
         method: 'GET',
       }),
       transformResponse: (response) =>
-        (response as ISuccessResponse<ICourse>).data,
+        (response as ISuccessResponse<ISigleCourse>).data,
       providesTags: (result, error, { id }) =>
         result ? [{ type: 'Course', id }] : ['Course'],
+    }),
+    getEnrolledStudentsByCourseId: builder.query<
+      IEnrolledStudent,
+      { courseId: string }
+    >({
+      query: ({ courseId }) => ({
+        url: `/courses/${courseId}/enrolled-students`,
+        method: 'GET',
+      }),
+      transformResponse: (response) =>
+        (response as ISuccessResponse<IEnrolledStudent>).data,
     }),
   }),
 });
@@ -82,4 +122,5 @@ export const {
   useCreateCourseMutation,
   useGetAllCoursesQuery,
   useGetCourseByIdQuery,
+  useGetEnrolledStudentsByCourseIdQuery,
 } = courseApi;

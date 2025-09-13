@@ -177,6 +177,10 @@ const Page = () => {
               ]) || []
             }
             noDataMessage="No courses found."
+            currentPage={1}
+            itemsPerPage={10}
+            totalItems={courses.length}
+            limitOptions={[10, 20, 50]}
           />
         </CardContent>
       </Card>

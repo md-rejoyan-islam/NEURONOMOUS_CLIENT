@@ -25,11 +25,11 @@ import NoticeType from './bulk-operation/notice-type';
 
 const BulkOperationModel = ({
   devices,
-  setFilteredDevices,
+  // setFilteredDevices,
 }: {
   devices: IDevice[];
   refetch?: () => void;
-  setFilteredDevices?: (devices: IDevice[]) => void;
+  // setFilteredDevices?: (devices: IDevice[]) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
@@ -89,12 +89,12 @@ const BulkOperationModel = ({
         mode,
       }).unwrap();
 
-      setFilteredDevices?.(
-        devices.map((device) => {
-          const isSelected = selectedDevices.includes(device._id);
-          return isSelected ? { ...device, mode } : device;
-        })
-      );
+      // setFilteredDevices?.(
+      //   devices.map((device) => {
+      //     const isSelected = selectedDevices.includes(device._id);
+      //     return isSelected ? { ...device, mode } : device;
+      //   })
+      // );
       toast.success('Device Mode Updated', {
         description: `Device mode changed to ${mode}.`,
       });
@@ -182,17 +182,17 @@ const BulkOperationModel = ({
       toast.success('Notice Sent', {
         description: `Notice message sent to device successfully.`,
       });
-      setFilteredDevices?.(
-        devices.map((device) => {
-          const isSelected = selectedDevices.includes(device._id);
-          return isSelected
-            ? {
-                ...device,
-                notice: message,
-              }
-            : device;
-        })
-      );
+      // setFilteredDevices?.(
+      //   devices.map((device) => {
+      //     const isSelected = selectedDevices.includes(device._id);
+      //     return isSelected
+      //       ? {
+      //           ...device,
+      //           notice: message,
+      //         }
+      //       : device;
+      //   })
+      // );
 
       // Reset form
       setSelectedDevices([]);

@@ -8,6 +8,7 @@ import { firmwareApi } from '@/queries/firmware';
 import { groupApi } from '@/queries/group';
 import { logsApi } from '@/queries/logs';
 import { notificationsApi } from '@/queries/notifications';
+import { openApi } from '@/queries/open';
 import { systemApi } from '@/queries/system';
 import { usersApi } from '@/queries/users';
 import { configureStore } from '@reduxjs/toolkit';
@@ -27,6 +28,7 @@ export const store = configureStore({
     [logsApi.reducerPath]: logsApi.reducer,
     [attendanceDevicesApi.reducerPath]: attendanceDevicesApi.reducer,
     [courseApi.reducerPath]: courseApi.reducer,
+    [openApi.reducerPath]: openApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -45,7 +47,8 @@ export const store = configureStore({
       contactApi.middleware,
       logsApi.middleware,
       attendanceDevicesApi.middleware,
-      courseApi.middleware
+      courseApi.middleware,
+      openApi.middleware
     ),
 });
 

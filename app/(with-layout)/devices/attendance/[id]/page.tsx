@@ -188,6 +188,7 @@ const Page = () => {
             ) : (
               <TeacherAssignModel
                 isLoading={isLoading}
+                refetch={refetch}
                 groupId={attendanceDevice?.group?._id as string}
                 deviceId={attendanceDevice?._id as string}
               />
@@ -196,6 +197,10 @@ const Page = () => {
 
         <CardContent>
           <NormalTable
+            currentPage={1}
+            itemsPerPage={10}
+            totalItems={attendanceDevice?.courses?.length || 0}
+            limitOptions={[10, 20, 50]}
             headers={[
               '#',
               'Course Name',

@@ -1,6 +1,11 @@
-import { IDevice, IGroup, IGroupWithPopulatedData, IUser } from '@/lib/types';
+import {
+  IAttendanceDevice,
+  IDevice,
+  IGroup,
+  IGroupWithPopulatedData,
+  IUser,
+} from '@/lib/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { tagTypes } from './tags';
 import { IAddGroupRequest } from './users';
 
 export interface LoginRequest {
@@ -31,6 +36,17 @@ export interface ISuccessResponse<T> {
   data: T;
 }
 
+export interface IGetAllGroups {
+  name: string;
+  eiin: string;
+  _id: string;
+  clock: number;
+  attendance: number;
+  users: number;
+  description: string;
+  createdAt: string;
+}
+
 export const groupApi = createApi({
   reducerPath: 'groupApi',
   baseQuery: fetchBaseQuery({
@@ -43,15 +59,15 @@ export const groupApi = createApi({
     },
   }),
   keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
-  tagTypes,
+  tagTypes: ['Group', 'Device'],
   endpoints: (builder) => ({
-    getAllGroups: builder.query<IGroupWithPopulatedData[], void>({
-      query: () => ({
-        url: '/groups',
+    getAllGroups: builder.query<IGetAllGroups[], string>({
+      query: (query) => ({
+        url: `/groups` + (query ? `?${query}` : ''),
         method: 'GET',
       }),
       transformResponse: (response) =>
-        (response as ISuccessResponse<IGroupWithPopulatedData[]>).data,
+        (response as ISuccessResponse<IGetAllGroups[]>).data,
       providesTags: (result) =>
         result
           ? [
@@ -137,7 +153,25 @@ export const groupApi = createApi({
       transformResponse: (response) =>
         (response as ISuccessResponse<IUser[]>).data,
     }),
-    addDeviceToGroup: builder.mutation<
+    // addDeviceToGroup: builder.mutation<
+    //   IGroupResponse,
+    //   {
+    //     id: string;
+    //     payload: {
+    //       deviceId: string;
+    //       name: string;
+    //       location: string;
+    //     };
+    //   }
+    // >({
+    //   query: ({ id, payload }) => ({
+    //     url: `/groups/${id}/add-clock-device`,
+    //     method: 'POST',
+    //     body: payload,
+    //   }),
+    //   invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+    // }),
+    addClockDeviceToGroup: builder.mutation<
       IGroupResponse,
       {
         id: string;
@@ -149,11 +183,14 @@ export const groupApi = createApi({
       }
     >({
       query: ({ id, payload }) => ({
-        url: `/groups/${id}/add-clock-device`,
+        url: `/clock-devices/group/${id}`,
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Group', id },
+        'Device',
+      ],
     }),
     addAttendanceDeviceToGroup: builder.mutation<
       IGroupResponse,
@@ -165,11 +202,14 @@ export const groupApi = createApi({
       }
     >({
       query: ({ id, payload }) => ({
-        url: `/groups/${id}/add-attendace-device`,
+        url: `/attendance-devices/group/${id}`,
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Group', id },
+        'Device',
+      ],
     }),
     // add user to group and give device access
     addUserToGroupWithDevices: builder.mutation<
@@ -210,6 +250,42 @@ export const groupApi = createApi({
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice[]>).data,
     }),
+    getClocksInGroup: builder.query<
+      IDevice[],
+      {
+        id: string;
+        search?: string;
+      }
+    >({
+      query: ({ id, search }) => ({
+        url: `/groups/${id}/devices/clocks${search ? `?search=${search}` : ''}`,
+        method: 'GET',
+      }),
+      transformResponse: (response) =>
+        (response as ISuccessResponse<IDevice[]>).data,
+      providesTags: (result, error, arg) => [
+        { type: 'Group', id: arg.id },
+        'Device',
+      ],
+    }),
+    getAttendanceDevicesInGroup: builder.query<
+      IAttendanceDevice[],
+      {
+        id: string;
+        search?: string;
+      }
+    >({
+      query: ({ id, search }) => ({
+        url: `/groups/${id}/devices/attendance${search ? `?search=${search}` : ''}`,
+        method: 'GET',
+      }),
+      transformResponse: (response) =>
+        (response as ISuccessResponse<IAttendanceDevice[]>).data,
+      providesTags: (result, error, arg) => [
+        { type: 'Group', id: arg.id },
+        'Device',
+      ],
+    }),
     // remove a device from group
     removeDeviceFromGroup: builder.mutation<
       void,
@@ -225,11 +301,13 @@ export const groupApi = createApi({
 });
 
 export const {
+  useGetClocksInGroupQuery,
+  useGetAttendanceDevicesInGroupQuery,
   useGetAllGroupsQuery,
   useAddAdminWithGroupMutation,
   useUpdateGroupByIdMutation,
   useGetGroupdByIdQuery,
-  useAddDeviceToGroupMutation,
+  useAddClockDeviceToGroupMutation,
   useGetAllUsersInGroupQuery,
   useAddUserToGroupWithDevicesMutation,
   useGetAllGroupDevicesQuery,

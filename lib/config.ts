@@ -3,7 +3,7 @@ export const API_CONFIG = {
   SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001',
   ENDPOINTS: {
     AUTH: '/auth',
-    DEVICES: '/devices',
+    DEVICES: '/clock-devices',
     USERS: '/users',
     NOTIFICATIONS: '/notifications',
     ANALYTICS: '/analytics',

@@ -24,7 +24,7 @@ export const devicesApi = createApi({
   endpoints: (builder) => ({
     getAllDevices: builder.query<IDevice[], { query?: string }>({
       query: ({ query }) => ({
-        url: `/devices?${query ? query : ''}`,
+        url: `/clock-devices?${query ? query : ''}`,
         method: 'GET',
       }),
       transformResponse: (response) =>
@@ -39,7 +39,7 @@ export const devicesApi = createApi({
     }),
     getDevices: builder.query<IDevice, { id: string }>({
       query: ({ id }) => ({
-        url: `/devices/${id}`,
+        url: `/clock-devices/${id}`,
         method: 'GET',
       }),
       transformResponse: (response) =>
@@ -48,7 +48,7 @@ export const devicesApi = createApi({
     }),
     getDevice: builder.query<IDevice, { id: string }>({
       query: ({ id }) => ({
-        url: `/devices/${id}`,
+        url: `/clock-devices/${id}`,
         method: 'GET',
       }),
       transformResponse: (response) =>
@@ -95,7 +95,7 @@ export const devicesApi = createApi({
     }),
     changeDeviceMode: builder.mutation<void, { id: string; mode: string }>({
       query: ({ id, mode }) => ({
-        url: `/devices/${id}/change-mode`,
+        url: `/clock-devices/${id}/change-mode`,
         method: 'PATCH',
         body: { mode },
       }),
@@ -106,7 +106,7 @@ export const devicesApi = createApi({
       { id: string; notice: string; duration?: number }
     >({
       query: ({ id, notice, duration }) => ({
-        url: `/devices/${id}/send-notice`,
+        url: `/clock-devices/${id}/send-notice`,
         method: 'PATCH',
         body: { notice, duration },
       }),
@@ -117,7 +117,7 @@ export const devicesApi = createApi({
       { deviceIds: string[]; notice: string; duration?: number }
     >({
       query: ({ deviceIds, notice, duration }) => ({
-        url: `/devices/send-notice`,
+        url: `/clock-devices/send-notice`,
         method: 'PATCH',
         body: { deviceIds, notice, duration },
       }),
@@ -134,7 +134,7 @@ export const devicesApi = createApi({
       }
     >({
       query: ({ id, notice, startTime, endTime }) => ({
-        url: `/devices/${id}/scheduled-notice`,
+        url: `/clock-devices/${id}/scheduled-notice`,
         method: 'PATCH',
         body: { notice, startTime, endTime },
       }),
@@ -150,7 +150,7 @@ export const devicesApi = createApi({
       }
     >({
       query: ({ deviceIds, notice, startTime, endTime }) => ({
-        url: `/devices/scheduled-notice`,
+        url: `/clock-devices/scheduled-notice`,
         method: 'PATCH',
         body: { deviceIds, notice, startTime, endTime },
       }),
@@ -159,7 +159,7 @@ export const devicesApi = createApi({
     }),
     getAllScheduledNotices: builder.query<IScheduledNotice[], { id: string }>({
       query: ({ id }) => ({
-        url: `/devices/${id}/scheduled-notices`,
+        url: `/clock-devices/${id}/scheduled-notices`,
         method: 'GET',
       }),
       transformResponse: (response) =>
@@ -176,7 +176,7 @@ export const devicesApi = createApi({
       { id: string; noticeId: string }
     >({
       query: ({ id, noticeId }) => ({
-        url: `/devices/${id}/scheduled-notices/${noticeId}`,
+        url: `/clock-devices/${id}/scheduled-notices/${noticeId}`,
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, { id }) => [
@@ -185,7 +185,7 @@ export const devicesApi = createApi({
     }),
     getAllowedUsersForDevice: builder.query<IUser[], { id: string }>({
       query: ({ id }) => ({
-        url: `/devices/${id}/allowed-users`,
+        url: `/clock-devices/${id}/allowed-users`,
         method: 'GET',
       }),
       transformResponse: (response) =>
@@ -199,7 +199,7 @@ export const devicesApi = createApi({
       { userIds: string[]; deviceId: string }
     >({
       query: ({ userIds, deviceId }) => ({
-        url: `/devices/${deviceId}/give-device-access`,
+        url: `/clock-devices/${deviceId}/give-device-access`,
         method: 'POST',
         body: { userIds },
       }),
@@ -209,7 +209,7 @@ export const devicesApi = createApi({
       { userId: string; deviceId: string }
     >({
       query: ({ userId, deviceId }) => ({
-        url: `/devices/${deviceId}/revoke-device-access/${userId}`,
+        url: `/clock-devices/${deviceId}/revoke-device-access/${userId}`,
         method: 'POST',
       }),
     }),
@@ -218,7 +218,7 @@ export const devicesApi = createApi({
       { deviceIds: string[]; mode: 'clock' | 'notice' }
     >({
       query: ({ deviceIds, mode }) => ({
-        url: `/devices/change-mode`,
+        url: `/clock-devices/change-mode`,
         method: 'PATCH',
         body: { mode, deviceIds },
       }),
@@ -230,7 +230,7 @@ export const devicesApi = createApi({
       { deviceId: string; firmwareId: string }
     >({
       query: ({ deviceId, firmwareId }) => ({
-        url: `/devices/${deviceId}/update-firmware`,
+        url: `/clock-devices/${deviceId}/update-firmware`,
         method: 'PATCH',
         body: { firmwareId },
       }),
@@ -240,7 +240,7 @@ export const devicesApi = createApi({
     }),
     deviceRestartById: builder.mutation<void, { deviceId: string }>({
       query: ({ deviceId }) => ({
-        url: `/devices/${deviceId}/restart`,
+        url: `/clock-devices/${deviceId}/restart`,
         method: 'PATCH',
       }),
       invalidatesTags: (result, error, { deviceId }) => [
