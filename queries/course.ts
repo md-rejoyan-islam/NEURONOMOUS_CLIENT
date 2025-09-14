@@ -1,4 +1,4 @@
-import { ICourse } from '@/lib/types';
+import { ICourse, IPagination } from '@/lib/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 interface ISuccessResponse<T> {
@@ -7,16 +7,13 @@ interface ISuccessResponse<T> {
   data: T;
 }
 
-interface courseQuery {
-  instructorId?: string;
-  departmentId?: string;
-  session?: string;
-  code?: string;
-  name?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+interface ISuccessResponseForAllCourse<T> {
+  success: boolean;
+  message: string;
+  data: {
+    courses: T[];
+    pagination: IPagination; // keep this for compatibility with backend response
+  };
 }
 
 interface ISigleCourse {
@@ -44,6 +41,21 @@ interface ISigleCourse {
   ];
 }
 
+interface ICourseForAll {
+  _id: string;
+  name: string;
+  code: string;
+  session: string;
+  department: string;
+  instructor: string;
+  instructor_email: string;
+  studentsEnrolled: number;
+  completedClasses: number;
+  createdAt: string;
+  updatedAt: string;
+  attendanceRate: string;
+}
+
 interface IEnrolledStudent {
   _id: string;
   name: string;
@@ -63,7 +75,7 @@ export const courseApi = createApi({
     baseUrl: '/api/proxy/api/v1',
   }),
   keepUnusedDataFor: 0,
-  tagTypes: ['Course'],
+  tagTypes: ['Course', 'Record'],
   endpoints: (builder) => ({
     createCourse: builder.mutation<
       ICourse,
@@ -84,23 +96,32 @@ export const courseApi = createApi({
       invalidatesTags: ['Course'],
     }),
 
-    getAllCourses: builder.query<ICourse[], string>({
+    getAllCourses: builder.query<
+      { pagination: IPagination; courses: ICourseForAll[] },
+      string
+    >({
       query: (query) => ({
         url: `/courses?${query}`,
         method: 'GET',
       }),
-      transformResponse: (response) =>
-        (response as ISuccessResponse<ICourse[]>).data,
+      transformResponse: (response) => {
+        const data = (response as ISuccessResponseForAllCourse<ICourseForAll>)
+          .data;
+        return {
+          courses: data.courses,
+          pagination: data.pagination,
+        };
+      },
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ _id }) => ({
+              ...result.courses?.map(({ _id }) => ({
                 type: 'Course' as const,
                 id: _id,
               })),
-              'Course',
+              { type: 'Course', id: 'LIST' },
             ]
-          : ['Course'],
+          : [{ type: 'Course', id: 'LIST' }],
     }),
     getCourseById: builder.query<ISigleCourse, { id: string }>({
       query: ({ id }) => ({
@@ -175,6 +196,9 @@ export const courseApi = createApi({
         url: `/courses/${courseId}/attendance-records/${date}`,
         method: 'GET',
       }),
+      providesTags: (result, error, { date }) => [
+        { type: 'Record', date: date },
+      ],
       transformResponse: (response) =>
         (
           response as ISuccessResponse<{
@@ -211,6 +235,19 @@ export const courseApi = createApi({
         method: 'PATCH',
         body: { date, studentId },
       }),
+      invalidatesTags: (result, error, { courseId, date }) => [
+        { type: 'Course', id: courseId },
+        { type: 'Record', date: date },
+      ],
+    }),
+    deleteAttendanceRecord: builder.mutation<
+      void,
+      { courseId: string; date: string }
+    >({
+      query: ({ courseId, date }) => ({
+        url: `/courses/${courseId}/records/${date}`,
+        method: 'DELETE',
+      }),
       invalidatesTags: (result, error, { courseId }) => [
         { type: 'Course', id: courseId },
       ],
@@ -219,6 +256,7 @@ export const courseApi = createApi({
 });
 
 export const {
+  useDeleteAttendanceRecordMutation,
   useCreateCourseMutation,
   useGetAllCoursesQuery,
   useGetCourseByIdQuery,

@@ -40,9 +40,14 @@ const AddCourseModel = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { data: courses } = useGetDepartmentCoursesQuery(String(groupId), {
-    skip: !groupId,
-  });
+  const { data: courses } = useGetDepartmentCoursesQuery(
+    {
+      id: String(groupId),
+    },
+    {
+      skip: !groupId,
+    }
+  );
   console.log(courses, ' courses');
 
   const {

@@ -33,8 +33,8 @@ import {
   UserPlus,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -42,12 +42,22 @@ const GroupCourses = () => {
   const params = useParams();
   const { id: _id } = params;
 
-  const { data: courses, isLoading } = useGetDepartmentCoursesQuery(
-    String(_id),
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') || '1';
+  const limit = searchParams.get('limit') || '20';
+  const search = searchParams.get('search') || '';
+
+  const { data: groupCourses, isLoading } = useGetDepartmentCoursesQuery(
+    {
+      id: String(_id),
+      query: `page=${page}&limit=${limit}&search=${search}`,
+    },
     {
       skip: !_id,
     }
   );
+
+  console.log(groupCourses);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -128,18 +138,25 @@ const GroupCourses = () => {
     }
   };
 
-  const filteredCourses = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return courses?.courses || [];
-    }
-    const lowercasedValue = searchTerm.toLowerCase();
+  const router = useRouter();
 
-    return courses?.courses.filter(
-      (course) =>
-        course.name.toLowerCase().includes(lowercasedValue) ||
-        course.code.toLowerCase().includes(lowercasedValue)
-    );
-  }, [courses?.courses, searchTerm]);
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    const params = new URLSearchParams(searchParams);
+
+    // debounce added
+    if (!value) {
+      params.delete('search');
+    } else {
+      params.set('search', value);
+    }
+    params.set('page', '1'); // Reset to first page on new search
+
+    const timeoutId = setTimeout(() => {
+      router.push(`/groups/all/${_id}/courses?${params.toString()}`);
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  };
 
   return (
     <div className="space-y-6 p-4 sm:p-6">
@@ -147,7 +164,7 @@ const GroupCourses = () => {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/groups">Groups</Link>
+              <Link href="/groups/all">Groups</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -186,14 +203,14 @@ const GroupCourses = () => {
         <CardContent>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <h2 className="text-lg font-medium">
-              Total Courses: {courses?.courses?.length}
+              Total Courses: {groupCourses?.pagination.items}
             </h2>
             <div>
               <Input
                 type="text"
                 placeholder="Search courses..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="max-w-sm"
               />
             </div>
@@ -207,9 +224,16 @@ const GroupCourses = () => {
             headers={['# ', 'Course Name', 'Course Code', 'Action']}
             isLoading={isLoading}
             noDataMessage="No courses found."
+            currentPage={groupCourses?.pagination.page}
+            itemsPerPage={groupCourses?.pagination.limit}
+            totalItems={groupCourses?.pagination.items}
+            limitOptions={[10, 20, 30, 50, 70, 100]}
             data={
-              filteredCourses?.map((course, index) => [
-                index + 1,
+              groupCourses?.courses?.map((course, index) => [
+                (groupCourses.pagination.page - 1) *
+                  groupCourses.pagination.limit +
+                  index +
+                  1,
                 course.name,
                 course.code,
                 <div key="actions" className="flex items-center gap-3">

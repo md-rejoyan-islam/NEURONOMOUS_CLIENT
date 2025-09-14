@@ -130,7 +130,7 @@ export default function FirmwareContent() {
             <NormalTable
               currentPage={pagination?.page || 1}
               itemsPerPage={pagination?.limit || 10}
-              totalItems={pagination?.total || 0}
+              totalItems={pagination?.totalPages || 0}
               headers={[
                 '#',
                 'Version',

@@ -73,47 +73,66 @@ const Page = () => {
         </div>
       </div>
       <Card className="mt-4">
-        <div className="flex flex-wrap justify-between gap-4 px-4">
-          <div>
-            <h3 className="text-muted-foreground text-sm font-medium">
-              Course ID
-            </h3>
-            <p className="mt-1 text-sm font-semibold">{record?.code}</p>
-          </div>
-          <div>
-            <h3 className="text-muted-foreground text-sm font-medium">
-              Course Name
-            </h3>
-            <p className="mt-1 text-sm font-semibold">{record?.name}</p>
-          </div>
-          <div>
-            <h3 className="text-muted-foreground text-sm font-medium">Date</h3>
-            <p className="mt-1 text-sm font-semibold">
-              {record?.date}
-              {/* {new Date(data.data).toLocaleDateString('en-US', {
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Course ID
+              </h3>
+              <p className="mt-1 text-sm font-semibold">{record?.code}</p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Course Name
+              </h3>
+              <p className="mt-1 text-sm font-semibold">{record?.name}</p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Date
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {record?.date}
+                {/* {new Date(data.data).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric',
               })} */}
-            </p>
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Total Students
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {record?.enrolled_students?.length || 0}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Attendend Students
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {record?.present_students?.length || 0}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Attendance Rate
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {record?.enrolled_students &&
+                record?.enrolled_students.length > 0
+                  ? (
+                      (record?.present_students?.length /
+                        record?.enrolled_students.length) *
+                      100
+                    ).toFixed(2) + '%'
+                  : '0%'}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-muted-foreground text-sm font-medium">
-              Total Students
-            </h3>
-            <p className="mt-1 text-sm font-semibold">
-              {record?.enrolled_students?.length || 0}
-            </p>
-          </div>
-          <div>
-            <h3 className="text-muted-foreground text-sm font-medium">
-              Attendend Students
-            </h3>
-            <p className="mt-1 text-sm font-semibold">
-              {record?.present_students?.length || 0}
-            </p>
-          </div>
-        </div>
+        </CardContent>
       </Card>
 
       <Card className="mt-6 py-4 shadow-xs">

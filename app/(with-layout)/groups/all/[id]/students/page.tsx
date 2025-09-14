@@ -238,7 +238,7 @@ const GroupStudents = () => {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/groups">Groups</Link>
+              <Link href="/groups/all">Groups</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -272,7 +272,7 @@ const GroupStudents = () => {
         <CardContent>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <h2 className="text-lg font-medium">
-              Total Students: {students?.pagination.total}
+              Total Students: {students?.pagination.items}
             </h2>
             <div>
               <Input
@@ -302,7 +302,7 @@ const GroupStudents = () => {
             noDataMessage="No courses found."
             currentPage={students?.pagination.page || 1}
             itemsPerPage={students?.pagination.limit || 10}
-            totalItems={students?.pagination.total || 0}
+            totalItems={students?.pagination.totalPages || 0}
             limitOptions={[10, 20, 30, 50, 70, 100]}
             data={
               students?.students?.map((student, index) => [

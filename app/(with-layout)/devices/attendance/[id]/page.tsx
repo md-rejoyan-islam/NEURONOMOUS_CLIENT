@@ -39,8 +39,6 @@ const Page = () => {
     }
   );
 
-  console.log(attendanceDevice, ' attendanceDevice');
-
   const assignedUser =
     attendanceDevice?.allowed_users?.find((u) => u.role !== 'admin') || null;
 

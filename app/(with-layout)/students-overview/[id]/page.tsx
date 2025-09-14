@@ -1,15 +1,11 @@
+'use client';
+import NormalTable from '@/components/table/normal-table';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { useGetStudentCoursesQuery } from '@/queries/student';
 import { DoorClosedLocked } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 const Page = () => {
   const student = {
@@ -48,6 +44,14 @@ const Page = () => {
       },
     ],
   };
+  const params = useParams();
+  const { id } = params;
+
+  const { data } = useGetStudentCoursesQuery(id as string, {
+    skip: !id,
+  });
+
+  console.log(data);
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -69,28 +73,28 @@ const Page = () => {
               <h3 className="text-muted-foreground text-sm font-medium">
                 Student Name
               </h3>
-              <p className="mt-1 text-sm font-semibold">{student.name}</p>
+              <p className="mt-1 text-sm font-semibold">{data?.data?.name}</p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Registration Number
               </h3>
               <p className="mt-1 text-sm font-semibold">
-                {student.registration}
+                {data?.data?.registration_number}
               </p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Session
               </h3>
-              <p className="mt-1 text-sm font-semibold">{student.session}</p>
+              <p className="mt-1 text-sm font-semibold">{data?.data.session}</p>
             </div>
             <div className="">
               <h3 className="text-muted-foreground text-sm font-medium">
                 Total Courses
               </h3>
               <p className="mt-1 text-sm font-semibold">
-                {student.courses.length}
+                {data?.data?.courses.length || 0}
               </p>
             </div>
           </div>
@@ -108,45 +112,28 @@ const Page = () => {
       </Card>
       <Card className="mt-4">
         <CardContent>
-          <Table>
-            <TableHeader className="bg-gray-50 uppercase dark:bg-white/5">
-              <TableHead>#</TableHead>
-              <TableHead>Course Id</TableHead>
-              <TableHead>Course Name</TableHead>
-              <TableHead>Session</TableHead>
-              <TableHead>Attendance</TableHead>
-              <TableHead>Percentage</TableHead>
-            </TableHeader>
-            <TableBody>
-              {student?.courses.map((course, index) => (
-                <TableRow
-                  key={index}
-                  className="hover:bg-gray-50 dark:hover:bg-white/5"
-                >
-                  <TableCell className="py-2 text-sm">{index + 1}</TableCell>
-                  <TableCell className="py-2 text-sm font-medium">
-                    {course.courseId}
-                  </TableCell>
-                  <TableCell className="py-2 text-sm font-medium">
-                    {course.courseName}
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">
-                    {course.session}
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">
-                    {course.attendedClasses} / {course.totalClasses}
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">
-                    {(
-                      (course.attendedClasses / course.totalClasses) *
-                      100
-                    ).toFixed(2)}
-                    %
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <NormalTable
+            headers={[
+              '#',
+              'Course Id',
+              'Course Name',
+              'Session',
+              'Attendance',
+              'Percentage',
+            ]}
+            isLoading={false}
+            data={
+              data?.data?.courses.map((course, index) => [
+                index + 1,
+                course.code,
+                course.name,
+                course.session,
+                `${course.attend} / ${course.total_class}`,
+                `${course.percentage}%`,
+              ]) || []
+            }
+            noDataMessage="No courses found."
+          />
         </CardContent>
       </Card>
     </div>

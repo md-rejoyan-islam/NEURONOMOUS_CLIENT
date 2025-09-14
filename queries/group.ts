@@ -234,16 +234,17 @@ export const groupApi = createApi({
         eiin: string;
         description: string;
         createdAt: string;
+        pagination: IPagination;
         courses: {
           name: string;
           code: string;
           _id: string;
         }[];
       },
-      string
+      { id: string; query?: string }
     >({
-      query: (id) => ({
-        url: `/groups/${id}/courses`,
+      query: ({ id, query }) => ({
+        url: `/groups/${id}/courses${query ? `?${query}` : ''}`,
         method: 'GET',
       }),
       transformResponse: (response) =>
@@ -254,6 +255,7 @@ export const groupApi = createApi({
             eiin: string;
             description: string;
             createdAt: string;
+            pagination: IPagination;
             courses: {
               name: string;
               code: string;
@@ -261,7 +263,7 @@ export const groupApi = createApi({
             }[];
           }>
         ).data,
-      providesTags: (result, error, id) => [
+      providesTags: (result, error, { id }) => [
         { type: 'GroupCourse', id },
         'GroupCourse',
       ],
@@ -463,7 +465,25 @@ export const groupApi = createApi({
       }
     >({
       query: ({ id, payload }) => ({
-        url: `/groups/${id}/add-user`,
+        url: `/groups/${id}/users/add-and-device-permissions`,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+    }),
+    giveDevicesPermissionToUser: builder.mutation<
+      { success: boolean; message?: string },
+      {
+        id: string;
+        payload: {
+          userId: string;
+          deviceIds: string[];
+          deviceType: 'clock' | 'attendance';
+        };
+      }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/groups/${id}/users/add-devices`,
         method: 'POST',
         body: payload,
       }),
@@ -579,5 +599,6 @@ export const {
   useAddStudentsInDepartmentMutation,
   useGetDepartmentStudentsQuery,
   useRemoveStudentForDepartmentMutation,
+  useGiveDevicesPermissionToUserMutation,
   useEditStudentInDepartmentMutation,
 } = groupApi;

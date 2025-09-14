@@ -91,20 +91,26 @@ const Page = () => {
           {/* Course Details Section */}
           <div className="mb-8 space-y-4">
             <div className="bg-opacity-50 flex items-center justify-between rounded-lg bg-gray-900 p-3 text-sm sm:text-base">
-              <span className="font-medium text-gray-400">Instructor:</span>
+              <span className="font-medium text-gray-400">Course Code:</span>
+              <span className="font-semibold text-gray-200">{data?.code}</span>
+            </div>
+            <div className="bg-opacity-50 flex items-center justify-between rounded-lg bg-gray-900 p-3 text-sm sm:text-base">
+              <span className="font-medium text-gray-400">Session:</span>
               <span className="font-semibold text-gray-200">
+                {data?.session}
+              </span>
+            </div>
+            <div className="bg-opacity-50 flex items-center justify-between rounded-lg bg-gray-900 p-3 text-sm sm:text-base">
+              <span className="font-medium text-gray-400">Instructor:</span>
+              <span className="text-base font-semibold text-gray-200">
                 {data?.instructor}
               </span>
             </div>
             <div className="bg-opacity-50 flex items-center justify-between rounded-lg bg-gray-900 p-3 text-sm sm:text-base">
               <span className="font-medium text-gray-400">Department:</span>
-              <span className="font-semibold text-gray-200">
+              <span className="ml-2 text-base font-semibold text-gray-200">
                 {data?.department}
               </span>
-            </div>
-            <div className="bg-opacity-50 flex items-center justify-between rounded-lg bg-gray-900 p-3 text-sm sm:text-base">
-              <span className="font-medium text-gray-400">Course Code:</span>
-              <span className="font-semibold text-gray-200">{data?.code}</span>
             </div>
           </div>
           {/* Registration Form */}

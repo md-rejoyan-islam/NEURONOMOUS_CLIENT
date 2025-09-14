@@ -12,6 +12,7 @@ interface ICourse {
   name: string;
   instructor: string;
   department: string;
+  session: string;
 }
 
 interface IEnrollmentResponse {

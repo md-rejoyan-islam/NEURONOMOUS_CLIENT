@@ -61,13 +61,13 @@ const CreateUserFrom = () => {
   };
 
   const handleSelectAllDevices = () => {
-    if (selectedDevices.length === selectedGroup?.devices.clocks.length) {
-      setSelectedDevices([]);
-    } else {
-      setSelectedDevices(
-        selectedGroup?.devices.clocks.map((device) => device.id) || []
-      );
-    }
+    // if (selectedDevices.length === selectedGroup?.devices.clocks.length) {
+    //   setSelectedDevices([]);
+    // } else {
+    //   setSelectedDevices(
+    //     selectedGroup?.devices.clocks.map((device) => device.id) || []
+    //   );
+    // }
   };
 
   const [createUserWithDevices] = useAddUserToGroupWithDevicesMutation();
@@ -210,7 +210,8 @@ const CreateUserFrom = () => {
         {/* Device Access */}
         <div>
           <DeviceAccess
-            devices={selectedGroup?.devices.clocks || []}
+            // devices={selectedGroup?.devices?.clocks || []}
+            devices={[]}
             selectedDevices={selectedDevices}
             handleSelectAllDevices={handleSelectAllDevices}
             handleDeviceToggle={handleDeviceToggle}

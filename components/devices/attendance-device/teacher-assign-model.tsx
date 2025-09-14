@@ -24,6 +24,7 @@ import { UserCreateInput, userCreateSchema } from '@/lib/validations';
 import {
   useAddUserToGroupWithDevicesMutation,
   useGetAllUsersInGroupQuery,
+  useGiveDevicesPermissionToUserMutation,
 } from '@/queries/group';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
@@ -59,6 +60,7 @@ const TeacherAssignModel = ({
 
   const users = groupUsers?.filter((user) => user.role !== 'admin');
   const [createUserWithDevices] = useAddUserToGroupWithDevicesMutation();
+  const [giveDevicePermission] = useGiveDevicesPermissionToUserMutation();
 
   const onSubmit = async (data: UserCreateInput) => {
     // Handle form submission logic here
@@ -97,8 +99,24 @@ const TeacherAssignModel = ({
         description: 'No teacher selected.',
       });
     }
+    const teacher = users?.find((user) => user._id === teacherId);
+    if (!teacher) {
+      return toast.error('Selected teacher not found', {
+        description: 'Please select a valid teacher.',
+      });
+    }
 
     try {
+      await giveDevicePermission({
+        id: groupId,
+        payload: {
+          userId: teacherId,
+          deviceType: 'attendance',
+          deviceIds: [deviceId],
+        },
+      }).unwrap();
+      refetch?.();
+
       toast.success('Teacher Assigned', {
         description: `Teacher has been assigned successfully.`,
       });

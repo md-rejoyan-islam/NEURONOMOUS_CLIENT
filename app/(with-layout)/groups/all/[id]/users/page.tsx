@@ -69,6 +69,7 @@ const GroupUsers = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<UserCreateInput>({
     resolver: zodResolver(userCreateSchema),
@@ -122,6 +123,7 @@ const GroupUsers = () => {
         description: `User ${data.first_name} ${data.last_name} has been created successfully.`,
       });
       setCreateUserModalOpen(false);
+      reset();
       //    refetch?.();
 
       // eslint-disable-next-line
@@ -200,7 +202,7 @@ const GroupUsers = () => {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/groups">Groups</Link>
+              <Link href="/groups/all">Groups</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

@@ -42,6 +42,8 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
     skip: !_id,
   });
 
+  console.log('Group Data:', group);
+
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const searchParams = useSearchParams();
@@ -110,7 +112,7 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/groups">Groups</Link>
+                  <Link href="/groups/all">Groups</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -154,7 +156,7 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
                 <h3 className="text-muted-foreground text-sm font-medium">
                   Total Devices
                 </h3>
-                <p className="mt-1 text-sm font-semibold">7</p>
+                <p className="mt-1 text-sm font-semibold">{group?.devices}</p>
               </div>
               <div className="">
                 <h3 className="text-muted-foreground text-sm font-medium">
@@ -176,19 +178,21 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
                 <h3 className="text-muted-foreground text-sm font-medium">
                   Total Students
                 </h3>
-                <p className="mt-1 text-sm font-semibold">200</p>
+                <p className="mt-1 text-sm font-semibold">{group?.students}</p>
               </div>
               <div className="">
                 <h3 className="text-muted-foreground text-sm font-medium">
                   Total Courses
                 </h3>
-                <p className="mt-1 text-sm font-semibold">40</p>
+                <p className="mt-1 text-sm font-semibold">{group?.courses}</p>
               </div>
               <div className="">
                 <h3 className="text-muted-foreground text-sm font-medium">
                   Total Users
                 </h3>
-                <p className="mt-1 text-sm font-semibold">6</p>
+                <p className="mt-1 text-sm font-semibold">
+                  {group?.members?.length || 0}
+                </p>
               </div>
               <div className="">
                 <h3 className="text-muted-foreground text-sm font-medium">

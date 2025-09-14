@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   useAddAttendanceRecordMutation,
+  useDeleteAttendanceRecordMutation,
   useGetCourseByIdQuery,
 } from '@/queries/course';
-import { DoorClosedLocked, Trash } from 'lucide-react';
+import { DoorClosedLocked, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { toast } from 'sonner';
@@ -21,8 +22,6 @@ const Page = () => {
     { skip: !courseId }
   );
 
-  console.log(coursee);
-
   const course = {
     id: '001',
     name: 'Introduction to Computer Science',
@@ -33,6 +32,24 @@ const Page = () => {
     lastUpdated: '2025-09-07T21:45:00Z',
     session: '2023-2024',
     attendanceRate: 92, // in percentage
+  };
+
+  const [deleteAttendanceRecord] = useDeleteAttendanceRecordMutation();
+  const handleDeleteAttendanceRecord = async (date: string) => {
+    try {
+      await deleteAttendanceRecord({ courseId: courseId, date }).unwrap();
+      toast.success('Attendance Record Deleted', {
+        description: `Attendance record has been deleted successfully.`,
+      });
+      // refetch();
+
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error('Failed to delete record', {
+        description:
+          error?.data?.message || 'Something went wrong. Please try again.',
+      });
+    }
   };
 
   const [addAttendanceRecord] = useAddAttendanceRecordMutation();
@@ -196,13 +213,7 @@ const Page = () => {
 
         <CardContent>
           <NormalTable
-            headers={[
-              '#',
-              'Date',
-              'Students Present',
-              'Students Absent',
-              'Action',
-            ]}
+            headers={['#', 'Date', 'Present', 'Absent', 'Rate(%)', 'Action']}
             isLoading={isLoading}
             noDataMessage="No attendance records found."
             data={
@@ -222,14 +233,21 @@ const Page = () => {
                 </Link>,
                 entry.present_students,
                 <span key={'absent-' + entry.date}>
-                  coursee.studentsEnrolled - entry.present_students
+                  {coursee.studentsEnrolled - entry.present_students}
                 </span>,
+                (
+                  ((entry.present_students || 0) / coursee.studentsEnrolled) *
+                  100
+                ).toFixed(2),
                 <div
                   className="flex items-center gap-2"
                   key={entry.date + '-actions'}
                 >
-                  <button className='transition" ml-2 cursor-pointer rounded-sm bg-red-100 p-1.5 hover:bg-red-200 dark:bg-red-700/20 dark:hover:bg-red-800/20'>
-                    <Trash className="inline-block h-4 w-4 text-red-600 hover:text-red-800" />
+                  <button
+                    className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
+                    onClick={() => handleDeleteAttendanceRecord(entry.date)}
+                  >
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>,
               ]) || []

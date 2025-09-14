@@ -385,10 +385,10 @@ export default function SystemLogsPage() {
           )}
 
           {/* Pagination */}
-          {pagination && pagination.pages > 1 && (
+          {pagination && (pagination.totalPages || 1) > 1 && (
             <div className="mt-6 flex items-center justify-between">
               <p className="text-sm text-gray-500">
-                Page {pagination.page} of {pagination.pages}
+                Page {pagination.page} of {pagination.totalPages}
               </p>
               <div className="flex gap-2">
                 <Button
@@ -404,7 +404,7 @@ export default function SystemLogsPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => handlePageChange(pagination.page + 1)}
-                  disabled={pagination.page === pagination.pages}
+                  disabled={pagination.page === pagination.totalPages}
                 >
                   Next
                   <ChevronRight className="ml-1 h-4 w-4" />

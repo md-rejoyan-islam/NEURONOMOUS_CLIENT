@@ -1,60 +1,19 @@
+'use client';
+import NormalTable from '@/components/table/normal-table';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { useGetAllStudentsSummaryQuery } from '@/queries/student';
 import { DoorClosedLocked } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const Page = () => {
-  const students = [
-    {
-      id: '2023001',
-      name: 'Alice Johnson',
-      registration: '2023001',
-      session: '2023-2024',
-      totalClasses: 30,
-      attendedClasses: 28,
-    },
-    {
-      id: '2023002',
-      name: 'Bob Smith',
-      registration: '2023002',
-      session: '2023-2024',
-      totalClasses: 30,
-      attendedClasses: 25,
-    },
-    {
-      id: '2023003',
-      name: 'Charlie Brown',
-      registration: '2023003',
-      session: '2022-2023',
-      totalClasses: 30,
-      attendedClasses: 20,
-    },
-    {
-      id: '2023004',
-      name: 'Diana Prince',
-      registration: '2023004',
-      session: '2023-2024',
-      totalClasses: 30,
-      attendedClasses: 30,
-    },
-    {
-      id: '2023005',
-      name: 'Ethan Hunt',
-      registration: '2023005',
-      session: '2021-2022',
-      totalClasses: 30,
-      attendedClasses: 22,
-    },
-  ];
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') || '1';
+  const limit = searchParams.get('limit') || '20';
+
+  const { data } = useGetAllStudentsSummaryQuery(`page=${page}&limit=${limit}`);
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -104,50 +63,46 @@ const Page = () => {
       </Card>
       <Card className="mt-4">
         <CardContent>
-          <Table>
-            <TableHeader className="bg-gray-50 uppercase dark:bg-white/5">
-              <TableHead>#</TableHead>
-              <TableHead>Student Name</TableHead>
-              <TableHead>Registration</TableHead>
-              <TableHead>Session</TableHead>
-              <TableHead>Attendance</TableHead>
-              <TableHead>Percentage</TableHead>
-            </TableHeader>
-            <TableBody>
-              {students.map((student, index) => (
-                <TableRow
-                  key={student.id}
-                  className="hover:bg-gray-50 dark:hover:bg-white/5"
+          <NormalTable
+            headers={[
+              '#',
+              'Name',
+              'Registration',
+              'Session',
+              'Attendance',
+              'Percentage',
+              'Courses',
+              'Retaken',
+              'Department',
+            ]}
+            isLoading={false}
+            totalItems={data?.pagination.items || 0}
+            itemsPerPage={data?.pagination.limit || 20}
+            currentPage={data?.pagination.page || 1}
+            data={
+              data?.data?.map((student, index) => [
+                index +
+                  1 +
+                  ((data?.pagination.page || 1) - 1) *
+                    (data?.pagination.limit || 20),
+                <Link
+                  key={student._id}
+                  href={`/students-overview/${student._id}`}
+                  className="text-blue-600 hover:underline"
                 >
-                  <TableCell className="py-2 text-sm">{index + 1}</TableCell>
-                  <TableCell className="py-2 text-sm font-medium">
-                    <Link
-                      href={`/students-overview/${student.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {student.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">
-                    {student.registration}
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">
-                    {student.session}
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">
-                    {student.attendedClasses} / {student.totalClasses}
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">
-                    {(
-                      (student.attendedClasses / student.totalClasses) *
-                      100
-                    ).toFixed(2)}
-                    %
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  {student.name}
+                </Link>,
+                student.registration_number,
+                student.session,
+                `${student.total_classes_attended} / ${student.total_classes_held}`,
+                `${student.performance_percentage}%`,
+                student.total_courses,
+                student.retaken_courses,
+                student.department.name,
+              ]) || []
+            }
+            noDataMessage={'No students found.'}
+          />
         </CardContent>
       </Card>
     </div>

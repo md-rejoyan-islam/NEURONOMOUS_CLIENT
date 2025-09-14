@@ -91,10 +91,10 @@ export interface IAttendanceDevice {
 }
 
 export interface IPagination {
+  items: number;
+  limit: number;
   page: number;
   totalPages: number;
-  limit: number;
-  total: number;
 }
 
 export interface IDevice {
@@ -153,10 +153,9 @@ export interface IGroupWithPopulatedData {
   eiin: string;
   description: string;
   createdAt: string;
-  devices: {
-    clocks: IDevice[];
-    attendance: IAttendanceDevice[];
-  }; // Populated device data
+  courses: number;
+  students: number;
+  devices: number; // Populated device data
   members: IUser[]; // Populated user data
 }
 

@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'IoT Control Hub',
     description: 'Advanced IoT device management and control system',
-    images: ['/warning.png'],
+    images: [`${clientUrl}/warning.png`],
   },
   robots: {
     index: true,

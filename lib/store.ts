@@ -9,6 +9,7 @@ import { groupApi } from '@/queries/group';
 import { logsApi } from '@/queries/logs';
 import { notificationsApi } from '@/queries/notifications';
 import { openApi } from '@/queries/open';
+import { studentApi } from '@/queries/student';
 import { systemApi } from '@/queries/system';
 import { usersApi } from '@/queries/users';
 import { configureStore } from '@reduxjs/toolkit';
@@ -29,6 +30,7 @@ export const store = configureStore({
     [attendanceDevicesApi.reducerPath]: attendanceDevicesApi.reducer,
     [courseApi.reducerPath]: courseApi.reducer,
     [openApi.reducerPath]: openApi.reducer,
+    [studentApi.reducerPath]: studentApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -48,7 +50,8 @@ export const store = configureStore({
       logsApi.middleware,
       attendanceDevicesApi.middleware,
       courseApi.middleware,
-      openApi.middleware
+      openApi.middleware,
+      studentApi.middleware
     ),
 });
 

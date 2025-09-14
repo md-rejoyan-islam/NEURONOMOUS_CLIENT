@@ -45,10 +45,10 @@ export interface ILog {
     };
   }[];
   pagination: {
-    total: number;
-    page: number;
-    pages: number;
+    items: number;
     limit: number;
+    page: number;
+    totalPages: number;
   };
 }
 
