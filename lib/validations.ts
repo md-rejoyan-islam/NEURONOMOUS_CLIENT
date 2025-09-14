@@ -7,9 +7,7 @@ export const loginSchema = z.object({
 });
 
 export const createCourseSchema = z.object({
-  name: z.string().min(2, 'Course name must be at least 2 characters'),
-  code: z.string().min(2, 'Course code must be at least 2 characters'),
-  department: z.string().min(2, 'Department must be at least 2 characters'),
+  course: z.string('Course is required').min(2, 'Select a course'),
   instructor: z.string().min(2, 'Instructor is required'),
   session: z.string().min(4, 'Session must be at least 4 characters'),
 });
@@ -29,6 +27,21 @@ export const createCourseForDepartmentSchema = z.object({
       },
     })
     .min(2, 'Department must be at least 2 characters'),
+});
+export const editStudentInDepartmentSchema = z.object({
+  name: z.string().min(2, 'Course name must be at least 2 characters'),
+  email: z.email('Invalid email address'),
+  registration_number: z
+    .string()
+    .min(2, 'Registration number must be at least 2 characters'),
+  session: z
+    .string()
+    .regex(/^\d{4}-\d{4}$/, 'Session must follow the format YYYY-YYYY')
+    .refine((val) => {
+      const years = val.split('-').map(Number);
+      return years[1] === years[0] + 1;
+    }, 'Session years must be consecutive'),
+  rfid: z.string().min(2, 'RFID must be at least 2 characters'),
 });
 
 export const userCreateSchema = z.object({
@@ -272,6 +285,19 @@ export const firmwareSchema = z.object({
     }, 'File size must be less than 5 MB'),
 });
 
+export const studentsUploadSchema = z.object({
+  file: z
+    .any()
+    .refine((file) => file instanceof File, 'File is required')
+    .refine(
+      (file) => file?.name?.endsWith('.json'),
+      'Only .json files are allowed'
+    )
+    .refine((file) => {
+      return file?.size <= 10 * 1024 * 1024;
+    }, 'File size must be less than 10 MB'),
+});
+
 // New validation schemas
 export const contactFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -329,3 +355,7 @@ export type CourseInput = z.infer<typeof createCourseSchema>;
 export type CreateCourseForDepartmentInput = z.infer<
   typeof createCourseForDepartmentSchema
 >;
+export type EditStudentInDepartmentInput = z.infer<
+  typeof editStudentInDepartmentSchema
+>;
+export type StudentsUploadInput = z.infer<typeof studentsUploadSchema>;

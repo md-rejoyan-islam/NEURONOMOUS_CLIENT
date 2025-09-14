@@ -34,23 +34,19 @@ const CreateUserFrom = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<UserCreateInput>({
     resolver: zodResolver(userCreateSchema),
   });
 
   const { data: groups } = useGetAllGroupsQuery('');
-  const [selectedGroup, setSelectedGroup] =
-    useState<IGroupWithPopulatedData | null>(null);
+  const [selectedGroup] = useState<IGroupWithPopulatedData | null>(null);
 
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [creating] = useState(false);
   const router = useRouter();
 
-  const handleGroupSelect = (id: string) => {
-    const group = groups?.find((group) => group._id === id);
-
+  const handleGroupSelect = () => {
     // if (group) {
     //   setSelectedGroup(group);
     // }
@@ -172,8 +168,8 @@ const CreateUserFrom = () => {
                 <div className="space-y-2">
                   <Label htmlFor="role">Select Group</Label>
                   <Select
-                    onValueChange={(value) => {
-                      handleGroupSelect(value);
+                    onValueChange={() => {
+                      handleGroupSelect();
                     }}
                   >
                     <SelectTrigger className="w-full">

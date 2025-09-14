@@ -23,7 +23,8 @@ export function DashboardSidebar({ className }: { className?: string }) {
   const { data: user } = useProfileQuery();
 
   const isActive = (path: string) => pathname === path;
-  const isSubItemActive = (path: string) => pathname.includes(path);
+
+  const isSubItemActive = (path: string) => pathname.startsWith('/' + path);
   // pathname.split('/')[1] === path.split('/')[1];
 
   const filteredItems = navigationItems.filter(

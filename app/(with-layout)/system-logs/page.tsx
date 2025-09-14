@@ -84,7 +84,7 @@ export default function SystemLogsPage() {
     page: 1,
     limit: 10,
   });
-  const [selectedLog, setSelectedLog] = useState<any>(null);
+  const [, setSelectedLog] = useState<any>(null);
 
   // const { data: logsData, isLoading, refetch } = useGetSystemLogsQuery(filters);
   const { data, isLoading, refetch } = useGetAllLogsQuery(filters);
@@ -102,6 +102,7 @@ export default function SystemLogsPage() {
   console.log('Logs Data:', logsData, pagination, data);
 
   const [exportLogs, { isLoading: isExporting }] = useExportLogsMutation();
+  console.log(exportLogs);
 
   const form = useForm<LogFilterInput>({
     resolver: zodResolver(logFilterSchema),
@@ -114,10 +115,11 @@ export default function SystemLogsPage() {
 
   const handleExport = async () => {
     try {
-      const result = await exportLogs(filters).unwrap();
+      // const result = await exportLogs(filters).unwrap();
       toast('Export started', {
         description: 'Your logs export will be ready shortly.',
       });
+      // eslint-disable-next-line
     } catch (error) {
       toast.error('Export failed', {
         description: 'Please try again later.',

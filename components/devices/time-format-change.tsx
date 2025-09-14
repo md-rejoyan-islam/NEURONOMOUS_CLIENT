@@ -7,7 +7,7 @@ import { Bell, RefreshCw, TimerReset } from 'lucide-react';
 import { useState } from 'react';
 
 const TimeFormatChange = ({ device }: { device: IDevice }) => {
-  const [isChangeFontTime, setIsChangeFontTime] = useState(false);
+  const [isChangeFontTime] = useState(false);
   return (
     <Card>
       <CardHeader>

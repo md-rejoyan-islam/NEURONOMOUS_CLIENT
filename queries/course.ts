@@ -33,6 +33,15 @@ interface ISigleCourse {
   updatedAt: string;
   completedClasses: number;
   attendanceRate: string;
+  records: [
+    {
+      _id: string;
+      date: string;
+      present_students: number;
+      createdAt: string;
+      updatedAt: string;
+    },
+  ];
 }
 
 interface IEnrolledStudent {
@@ -59,8 +68,7 @@ export const courseApi = createApi({
     createCourse: builder.mutation<
       ICourse,
       {
-        code: string;
-        name: string;
+        courseId: string;
         session: string;
         instructor: string;
         department: string;
@@ -115,6 +123,98 @@ export const courseApi = createApi({
       transformResponse: (response) =>
         (response as ISuccessResponse<IEnrolledStudent>).data,
     }),
+    addAttendanceRecord: builder.mutation<
+      void,
+      { courseId: string; date: string }
+    >({
+      query: ({ courseId, date }) => ({
+        url: `/courses/${courseId}/attendance-records`,
+        method: 'POST',
+        body: { date },
+      }),
+      invalidatesTags: (result, error, { courseId }) => [
+        { type: 'Course', id: courseId },
+      ],
+    }),
+    removeCourse: builder.mutation<void, { groupId: string; courseId: string }>(
+      {
+        query: ({ groupId, courseId }) => ({
+          url: `/courses/${courseId}/department/${groupId}`,
+          method: 'DELETE',
+        }),
+        invalidatesTags: ['Course'],
+      }
+    ),
+    getAttendanceRecordByDate: builder.query<
+      {
+        _id: string;
+        date: string;
+        code: string;
+        name: string;
+        enrolled_students: {
+          _id: string;
+          name: string;
+          registration_number: string;
+          session: string;
+        }[];
+        present_students: {
+          _id: string;
+          presentBy: string;
+          student: {
+            name: string;
+            registration_number: string;
+            session: string;
+          };
+        }[];
+        createdAt: string;
+        updatedAt: string;
+      },
+      { courseId: string; date: string }
+    >({
+      query: ({ courseId, date }) => ({
+        url: `/courses/${courseId}/attendance-records/${date}`,
+        method: 'GET',
+      }),
+      transformResponse: (response) =>
+        (
+          response as ISuccessResponse<{
+            _id: string;
+            date: string;
+            code: string;
+            name: string;
+            enrolled_students: {
+              _id: string;
+              name: string;
+              registration_number: string;
+              session: string;
+            }[];
+            present_students: {
+              _id: string;
+              presentBy: string;
+              student: {
+                name: string;
+                registration_number: string;
+                session: string;
+              };
+            }[];
+            createdAt: string;
+            updatedAt: string;
+          }>
+        ).data,
+    }),
+    manuallyAttendanceRecordToggle: builder.mutation<
+      void,
+      { courseId: string; date: string; studentId: string }
+    >({
+      query: ({ courseId, date, studentId }) => ({
+        url: `/courses/${courseId}/manually-toggle-attendance`,
+        method: 'PATCH',
+        body: { date, studentId },
+      }),
+      invalidatesTags: (result, error, { courseId }) => [
+        { type: 'Course', id: courseId },
+      ],
+    }),
   }),
 });
 
@@ -123,4 +223,7 @@ export const {
   useGetAllCoursesQuery,
   useGetCourseByIdQuery,
   useGetEnrolledStudentsByCourseIdQuery,
+  useAddAttendanceRecordMutation,
+  useGetAttendanceRecordByDateQuery,
+  useManuallyAttendanceRecordToggleMutation,
 } = courseApi;

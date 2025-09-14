@@ -9,19 +9,6 @@ import clsx from 'clsx';
 import { Shield, Users, UserX } from 'lucide-react';
 import TableSkeleton from '../loading/table-skeleton';
 
-interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: 'user' | 'admin' | 'superAdmin';
-  status: 'active' | 'inactive' | 'banned';
-  createdAt: string;
-  lastLogin: string;
-  deviceAccess: string[];
-  groupName?: string;
-}
-
 export default function UsersComponent() {
   const { data: user } = useProfileQuery();
 

@@ -1,17 +1,15 @@
 'use client';
-import { Card, CardContent } from '@/components/ui/card';
+import NormalTable from '@/components/table/normal-table';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { useGetCourseByIdQuery } from '@/queries/course';
-import { DoorClosedLocked, Eye, Trash } from 'lucide-react';
+  useAddAttendanceRecordMutation,
+  useGetCourseByIdQuery,
+} from '@/queries/course';
+import { DoorClosedLocked, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { toast } from 'sonner';
 
 const Page = () => {
   const params = useParams();
@@ -37,13 +35,31 @@ const Page = () => {
     attendanceRate: 92, // in percentage
   };
 
-  const dates = [
-    { date: '2025-09-02T09:00:00Z', present: 110 },
-    { date: '2025-09-04T09:00:00Z', present: 115 },
-    { date: '2025-09-06T09:00:00Z', present: 112 },
-    { date: '2025-09-08T09:00:00Z', present: 118 },
-    { date: '2025-09-10T09:00:00Z', present: 120 },
-  ];
+  const [addAttendanceRecord] = useAddAttendanceRecordMutation();
+
+  const handleAddRecord = async () => {
+    // Get current date in DD-MM-YYYY format
+    const d = new Date();
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const year = d.getFullYear();
+    const fdate = `${day}-${month}-${year}`;
+
+    try {
+      await addAttendanceRecord({ courseId: courseId, date: fdate }).unwrap();
+
+      toast.success('Attendance Record Added', {
+        description: `Attendance record for ${fdate} has been added successfully.`,
+      });
+      // refetch();
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error('Failed to add record', {
+        description:
+          error?.data?.message || 'Something went wrong. Please try again.',
+      });
+    }
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -170,53 +186,55 @@ const Page = () => {
         </CardContent>
       </Card>
 
-      <Card className="mt-4 pt-2">
+      <Card className="mt-4">
+        <CardHeader className="flex items-center justify-between gap-6">
+          <h2 className="text-lg font-medium">Attendance Records</h2>
+          <div>
+            <Button onClick={handleAddRecord}>Add Record</Button>
+          </div>
+        </CardHeader>
+
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Students Present</TableHead>
-                <TableHead>Students Absent</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {dates.map((entry, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Link
-                      href={`/devices/attendance/001/courses/${course.id}/${entry.date}`}
-                      className="font-medium text-blue-600 hover:underline"
-                    >
-                      {new Date(entry.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{entry.present}</TableCell>
-                  <TableCell>
-                    {course.studentsEnrolled - entry.present}
-                  </TableCell>
-                  <TableCell>
-                    <a
-                      href={`https://example.com/attendance/${course.id}/${entry.date}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      <Eye className="inline-block h-4 w-4" />
-                    </a>
-                    <button className='transition" ml-2 cursor-pointer rounded-sm bg-red-100 p-1.5 hover:bg-red-200 dark:bg-red-700/20 dark:hover:bg-red-800/20'>
-                      <Trash className="inline-block h-4 w-4 text-red-600 hover:text-red-800" />
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <NormalTable
+            headers={[
+              '#',
+              'Date',
+              'Students Present',
+              'Students Absent',
+              'Action',
+            ]}
+            isLoading={isLoading}
+            noDataMessage="No attendance records found."
+            data={
+              coursee?.records.map((entry, index) => [
+                index + 1,
+                <Link
+                  key={'link-' + entry.date}
+                  href={`/devices/attendance/${id}/courses/${coursee._id}/${entry.date}`}
+                  className="font-medium text-blue-600 hover:underline"
+                >
+                  {entry.date}
+                  {/* {new Date(entry.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })} */}
+                </Link>,
+                entry.present_students,
+                <span key={'absent-' + entry.date}>
+                  coursee.studentsEnrolled - entry.present_students
+                </span>,
+                <div
+                  className="flex items-center gap-2"
+                  key={entry.date + '-actions'}
+                >
+                  <button className='transition" ml-2 cursor-pointer rounded-sm bg-red-100 p-1.5 hover:bg-red-200 dark:bg-red-700/20 dark:hover:bg-red-800/20'>
+                    <Trash className="inline-block h-4 w-4 text-red-600 hover:text-red-800" />
+                  </button>
+                </div>,
+              ]) || []
+            }
+          />
         </CardContent>
       </Card>
     </div>

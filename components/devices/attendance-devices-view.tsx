@@ -29,63 +29,6 @@ import {
   SelectValue,
 } from '../ui/select';
 
-const data = [
-  {
-    id: 'auth-001',
-    authorName: 'Dr. Rahman',
-    authorEmail: 'rahman@sust.edu',
-    lastUpdate: '2025-09-08T10:30:00Z',
-    totalClass: 42,
-    department: 'Electrical and Electronic Engineering',
-    status: 'online',
-  },
-  {
-    id: 'auth-002',
-    authorName: 'Prof. Ayesha Karim',
-    authorEmail: 'ayesha.karim@sust.edu',
-    lastUpdate: '2025-09-07T15:45:00Z',
-    totalClass: 36,
-    department: 'Computer Science and Engineering',
-    status: 'offline',
-  },
-  {
-    id: 'auth-003',
-    authorName: 'Md. Saiful Islam',
-    authorEmail: 'saiful.islam@sust.edu',
-    lastUpdate: '2025-09-08T12:10:00Z',
-    totalClass: 28,
-    department: 'Civil Engineering',
-    status: 'online',
-  },
-  {
-    id: 'auth-004',
-    authorName: 'Dr. Nazmul Hasan',
-    authorEmail: 'nazmul.hasan@sust.edu',
-    lastUpdate: '2025-09-06T09:20:00Z',
-    totalClass: 50,
-    department: 'Mechanical Engineering',
-    status: 'offline',
-  },
-  {
-    id: 'auth-005',
-    authorName: 'Farhana Akter',
-    authorEmail: 'farhana.akter@sust.edu',
-    lastUpdate: '2025-09-08T11:55:00Z',
-    totalClass: 31,
-    department: 'Business Administration',
-    status: 'online',
-  },
-  {
-    id: 'auth-006',
-    authorName: 'Dr. Imran Hossain',
-    authorEmail: 'imran.hossain@sust.edu',
-    lastUpdate: '2025-09-07T18:05:00Z',
-    totalClass: 40,
-    department: 'Mathematics',
-    status: 'offline',
-  },
-];
-
 const AttendanceDevicesView = ({
   query,
 }: {

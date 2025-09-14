@@ -31,11 +31,9 @@ const GroupComponent = () => {
 
   const [searchTerm, setSearchTerm] = useState<string>(search);
 
-  const {
-    data: groups = [],
-    isLoading,
-    error,
-  } = useGetAllGroupsQuery(`search=${searchTerm}`);
+  const { data: groups = [], isLoading } = useGetAllGroupsQuery(
+    `search=${searchTerm}`
+  );
   const [deleteGroup] = useDeleteGroupByIdMutation();
 
   const handleDeleteGroup = (id: string) => {

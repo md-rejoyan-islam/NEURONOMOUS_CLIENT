@@ -66,8 +66,6 @@ export const firmwareApi = createApi({
     }),
     createFirmware: builder.mutation<Firmware, FormData>({
       query: (firmware) => {
-        console.log(firmware, ' firmware data');
-
         return {
           url: '/firmwares',
           method: 'POST',

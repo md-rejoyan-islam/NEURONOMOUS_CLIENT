@@ -94,7 +94,7 @@ export interface IPagination {
   page: number;
   totalPages: number;
   limit: number;
-  items: number;
+  total: number;
 }
 
 export interface IDevice {

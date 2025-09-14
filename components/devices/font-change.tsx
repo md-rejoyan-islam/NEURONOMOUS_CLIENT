@@ -13,7 +13,7 @@ import { Bell, RefreshCw, TypeOutline } from 'lucide-react';
 import { useState } from 'react';
 
 const FontChange = ({ device }: { device: IDevice }) => {
-  const [isChangeFontTime, setIsChangeFontTime] = useState(false);
+  const [isChangeFontTime] = useState(false);
   return (
     <Card>
       <CardHeader>

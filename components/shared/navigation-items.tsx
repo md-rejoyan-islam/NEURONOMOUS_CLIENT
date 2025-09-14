@@ -42,7 +42,7 @@ const navigationItems = [
   },
   {
     name: 'Courses',
-    href: '/courses',
+    href: 'courses',
     icon: FileChartColumn,
     isCollapsible: true,
     roles: ['superadmin', 'admin', 'user'],

@@ -67,8 +67,6 @@ async function handleProxyRequest(
   const urlPath = pathSegments.join('/');
   const targetUrl = `${API_URL}/${urlPath}${request.nextUrl.search}`;
 
-  console.log(targetUrl);
-
   const requestBody =
     request.method === 'GET' || request.method === 'HEAD'
       ? null

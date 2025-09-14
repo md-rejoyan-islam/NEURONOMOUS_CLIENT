@@ -30,9 +30,16 @@ const Page = () => {
     data: attendanceDevice,
     isLoading,
     refetch,
-  } = useGetAttendanceDeviceByIdQuery({
-    id: id as string,
-  });
+  } = useGetAttendanceDeviceByIdQuery(
+    {
+      id: id as string,
+    },
+    {
+      skip: !id,
+    }
+  );
+
+  console.log(attendanceDevice, ' attendanceDevice');
 
   const assignedUser =
     attendanceDevice?.allowed_users?.find((u) => u.role !== 'admin') || null;
