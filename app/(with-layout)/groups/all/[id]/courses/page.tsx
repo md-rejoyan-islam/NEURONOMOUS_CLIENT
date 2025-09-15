@@ -19,8 +19,8 @@ const GroupCoursesPage = async ({
   params,
   searchParams,
 }: {
-  params: { id: string };
-  searchParams: { page?: string; search?: string; limit?: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string; search?: string; limit?: string }>;
 }) => {
   const { id: _id } = await params;
   const searchQuery = await searchParams;
