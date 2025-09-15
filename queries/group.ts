@@ -37,6 +37,16 @@ export interface ISuccessResponse<T> {
   data: T;
 }
 
+export interface IUsersInGroup {
+  name: string;
+  eiin: string;
+  _id: string;
+  description: string;
+  createdAt: string;
+  pagination: IPagination;
+  members: IUser[];
+}
+
 export interface IGetAllGroups {
   name: string;
   eiin: string;
@@ -382,14 +392,20 @@ export const groupApi = createApi({
       }),
       invalidatesTags: ['Group'],
     }),
-    getAllUsersInGroup: builder.query<IUser[], string>({
-      query: (id) => ({
-        url: `/groups/${id}/users`,
+    getAllUsersInGroup: builder.query<
+      IUsersInGroup,
+      {
+        id: string;
+        query?: string;
+      }
+    >({
+      query: ({ id, query }) => ({
+        url: `/groups/${id}/users` + (query ? `?${query}` : ''),
         method: 'GET',
       }),
-      providesTags: (result, error, id) => [{ type: 'Group', id }],
+      providesTags: (result, error, { id }) => [{ type: 'Group', id }],
       transformResponse: (response) =>
-        (response as ISuccessResponse<IUser[]>).data,
+        (response as ISuccessResponse<IUsersInGroup>).data,
     }),
     // addDeviceToGroup: builder.mutation<
     //   IGroupResponse,
