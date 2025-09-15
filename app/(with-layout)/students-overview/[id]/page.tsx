@@ -8,42 +8,6 @@ import { DoorClosedLocked } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
 const Page = () => {
-  const student = {
-    id: '2023001',
-    name: 'Alice Johnson',
-    registration: '2023001',
-    session: '2023-2024',
-    courses: [
-      {
-        courseId: 'CSE201',
-        courseName: 'Data Structures',
-        session: '2020-2022',
-        totalClasses: 30,
-        attendedClasses: 28,
-      },
-      {
-        courseId: 'CSE202',
-        courseName: 'Algorithms',
-        totalClasses: 28,
-        session: '2023-2024',
-        attendedClasses: 25,
-      },
-      {
-        courseId: 'CSE301',
-        courseName: 'Operating Systems',
-        totalClasses: 25,
-        session: '2022-2023',
-        attendedClasses: 20,
-      },
-      {
-        courseId: 'CSE401',
-        courseName: 'Database Systems',
-        totalClasses: 20,
-        session: '2023-2024',
-        attendedClasses: 18,
-      },
-    ],
-  };
   const params = useParams();
   const { id } = params;
 

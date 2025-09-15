@@ -281,6 +281,7 @@ export const groupApi = createApi({
           email: string;
           _id: string;
           session: string;
+          phone?: string;
           registration_number: string;
           rfid: string;
         }[];
@@ -303,6 +304,7 @@ export const groupApi = createApi({
             students: {
               name: string;
               email: string;
+              phone?: string;
               _id: string;
               session: string;
               registration_number: string;

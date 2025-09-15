@@ -40,8 +40,11 @@ export interface ICpu {
 
 export interface ICourse {
   _id: string;
-  code: string;
-  name: string;
+  course: {
+    _id: string;
+    name: string;
+    code: string;
+  };
   session: string;
   enroll_link: string;
   instructor: IUser;
