@@ -45,9 +45,15 @@ const TeacherAssignModel = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { data: groupUsers } = useGetAllUsersInGroupQuery(groupId, {
-    skip: !groupId,
-  });
+  const { data: groupUsers } = useGetAllUsersInGroupQuery(
+    {
+      id: groupId,
+      query: 'limit=1000',
+    },
+    {
+      skip: !groupId,
+    }
+  );
 
   const {
     register,
@@ -58,7 +64,7 @@ const TeacherAssignModel = ({
     resolver: zodResolver(userCreateSchema),
   });
 
-  const users = groupUsers?.filter((user) => user.role !== 'admin');
+  const users = groupUsers?.members.filter((user) => user.role !== 'admin');
   const [createUserWithDevices] = useAddUserToGroupWithDevicesMutation();
   const [giveDevicePermission] = useGiveDevicesPermissionToUserMutation();
 
