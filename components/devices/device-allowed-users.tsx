@@ -71,10 +71,14 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
       });
     }
   };
-  const { data: groupMembers } = useGetAllUsersInGroupQuery(group || '') || [];
+  const { data: groupMembers } =
+    useGetAllUsersInGroupQuery({
+      id: group || '',
+      query: 'limit=1000',
+    }) || [];
 
   const withoutAccessUsers =
-    groupMembers?.filter(
+    groupMembers?.members?.filter(
       (user) =>
         !allowedUsers?.some((u) => u._id === user._id) && user.role !== 'admin'
     ) || [];

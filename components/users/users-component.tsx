@@ -21,13 +21,20 @@ export default function UsersComponent() {
     data: allGroupUsers,
     isLoading: isGroupUsersLoading,
     refetch: groupUserRefetch,
-  } = useGetAllUsersInGroupQuery(user?.group || '', {
-    skip: user?.role !== 'admin' || !user?.group,
-  }) || {
+  } = useGetAllUsersInGroupQuery(
+    {
+      id: user?.group || '',
+      query: 'limit=1000',
+    },
+    {
+      skip: user?.role !== 'admin' || !user?.group,
+    }
+  ) || {
     data: [],
   };
 
-  const users = user?.role === 'superadmin' ? allUsers : allGroupUsers || [];
+  const users =
+    user?.role === 'superadmin' ? allUsers : allGroupUsers?.members || [];
 
   if (isLoading || isGroupUsersLoading) {
     return <TableSkeleton />;
