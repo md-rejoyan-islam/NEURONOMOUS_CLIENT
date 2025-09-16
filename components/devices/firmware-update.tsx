@@ -27,12 +27,16 @@ const FirmwareUpdate = ({
     useUpdateDeviceFirmwareMutation();
   const [updateMessage, setUpdateMessage] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
+  const [failedUpdate, setFailedUpdate] = useState(false);
 
   const updateFirmware = async () => {
     try {
       await updateDeviceFirmware({ deviceId: id, firmwareId }).unwrap();
+      setUpdateMessage(null);
       setIsOpen(false);
       setIsOpenProcess(true);
+      setProgress(0);
+      setFailedUpdate(false);
 
       // eslint-disable-next-line
     } catch (error: any) {
@@ -62,9 +66,11 @@ const FirmwareUpdate = ({
       // } else
 
       if (typeof +value === 'number' && +value >= 0 && +value <= 100) {
+        setFailedUpdate(false);
         setUpdateMessage('');
         setProgress(+value);
       } else if (messageValue === 'Rebooting') {
+        setFailedUpdate(false);
         setProgress(100);
         setUpdateMessage('Rebooting device...');
         setTimeout(() => {
@@ -75,6 +81,15 @@ const FirmwareUpdate = ({
             description: `Device ${id} has been updated to version ${version}.`,
           });
         }, 5000);
+      } else if (messageValue === 'Failed') {
+        setFailedUpdate(true);
+        setUpdateMessage('Update failed. Please try again.');
+        setIsOpenProcess(false);
+
+        // setProgress(0);
+        // toast.error('Firmware update failed', {
+        //   description: `Device ${id} failed to update to version ${version}. Please try again.`,
+        // });
       }
     };
     socket.on(`device:${id}:firmware`, handler);
@@ -176,6 +191,39 @@ const FirmwareUpdate = ({
             <p className="mt-4 animate-pulse text-center text-sm opacity-70">
               This process may take several minutes. Please be patient.
             </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={failedUpdate}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <div className="rounded-md p-2 text-2xl">❌</div>
+              <div>
+                <h3 className="text-xl">Firmware Update Failed</h3>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="pb-3">
+            <p className="mb-4 text-sm opacity-70">
+              The firmware update has failed. Please try again. If the problem
+              persists, contact support.
+            </p>
+
+            <div className="mb-2 flex justify-between text-xs opacity-80">
+              <p>Installed</p>
+              <p>{updateMessage ? updateMessage : `${progress}%`}</p>
+            </div>
+            <Progress value={progress} className="w-full" />
+          </div>
+          <div className="flex justify-end">
+            <Button
+              variant="destructive"
+              onClick={() => setFailedUpdate(false)}
+              disabled={isLoading}
+            >
+              Close
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
