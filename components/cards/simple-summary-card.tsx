@@ -19,7 +19,7 @@ const SimpleSummaryCard = ({
             <p className="text-muted-foreground text-sm font-medium">{label}</p>
             <p className={`text-2xl font-bold ${valueColor}`}>{value}</p>
           </div>
-          <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/20">
+          <div className="rounded-full bg-slate-100 p-3 dark:bg-slate-800/40">
             {icon}
           </div>
         </div>

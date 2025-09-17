@@ -11,10 +11,8 @@ const GroupSkeleton = () => {
           <Skeleton className="mb-2 h-5 max-w-80" />
         </div>
         <div className="hidden items-center justify-end sm:flex">
-          <div>
-            <Skeleton className="mb-2 h-9 w-28" />
-            <Skeleton className="mb-2 h-9 w-28" />
-          </div>
+          <Skeleton className="mb-2 h-9 w-28" />
+          <Skeleton className="mb-2 h-9 w-28" />
         </div>
       </div>
 

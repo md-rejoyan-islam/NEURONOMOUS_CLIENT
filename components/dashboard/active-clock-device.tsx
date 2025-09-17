@@ -6,7 +6,7 @@ import { useGetAllDevicesQuery } from '@/queries/devices';
 import { CheckCircle, Wifi } from 'lucide-react';
 import { useEffect } from 'react';
 
-const ActiveDevice = () => {
+const ActiveClockDevice = () => {
   const { data: devices, refetch: refetchAllDevices } = useGetAllDevicesQuery(
     {}
   );
@@ -48,4 +48,4 @@ const ActiveDevice = () => {
   );
 };
 
-export default ActiveDevice;
+export default ActiveClockDevice;

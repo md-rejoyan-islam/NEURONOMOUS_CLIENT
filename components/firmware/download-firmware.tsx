@@ -28,19 +28,6 @@ const DownloadFirmware = ({ id }: { id: string }) => {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-
-      //   const data = await download(id).unwrap();
-      //   if (data) {
-      //     const blob = new Blob([data]);
-      //     const url = window.URL.createObjectURL(blob);
-      //     const link = document.createElement('a');
-      //     link.href = url;
-      //     link.setAttribute('download', `firmware-${id}.bin`);
-      //     document.body.appendChild(link);
-      //     link.click();
-      //     document.body.removeChild(link);
-      //     window.URL.revokeObjectURL(url);
-      //   }
       toast.success('Download successful', {
         description: `Firmware ${id} has been downloaded.`,
       });

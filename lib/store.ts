@@ -10,7 +10,7 @@ import { logsApi } from '@/queries/logs';
 import { notificationsApi } from '@/queries/notifications';
 import { openApi } from '@/queries/open';
 import { studentApi } from '@/queries/student';
-import { systemApi } from '@/queries/system';
+import { summaryApi } from '@/queries/summary';
 import { usersApi } from '@/queries/users';
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
@@ -24,7 +24,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [groupApi.reducerPath]: groupApi.reducer,
     [firmwareApi.reducerPath]: firmwareApi.reducer,
-    [systemApi.reducerPath]: systemApi.reducer,
+    [summaryApi.reducerPath]: summaryApi.reducer,
     [contactApi.reducerPath]: contactApi.reducer,
     [logsApi.reducerPath]: logsApi.reducer,
     [attendanceDevicesApi.reducerPath]: attendanceDevicesApi.reducer,
@@ -45,7 +45,7 @@ export const store = configureStore({
       authApi.middleware,
       groupApi.middleware,
       firmwareApi.middleware,
-      systemApi.middleware,
+      summaryApi.middleware,
       contactApi.middleware,
       logsApi.middleware,
       attendanceDevicesApi.middleware,
