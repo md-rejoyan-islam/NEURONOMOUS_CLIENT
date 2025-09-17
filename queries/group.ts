@@ -69,7 +69,7 @@ export const groupApi = createApi({
       return response.json();
     },
   }),
-  keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
+  // keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
   tagTypes: ['Group', 'Device', 'GroupCourse', 'Students'],
   endpoints: (builder) => ({
     getAllGroups: builder.query<IGetAllGroups[], string>({

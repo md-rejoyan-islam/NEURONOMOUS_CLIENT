@@ -43,12 +43,19 @@ interface IDashboardSummary {
   };
 }
 
+interface IGroupSummary {
+  totalGroups: number;
+  clocksUsed: number;
+  attendanceUsed: number;
+  totalUsers: number;
+}
+
 export const summaryApi = createApi({
   reducerPath: 'summaryApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/proxy/api/v1',
   }),
-  keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
+  // keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
   tagTypes: ['Summary'],
   endpoints: (builder) => ({
     getDashboardPageSummary: builder.query<IDashboardSummary, void>({
@@ -117,6 +124,15 @@ export const summaryApi = createApi({
       }),
       extraOptions: { skipCache: true },
     }),
+    getAllGroupSummaries: builder.query<IGroupSummary, void>({
+      query: () => ({
+        url: '/summary/all-groups',
+        method: 'GET',
+      }),
+      transformResponse: (response: ISuccessResponse<IGroupSummary>) =>
+        response.data,
+      providesTags: ['Summary'],
+    }),
   }),
 });
 
@@ -125,4 +141,5 @@ export const {
   useDownloadClocksSummaryMutation,
   useDownloadAttendancesSummaryMutation,
   useDownloadStudentsSummaryMutation,
+  useGetAllGroupSummariesQuery,
 } = summaryApi;

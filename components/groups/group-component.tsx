@@ -1,12 +1,12 @@
 'use client';
 
 import GroupEditModal from '@/components/groups/group-edit-modal';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import {
   useDeleteGroupByIdMutation,
   useGetAllGroupsQuery,
 } from '@/queries/group';
+import { useGetAllGroupSummariesQuery } from '@/queries/summary';
 import {
   AlarmClock,
   Calculator,
@@ -16,7 +16,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import SimpleSummaryCard from '../cards/simple-summary-card';
@@ -25,16 +25,17 @@ import NormalTable from '../table/normal-table';
 import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
 
-const GroupComponent = () => {
-  const searchParam = useSearchParams();
-  const search = searchParam.get('search') || '';
-
+const GroupComponent = ({ search }: { search: string }) => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>(search);
 
   const { data: groups = [], isLoading } = useGetAllGroupsQuery(
     `search=${searchTerm}`
   );
-  const [deleteGroup] = useDeleteGroupByIdMutation();
+
+  const { data } = useGetAllGroupSummariesQuery();
+
+  const [deleteGroup, { isLoading: isDeleting }] = useDeleteGroupByIdMutation();
 
   const handleDeleteGroup = (id: string) => {
     try {
@@ -51,9 +52,6 @@ const GroupComponent = () => {
     }
   };
 
-  const router = useRouter();
-
-  // handle search filter with debounce
   const handleSearch = (term: string) => {
     setSearchTerm(term);
     const timeout = setTimeout(() => {
@@ -77,23 +75,23 @@ const GroupComponent = () => {
       <div className="grid grid-cols-1 gap-4 pt-4 pb-2 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
         <SimpleSummaryCard
           label="Total Groups"
-          value={groups.length}
+          value={data?.totalGroups ?? 0}
           icon={
             <FolderOpen className="h-6 w-6 text-purple-600 dark:text-purple-400" />
           }
           valueColor="text-purple-600 dark:text-purple-400"
         />
         <SimpleSummaryCard
-          label="Total Clock Devices"
-          value={groups.reduce((total, group) => total + group.clock, 0)}
+          label="Used Clock Devices"
+          value={data?.clocksUsed ?? 0}
           icon={
             <AlarmClock className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           }
           valueColor="text-blue-600 dark:text-blue-400"
         />
         <SimpleSummaryCard
-          label="Total Attendance Devices"
-          value={groups.reduce((total, group) => total + group.attendance, 0)}
+          label="Used Attendance Devices"
+          value={data?.attendanceUsed ?? 0}
           icon={
             <Calculator className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           }
@@ -101,11 +99,7 @@ const GroupComponent = () => {
         />
         <SimpleSummaryCard
           label="Total Users in Groups"
-          value={
-            groups.length > 0
-              ? groups.reduce((total, group) => total + group.users, 0)
-              : 0
-          }
+          value={data?.totalUsers ?? 0}
           icon={
             <Settings className="h-6 w-6 text-green-600 dark:text-green-400" />
           }
@@ -177,14 +171,13 @@ const GroupComponent = () => {
                   _id={group._id}
                   eiin={group.eiin} // to be added later
                 />
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
+                  className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
                   onClick={() => handleDeleteGroup(group._id)}
-                  className="h-8 w-8 cursor-pointer bg-red-200/50 p-1 text-red-600 hover:text-red-700 dark:bg-red-200/10"
+                  disabled={isDeleting}
                 >
                   <Trash2 className="h-4 w-4" />
-                </Button>
+                </button>
               </div>,
             ])}
             noDataMessage="No groups available."

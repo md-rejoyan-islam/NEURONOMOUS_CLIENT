@@ -4,10 +4,17 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Groups Management',
-  description: 'Create and manage device groups for better organization',
+  description: 'Manage and monitor all device groups for better organization',
 };
 
-export default function GroupPage() {
+export default async function GroupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    search?: string;
+  }>;
+}) {
+  const { search } = await searchParams;
   return (
     <div className="space-y-6 p-4 sm:p-6">
       {/* Header */}
@@ -18,12 +25,11 @@ export default function GroupPage() {
             All Groups Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Create and manage device groups for better organization
+            Manage and monitor all device groups for better organization
           </p>
         </div>
-        {/* <GroupCreateModal /> */}
       </div>
-      <GroupComponent />
+      <GroupComponent search={search || ''} />
     </div>
   );
 }

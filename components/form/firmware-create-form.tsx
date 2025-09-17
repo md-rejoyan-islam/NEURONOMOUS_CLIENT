@@ -21,7 +21,9 @@ import InputField from './input-field';
 import TextField from './text-field';
 
 const FirmwareCreateForm = () => {
-  const [dragActive, setDragActive] = useState(false);
+  const [dragActive, setDragActive] = useState<boolean>(false);
+  const [uploadFirmware, { isLoading: isUploading }] =
+    useCreateFirmwareMutation();
 
   const {
     register,
@@ -29,6 +31,7 @@ const FirmwareCreateForm = () => {
     watch,
     setValue,
     clearErrors,
+    resetField,
     reset,
     formState: { errors },
   } = useForm<FirmwareFormData>({
@@ -77,8 +80,6 @@ const FirmwareCreateForm = () => {
     }
   };
 
-  const [uploadFirmware, { isLoading: isUploading }] =
-    useCreateFirmwareMutation();
   const onSubmit = async (data: FirmwareFormData) => {
     try {
       const formData = new FormData();
@@ -93,6 +94,8 @@ const FirmwareCreateForm = () => {
       });
 
       reset();
+      resetField('file');
+      resetField('device_type');
 
       // eslint-disable-next-line
     } catch (error: any) {
@@ -139,7 +142,7 @@ const FirmwareCreateForm = () => {
               id="file-upload"
               type="file"
               // Accept=.bin , pdf
-              accept=".bin,.pdf"
+              accept=".bin"
               className="hidden"
               onChange={handleFileChange}
             />

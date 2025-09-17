@@ -1,15 +1,19 @@
-import { Edit, Plus } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '../ui/button';
-
+import InputField from '@/components//form/input-field';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components//ui/dialog';
+import TextField from '@/components/form/text-field';
+import { Button } from '@/components/ui/button';
 import { GroupInput, groupSchema } from '@/lib/validations';
 import { useUpdateGroupByIdMutation } from '@/queries/group';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Edit, Plus } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import InputField from '../form/input-field';
-import TextField from '../form/text-field';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 
 const GroupEditModal = ({
   _id,

@@ -80,6 +80,7 @@ export interface IAttendanceDevice {
     name: string;
     admin: IUser;
   };
+  available_firmwares: [{ _id: string; version: string }];
   courses: {
     _id: string;
     code: string;

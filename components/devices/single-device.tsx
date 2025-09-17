@@ -1,7 +1,6 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
@@ -11,10 +10,18 @@ import {
   useGetAllScheduledNoticesQuery,
   useGetDeviceQuery,
 } from '@/queries/devices';
-import { ArrowLeft, Bell, Clock, Cuboid, Wifi, WifiOff } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { Bell, Clock, Cuboid, Wifi, WifiOff } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import SmallLoading from '../loading/small-loading';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '../ui/breadcrumb';
 import DeviceAllowedUsers from './device-allowed-users';
 import FirmwareUpdate from './firmware-update';
 import FontChange from './font-change';
@@ -25,8 +32,6 @@ import ScheduledNotice from './scheduled-notice';
 import TimeFormatChange from './time-format-change';
 
 export default function SingleDevice({ id }: { id: string }) {
-  const router = useRouter();
-
   const { data: user } = useProfileQuery();
 
   const {
@@ -61,22 +66,24 @@ export default function SingleDevice({ id }: { id: string }) {
   }
 
   return (
-    <div className="space-y-6 p-4 sm:p-6">
+    <div className="space-y-4 p-2 sm:p-6">
       {/* Header */}
       <div>
-        <Button
-          onClick={() => router.push('/devices')}
-          variant="outline"
-          className="mb-4"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Devices
-        </Button>
-
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-bold sm:text-3xl">{device.name}</h1>
-            <p className="text-muted-foreground mt-1">Device ID: {device.id}</p>
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/devices">Devices</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{device?.name || device?._id}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
           </div>
           <div className="flex flex-row-reverse items-center gap-3">
             <RestartDevice
@@ -130,7 +137,7 @@ export default function SingleDevice({ id }: { id: string }) {
                   </div>
                 )}
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-2">
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
                   Device ID

@@ -7,7 +7,6 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
   try {
     const data = await getGroupById(id);
     return {
@@ -24,11 +23,23 @@ export async function generateMetadata({
 
 const SingleGroupPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{
+    deviceType?: 'clock' | 'attendance';
+    search?: string;
+  }>;
 }) => {
   const { id } = await params;
-  return <SingleGroupComponent _id={id} />;
+  const { deviceType, search } = await searchParams;
+  return (
+    <SingleGroupComponent
+      _id={id}
+      deviceType={deviceType || 'clock'}
+      search={search || ''}
+    />
+  );
 };
 
 export default SingleGroupPage;

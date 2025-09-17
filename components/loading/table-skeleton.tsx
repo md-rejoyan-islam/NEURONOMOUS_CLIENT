@@ -27,25 +27,21 @@ const TableSkeleton = () => {
       </div>
 
       {/* Skeleton for  Table */}
-      <div className="bg-card w-full rounded-lg border p-6 shadow-lg">
-        <div className="mb-4 flex items-center">
-          <Skeleton className="mr-2 h-6 w-6" />
-          <Skeleton className="h-6 w-48" />
-        </div>
+      <div className="bg-card w-full rounded-lg border px-6 pt-4 pb-4 shadow-lg">
         <div className="space-y-2">
           {/* Table Header Skeleton */}
-          <div className="border-border grid grid-cols-6 gap-4 border-b py-2">
-            <Skeleton className="h-4 w-8" /> {/* # */}
-            <Skeleton className="h-4 w-24" /> {/* Name */}
-            <Skeleton className="h-4 w-20" /> {/* Devices */}
-            <Skeleton className="h-4 w-16" /> {/* Users */}
-            <Skeleton className="h-4 w-20" /> {/* Created */}
-            <Skeleton className="h-4 w-16" /> {/* Actions */}
+          <div className="border-border grid grid-cols-6 gap-4 border-b pb-2">
+            <Skeleton className="h-6 w-8" /> {/* # */}
+            <Skeleton className="h-6 w-24" /> {/* Name */}
+            <Skeleton className="h-6 w-20" /> {/* Devices */}
+            <Skeleton className="h-6 w-16" /> {/* Users */}
+            <Skeleton className="h-6 w-20" /> {/* Created */}
+            <Skeleton className="h-6 w-16" /> {/* Actions */}
           </div>
           {/* Table Rows Skeleton */}
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="grid grid-cols-6 gap-4 py-2">
-              <Skeleton className="h-4 w-4" />
+              <Skeleton className="h-4 w-6" />
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-4 w-16" />

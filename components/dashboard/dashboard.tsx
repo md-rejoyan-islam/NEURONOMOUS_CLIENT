@@ -23,7 +23,8 @@ import {
   Users,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import TableSkeleton from '../loading/table-skeleton';
+import CardSkeleton from '../loading/card-skeleton';
+import { Skeleton } from '../ui/skeleton';
 
 export default function Dashboard() {
   const { data, isLoading, error } = useGetDashboardPageSummaryQuery(
@@ -88,22 +89,38 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <div className="p-4 sm:p-6">
-        <TableSkeleton />;
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <Skeleton className="mb-2 h-8 w-100" />
+            <Skeleton className="h-6 w-68" />
+          </div>
+          <div>
+            <Skeleton className="mb-2 h-8 w-36" />
+            <Skeleton className="h-6 w-20" />
+          </div>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+          {Array.from({ length: 12 }).map((_, index) => (
+            <CardSkeleton index={index} key={index} />
+          ))}
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-4 sm:p-6">
-        <div className="py-12 text-center">
-          <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
-          <h3 className="mb-2 text-lg font-medium">
-            Failed to load dashboard data
-          </h3>
-          <p className="text-muted-foreground">
-            Please try refreshing the page.
-          </p>
+      <div className="h-full p-4 sm:p-6">
+        <div className="flex h-full w-full items-center justify-center">
+          <div className="py-12 text-center">
+            <AlertTriangle className="mx-auto mb-4 h-16 w-16 text-red-500" />
+            <h3 className="mb-2 text-lg font-medium">
+              Failed to load dashboard data
+            </h3>
+            <p className="text-muted-foreground">
+              Please try refreshing the page.
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -112,7 +129,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 p-4 sm:p-6">
       {/* Welcome Section */}
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+      <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-2xl font-bold sm:text-3xl">
             Welcome back, {data?.first_name + ' ' + data?.last_name}
@@ -122,10 +139,10 @@ export default function Dashboard() {
           </p>
         </div>
         <TimeDateShow />
-      </div>
+      </section>
 
       {/* System Overview */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
         {data?.role === 'superadmin' && data?.cpu && (
           <CpuUsage cpu={data?.cpu} />
         )}
@@ -182,53 +199,60 @@ export default function Dashboard() {
         /> */}
 
         {/* summary download options for superadmin ( clock devices, attendance devices, users, groups ) */}
-      </div>
+      </section>
 
-      <hr />
+      {data?.role !== 'user' && <hr />}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <Card>
-          <CardContent>
-            <p className="text-primary pb-2 font-medium">
-              Clock Devices Report
-            </p>
+        {data?.role === 'superadmin' && (
+          <>
+            <Card>
+              <CardContent>
+                <p className="text-primary pb-2 font-medium">
+                  Clock Devices Report
+                </p>
 
-            <p className="text-muted-foreground mb-4 text-xs">
-              Download a summary report of all registered clock devices.
-            </p>
-            <Button variant={'outline'} onClick={handleDownloadClocks}>
-              <ArrowDown className="text-primary animate-bounce" />
-              Download
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <p className="text-primary pb-2 font-medium">
-              Attendance Devices Report
-            </p>
+                <p className="text-muted-foreground mb-4 text-xs">
+                  Download a summary report of all registered clock devices.
+                </p>
+                <Button variant={'outline'} onClick={handleDownloadClocks}>
+                  <ArrowDown className="text-primary animate-bounce" />
+                  Download
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent>
+                <p className="text-primary pb-2 font-medium">
+                  Attendance Devices Report
+                </p>
 
-            <p className="text-muted-foreground mb-4 text-xs">
-              Download a summary report of all registered attendance devices.
-            </p>
-            <Button variant={'outline'} onClick={handleDownloadAttendance}>
-              <ArrowDown className="text-primary animate-bounce" />
-              Download
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <p className="text-primary pb-2 font-medium">Students Report</p>
+                <p className="text-muted-foreground mb-4 text-xs">
+                  Download a summary report of all registered attendance
+                  devices.
+                </p>
+                <Button variant={'outline'} onClick={handleDownloadAttendance}>
+                  <ArrowDown className="text-primary animate-bounce" />
+                  Download
+                </Button>
+              </CardContent>
+            </Card>
+          </>
+        )}
+        {data?.role !== 'user' && (
+          <Card>
+            <CardContent>
+              <p className="text-primary pb-2 font-medium">Students Report</p>
 
-            <p className="text-muted-foreground mb-4 text-xs">
-              Download a summary report of all registered students.
-            </p>
-            <Button variant={'outline'} onClick={handleDownloadStudent}>
-              <ArrowDown className="text-primary animate-bounce" />
-              Download
-            </Button>
-          </CardContent>
-        </Card>
+              <p className="text-muted-foreground mb-4 text-xs">
+                Download a summary report of all registered students.
+              </p>
+              <Button variant={'outline'} onClick={handleDownloadStudent}>
+                <ArrowDown className="text-primary animate-bounce" />
+                Download
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

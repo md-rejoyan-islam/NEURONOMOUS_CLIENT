@@ -16,7 +16,7 @@ import {
 } from '@/queries/group';
 import { Bell, Boxes, Search, TabletsIcon, Wifi, WifiOff } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import GroupSkeleton from '../loading/group-skeleton';
 import { Card, CardContent, CardTitle } from '../ui/card';
@@ -32,15 +32,19 @@ import BulkOperationModel from './bulk-operation-model';
 import GroupAttendanceDeviceView from './group-attendance-device-view';
 import GroupDevicesView from './group-clocks-view';
 
-const SingleGroupComponent = ({ _id }: { _id: string }) => {
-  const searchParams = useSearchParams();
-  const deviceTypeParam = searchParams.get('deviceType');
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [deviceType, setDeviceType] = useState<'clock' | 'attendance'>(
-    deviceTypeParam === 'attendance' ? 'attendance' : 'clock'
-  );
-
+const SingleGroupComponent = ({
+  _id,
+  deviceType: dType,
+  search,
+}: {
+  _id: string;
+  deviceType: 'clock' | 'attendance';
+  search?: string;
+}) => {
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState<string>(search || '');
+  const [deviceType, setDeviceType] = useState<'clock' | 'attendance'>(dType);
+
   const {
     data: group,
     isLoading,
@@ -50,24 +54,27 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
     skip: !_id,
   });
 
-  const { data: clockDevices } = useGetClocksInGroupQuery(
-    {
-      id: _id,
-      search: searchTerm,
-    },
-    {
-      skip: !_id,
-    }
-  );
-  const { data: attendanceDevices } = useGetAttendanceDevicesInGroupQuery(
-    {
-      id: _id,
-      search: searchTerm,
-    },
-    {
-      skip: !_id,
-    }
-  );
+  const { data: clockDevices, isLoading: isClocksLoading } =
+    useGetClocksInGroupQuery(
+      {
+        id: _id,
+        search: searchTerm,
+      },
+      {
+        skip: !_id || deviceType !== 'clock',
+      }
+    );
+
+  const { data: attendanceDevices, isLoading: isAttendanceLoading } =
+    useGetAttendanceDevicesInGroupQuery(
+      {
+        id: _id,
+        search: searchTerm,
+      },
+      {
+        skip: !_id || deviceType !== 'attendance',
+      }
+    );
 
   const handleDeviceTypeChange = (value: 'clock' | 'attendance') => {
     setDeviceType(value);
@@ -345,10 +352,15 @@ const SingleGroupComponent = ({ _id }: { _id: string }) => {
           id={_id}
           filteredDevices={clockDevices ?? []}
           searchTerm={searchTerm}
+          isLoading={isClocksLoading}
         />
       )}
       {deviceType === 'attendance' && (
-        <GroupAttendanceDeviceView filteredDevices={attendanceDevices ?? []} />
+        <GroupAttendanceDeviceView
+          filteredDevices={attendanceDevices ?? []}
+          searchTerm={searchTerm}
+          isLoading={isAttendanceLoading}
+        />
       )}
     </div>
   );

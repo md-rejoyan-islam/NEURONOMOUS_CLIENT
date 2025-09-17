@@ -13,14 +13,6 @@ import React from 'react';
 import { Skeleton } from '../ui/skeleton';
 import Pagination from './table-pagination';
 
-//  currentPage={1}
-//       itemsPerPage={10}
-//       limitOptions={[5, 10, 20, 35, 50, 100]}
-//       totalItems={90}
-//       onPageChange={() => {}}
-//       onLimitChange={() => {}}
-//       showLimitSelector={true}
-
 const NormalTable = ({
   headers,
   isLoading,
@@ -59,7 +51,7 @@ const NormalTable = ({
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="border-b">
           {isLoading &&
             [1, 2, 3, 4, 5, 6, 7].map((loader) => (
               <TableRow key={loader}>

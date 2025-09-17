@@ -2,11 +2,21 @@
 
 import AddCourseModel from '@/components/devices/attendance-device/add-new-course-modal';
 import TeacherAssignModel from '@/components/devices/attendance-device/teacher-assign-model';
+import FirmwareUpdate from '@/components/devices/firmware-update';
 import NormalTable from '@/components/table/normal-table';
 import { Badge } from '@/components/ui/badge';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useGetAttendanceDeviceByIdQuery } from '@/queries/attendance-device';
+import { useProfileQuery } from '@/queries/auth';
 import {
   Calendar,
   Cpu,
@@ -25,6 +35,7 @@ import { useParams } from 'next/navigation';
 
 const Page = () => {
   const { id } = useParams();
+  const { data: user } = useProfileQuery();
 
   const {
     data: attendanceDevice,
@@ -42,132 +53,159 @@ const Page = () => {
   const assignedUser =
     attendanceDevice?.allowed_users?.find((u) => u.role !== 'admin') || null;
 
+  if (isLoading) {
+    return <p>loading</p>;
+  }
+
   return (
-    <div className="px-4 py-6 sm:px-6 lg:px-8">
-      {/* <Breadcrumb>
+    <div className="space-y-4 p-2 sm:p-6">
+      <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/devices">Devices</Link>
+              <Link href="/devices/">Devices</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Attendance Devices</BreadcrumbPage>
+            <BreadcrumbPage>9J6MWPLJ8NWP</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
-      </Breadcrumb> */}
+      </Breadcrumb>
 
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="flex items-center gap-2 text-2xl font-bold sm:text-3xl">
             <DoorClosedLocked className="text-primary h-6 w-6 sm:h-8 sm:w-8" />
-            Teacher Courses
+            Attendance Device Details
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage and monitor course details and attendance records
+            Detailed information and management for your attendance device.
           </p>
         </div>
       </div>
 
       <Card className="my-4">
         <CardContent>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <h1 className="flex items-center text-2xl font-bold">
               <User className="mr-2 inline-block h-6 w-6" />
 
               {assignedUser
                 ? assignedUser.first_name + ' ' + assignedUser.last_name
-                : 'No teacher assigned'}
+                : 'Unassigned User'}
             </h1>
             <div className="ml-2 flex items-center gap-2">
-              {attendanceDevice?.status === 'online' ? (
-                <Wifi className="h-4 w-4 text-green-500" />
-              ) : (
-                <WifiOff className="h-4 w-4 text-red-500" />
-              )}
-              <Badge
-                variant={
-                  attendanceDevice?.status === 'online'
-                    ? 'default'
-                    : 'destructive'
-                }
-                className={
-                  attendanceDevice?.status === 'online'
-                    ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                    : ''
-                }
-              >
-                {attendanceDevice?.status || 'N/A'}
-              </Badge>
+              <div className="flex items-center gap-2">
+                {attendanceDevice?.status === 'online' ? (
+                  <Wifi className="h-4 w-4 text-green-500" />
+                ) : (
+                  <WifiOff className="h-4 w-4 text-red-500" />
+                )}
+                <Badge
+                  variant={
+                    attendanceDevice?.status === 'online'
+                      ? 'default'
+                      : 'destructive'
+                  }
+                  className={
+                    attendanceDevice?.status === 'online'
+                      ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
+                      : ''
+                  }
+                >
+                  {attendanceDevice?.status || 'N/A'}
+                </Badge>
+              </div>
+              <div>
+                {user &&
+                  ['admin', 'superadmin'].includes(user?.role) &&
+                  attendanceDevice?.available_firmwares &&
+                  attendanceDevice?.available_firmwares?.length > 0 && (
+                    <div>
+                      <FirmwareUpdate
+                        version={'1.0.2'}
+                        id={attendanceDevice?._id || ''}
+                        firmwareId={'' as string}
+                        disabled={attendanceDevice?.status !== 'online'}
+                      />
+                    </div>
+                  )}
+              </div>
             </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-10 gap-y-3">
-            <p className="text-muted-foreground mt-2 flex items-center">
-              <School className="mr-2 inline-block h-4 w-4" />
-              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Group:
-              </span>
-              <span>
+          <div className="mt-6 grid grid-cols-2 items-center gap-4 lg:grid-cols-3">
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                <School className="mr-2 inline-block h-4 w-4" />
+                Group
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
                 {attendanceDevice?.group?.name ||
                   'Devices not assigned to any group'}
-              </span>
-            </p>
-            <p className="text-muted-foreground mt-2 flex items-center">
-              <Mail className="mr-2 inline-block h-4 w-4" />
-              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Mail:
-              </span>
-              {attendanceDevice?.group
-                ? attendanceDevice?.allowed_users?.find(
-                    (u) => u.role === 'admin'
-                  )?.email
-                : 'N/A'}
-            </p>
-            <p className="text-muted-foreground mt-2 flex items-center">
-              <NotebookTabs className="mr-2 inline-block h-4 w-4" />
-              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Mac Address:
-              </span>
-              {attendanceDevice?.mac_id || 'N/A'}
-            </p>
-            <p className="text-muted-foreground mt-2 flex items-center">
-              <IdCardLanyard className="mr-2 inline-block h-4 w-4" />
-              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Id:
-              </span>
-              {attendanceDevice?.id || 'N/A'}
-            </p>
-            <p className="text-muted-foreground mt-2 flex items-center">
-              <Cpu className="mr-2 inline-block h-4 w-4" />
-              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Firmware:
-              </span>
-              {attendanceDevice?.firmware_version || 'N/A'}
-            </p>
-            <p className="text-muted-foreground mt-2 flex items-center">
-              <Calendar className="mr-2 inline-block h-4 w-4" />
-              <span className="mr-1 font-medium text-slate-700 dark:text-white/90">
-                Last Update:
-              </span>
-              {attendanceDevice?.last_seen
-                ? new Date(attendanceDevice.last_seen).toLocaleString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })
-                : 'N/A'}
-            </p>
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                <Mail className="mr-2 inline-block h-4 w-4" />
+                Mail
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {attendanceDevice?.group
+                  ? attendanceDevice?.allowed_users?.find(
+                      (u) => u.role === 'admin'
+                    )?.email
+                  : 'N/A'}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                <NotebookTabs className="mr-2 inline-block h-4 w-4" />
+                Mac Address
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {attendanceDevice?.mac_id || 'N/A'}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                <IdCardLanyard className="mr-2 inline-block h-4 w-4" />
+                Id
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {attendanceDevice?.id || 'N/A'}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                <Cpu className="mr-2 inline-block h-4 w-4" />
+                Firmware
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {attendanceDevice?.firmware_version || 'N/A'}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                <Calendar className="mr-2 inline-block h-4 w-4" />
+                Last Update
+              </h3>
+              <p className="mt-1 text-sm font-semibold">
+                {attendanceDevice?.last_seen
+                  ? new Date(attendanceDevice.last_seen).toLocaleString(
+                      'en-US',
+                      {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      }
+                    )
+                  : 'N/A'}
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
