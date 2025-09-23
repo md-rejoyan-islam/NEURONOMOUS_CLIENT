@@ -4,10 +4,16 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+const clientUrl =
+  process.env.NEXT_PUBLIC_CLIENT_URL || 'https://neuronomous.net';
+
 export const metadata: Metadata = {
   title: 'Login | Neuronomous IoT Platform',
   description:
     'Access your Neuronomous account securely and manage your IoT devices.',
+  alternates: {
+    canonical: clientUrl + '/login',
+  },
   openGraph: {
     title: 'Login | Neuronomous IoT Platform',
     description:

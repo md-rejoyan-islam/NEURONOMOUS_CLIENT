@@ -101,6 +101,14 @@ export const devicesApi = createApi({
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Device', id }],
     }),
+    changeDeviceScene: builder.mutation<void, { id: string; scene: string }>({
+      query: ({ id, scene }) => ({
+        url: `/clock-devices/${id}/change-scene`,
+        method: 'PATCH',
+        body: { scene },
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Device', id }],
+    }),
     sendNoticeToDevice: builder.mutation<
       void,
       { id: string; notice: string; duration?: number }
@@ -251,6 +259,7 @@ export const devicesApi = createApi({
 });
 
 export const {
+  useChangeDeviceSceneMutation,
   useGetDevicesQuery,
   useGetDeviceQuery,
   useUpdateDeviceMutation,

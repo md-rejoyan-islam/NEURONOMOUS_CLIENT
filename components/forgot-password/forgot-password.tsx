@@ -59,7 +59,7 @@ export default function ForgotPassword() {
             </Alert>
 
             <Link href={'/login'}>
-              <Button className="w-full">
+              <Button className="w-full" aria-label="Back to Sign In Button">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Sign In
               </Button>

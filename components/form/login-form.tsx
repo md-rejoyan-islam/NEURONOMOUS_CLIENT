@@ -96,6 +96,7 @@ const LoginForm = () => {
         type="submit"
         className="h-10 w-full uppercase"
         disabled={isLoading}
+        aria-label="Sign In Button"
       >
         {isLoading ? 'Signing in...' : 'Sign In'}
       </Button>

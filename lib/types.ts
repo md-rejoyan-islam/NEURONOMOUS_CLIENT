@@ -113,6 +113,7 @@ export interface IDevice {
   end_time: number | null; // Unix timestamp in milliseconds, can be null
   firmware_version: string | null;
   type: 'single' | 'double';
+  scene: 'scene0' | 'scene1' | 'scene2' | null;
   free_heap: number;
   location: string | null;
   last_seen: number; // Unix timestamp in milliseconds

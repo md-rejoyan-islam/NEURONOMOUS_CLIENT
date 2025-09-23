@@ -4,13 +4,15 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import { socketManager } from '@/lib/socket';
 import { useProfileQuery } from '@/queries/auth';
 import {
   useGetAllScheduledNoticesQuery,
   useGetDeviceQuery,
 } from '@/queries/devices';
-import { Bell, Clock, Cuboid, Wifi, WifiOff } from 'lucide-react';
+import { Bell, Clock, Cog, Cuboid, Wifi, WifiOff } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import SmallLoading from '../loading/small-loading';
@@ -22,13 +24,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '../ui/breadcrumb';
+import { Button } from '../ui/button';
+import { Switch } from '../ui/switch';
 import DeviceAllowedUsers from './device-allowed-users';
 import FirmwareUpdate from './firmware-update';
 import FontChange from './font-change';
 import ModeChange from './mode-change';
 import NoticeMessage from './notice-message';
 import RestartDevice from './restart-device';
+import SceneChange from './scene-change';
 import ScheduledNotice from './scheduled-notice';
+import StopwatchTimer from './stop-watch';
 import TimeFormatChange from './time-format-change';
 
 export default function SingleDevice({ id }: { id: string }) {
@@ -111,7 +117,7 @@ export default function SingleDevice({ id }: { id: string }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-1">
         {/* Device Information */}
         <Card>
           <CardHeader>
@@ -137,7 +143,7 @@ export default function SingleDevice({ id }: { id: string }) {
                   </div>
                 )}
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
                   Device ID
@@ -242,7 +248,7 @@ export default function SingleDevice({ id }: { id: string }) {
             </div>
 
             {device?.notice && (
-              <div className="rounded-lg border border-orange-200 bg-orange-50 p-4 dark:border-orange-500/30 dark:bg-orange-900/20">
+              <div className="rounded-lg border border-orange-200 bg-orange-50 p-4 sm:w-1/2 dark:border-orange-500/30 dark:bg-orange-900/20">
                 <Label className="text-sm font-medium text-orange-800 dark:text-orange-400">
                   Current Notice
                 </Label>
@@ -261,17 +267,200 @@ export default function SingleDevice({ id }: { id: string }) {
 
         {/* Device Mode Control */}
         <div className="space-y-6">
+          <div>
+            <div>
+              <Tabs defaultValue={device.mode} className="space-y-4">
+                <Card className="py-4">
+                  <CardContent>
+                    <CardTitle className="flex items-center justify-between gap-2">
+                      <div className="flex items-center">
+                        <Cog className="text-primary h-5 w-5" />
+                        Select Device Mode
+                      </div>
+                      <TabsList>
+                        <TabsTrigger value="clock">Clock</TabsTrigger>
+                        <TabsTrigger value="notice">Notice</TabsTrigger>
+                        <TabsTrigger value="timer">Timer</TabsTrigger>
+                      </TabsList>
+                    </CardTitle>
+                  </CardContent>
+                </Card>
+
+                <TabsContent value="clock" className="mt-4">
+                  <ModeChange
+                    device={device}
+                    currentMode={device.mode}
+                    newMode="clock"
+                    id={id}
+                  />
+                  {/* <Card>
+                    <CardContent className="">
+                      <div className="flex items-center justify-between space-y-2">
+                        <div>
+                          <Label className="text-lg font-medium">
+                            <CalendarCog className="text-primary mr-2 inline-block h-5 w-5" />
+                            Enable Clock Mode
+                          </Label>
+                          <p className="text-sm">
+                            Switch the device to Clock mode to display time
+                            prominently.
+                          </p>
+                        </div>
+                        <Button
+                          disabled={device.mode === 'clock'}
+                          onClick={() => {
+                            fetch('/api/devices/mode', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({
+                                id: device.id,
+                                mode: 'clock',
+                              }),
+                            })
+                              .then((res) => {
+                                if (!res.ok) {
+                                  throw new Error('Failed to change mode');
+                                }
+                                return res.json();
+                              })
+                              .then(() => {
+                                refetchDevice();
+                              })
+                              .catch((err) => {
+                                console.error(err);
+                                alert('Error changing device mode');
+                              });
+                          }}
+                        >
+                          Switch to Clock Mode
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card> */}
+
+                  <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    {device.type === 'double' && (
+                      <SceneChange device={device} id={id} />
+                    )}
+
+                    {/* font change  */}
+                    <FontChange device={device} />
+                    {/* time format    */}
+                    <TimeFormatChange device={device} />
+                  </div>
+                </TabsContent>
+                <TabsContent value="notice">
+                  <ModeChange
+                    device={device}
+                    currentMode={device.mode}
+                    newMode="notice"
+                    id={id}
+                  />
+                  {/* <Card className="mb-6">
+                    <CardContent className="">
+                      <div className="flex items-center justify-between space-y-2">
+                        <div>
+                          <Label className="text-lg font-medium">
+                            <Bell className="text-primary mr-2 inline-block h-5 w-5" />
+                            Enable Notice Mode
+                          </Label>
+                          <p className="text-sm">
+                            Switch the device to Notice mode to display
+                            important messages.
+                          </p>
+                        </div>
+                        <Button
+                          disabled={device.mode === 'notice'}
+                          onClick={() => {
+                            fetch('/api/devices/mode', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({
+                                id: device.id,
+                                mode: 'clock',
+                              }),
+                            })
+                              .then((res) => {
+                                if (!res.ok) {
+                                  throw new Error('Failed to change mode');
+                                }
+                                return res.json();
+                              })
+                              .then(() => {
+                                refetchDevice();
+                              })
+                              .catch((err) => {
+                                console.error(err);
+                                alert('Error changing device mode');
+                              });
+                          }}
+                        >
+                          Switch to Clock Mode
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card> */}
+                  {/* Notice Message Control */}
+                  <NoticeMessage id={id} refetch={refetch} />
+                </TabsContent>
+                <TabsContent value="timer">
+                  <Card>
+                    <CardContent className="">
+                      <div className="mx-auto flex w-fit items-center justify-center gap-2 font-mono">
+                        <StopwatchTimer />
+                        {/* <div className="text-center">
+                          <h3>Hours</h3>
+                          <SwiperTimer index={24} />
+                        </div>
+                        <div>
+                          <span className="text-8xl">:</span>
+                        </div>
+                        <div className="text-center">
+                          <h3>Minutes</h3>
+                          <SwiperTimer index={60} />
+                        </div>
+                        <div>
+                          <span className="text-8xl">:</span>
+                        </div>
+                        <div className="text-center">
+                          <h3>Seconds</h3>
+                          <SwiperTimer index={60} />
+                        </div> */}
+                      </div>
+                      <div className="flex items-center justify-center gap-6 pt-4">
+                        <p>Count Down</p>
+                        <div className="mt-1">
+                          <Switch className="scale-125 cursor-pointer" />
+                        </div>
+                        <p>Count Up</p>
+                      </div>
+                      <div>
+                        <Button className="mt-4 w-full">Set Timer</Button>
+                      </div>
+
+                      {/* <ClockTimer /> */}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
+
           {/* mode change  */}
-          {<ModeChange device={device} id={id} />}
+          {/* {<ModeChange device={device} id={id} />} */}
           {/* Notice Message Control */}
-          <NoticeMessage id={id} refetch={refetch} />
+          {/* <NoticeMessage id={id} refetch={refetch} /> */}
         </div>
       </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* font change  */}
-        <FontChange device={device} />
+        {/* <FontChange device={device} /> */}
         {/* time format    */}
-        <TimeFormatChange device={device} />
+        {/* <TimeFormatChange device={device} /> */}
       </div>
       {/* Scheduled Notices */}
       {schedules && schedules.length > 0 && (
