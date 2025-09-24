@@ -255,10 +255,44 @@ export const devicesApi = createApi({
         { type: 'Device', id: deviceId },
       ],
     }),
+    startStopWatch: builder.mutation<
+      void,
+      {
+        deviceId: string;
+        data: {
+          start_time: number;
+          end_time: number;
+          mode: 'up' | 'down';
+        };
+      }
+    >({
+      query: ({ deviceId, data }) => ({
+        url: `/clock-devices/${deviceId}/start-stopwatch`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { deviceId }) => [
+        { type: 'Device', id: deviceId },
+      ],
+    }),
+    stopStopWatch: builder.mutation<
+      void,
+      { deviceId: string; stopwatchId: string }
+    >({
+      query: ({ deviceId, stopwatchId }) => ({
+        url: `/clock-devices/${deviceId}/stop-stopwatch/${stopwatchId}`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: (result, error, { deviceId }) => [
+        { type: 'Device', id: deviceId },
+      ],
+    }),
   }),
 });
 
 export const {
+  useStopStopWatchMutation,
+  useStartStopWatchMutation,
   useChangeDeviceSceneMutation,
   useGetDevicesQuery,
   useGetDeviceQuery,

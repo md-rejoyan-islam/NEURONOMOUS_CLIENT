@@ -1,98 +1,228 @@
-import {
-  ChangeEvent,
-  TouchEvent,
-  useEffect,
-  useRef,
-  useState,
-  WheelEvent,
-} from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { IDevice } from '@/lib/types';
+import { useStartStopWatchMutation } from '@/queries/devices';
+import { ChevronDownIcon } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { Calendar } from '../ui/calendar';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import Timer from './timer';
 
 type Time = { h: number; m: number; s: number };
 
-export default function StopwatchTimer() {
-  const [time, setTime] = useState<Time>({ h: 0, m: 0, s: 0 });
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+const StopWatchNew = ({ device }: { device: IDevice }) => {
+  const [timer, setTimer] = useState<Time>({ h: 0, m: 0, s: 0 });
+  const [mode, setMode] = useState<'up' | 'down'>('up');
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [time, setTime] = useState<string>('12:00:00');
 
-  const formatValue = (val: number) => String(val).padStart(2, '0');
+  const [startStopWatch] = useStartStopWatchMutation();
+  const [timerStartOption, setTimerStartOption] = useState<'now' | 'schedule'>(
+    'now'
+  );
 
-  const updateTime = (key: keyof Time, value: number) => {
-    setTime((prev) => ({ ...prev, [key]: value }));
-  };
+  const handleStartStopWatch = async () => {
+    const start = new Date();
 
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, []);
+    const durationMs = (timer.h * 3600 + timer.m * 60 + timer.s) * 1000;
+    const gmt6Offset = 6 * 60 * 60 * 1000;
 
-  const handleWheel = (
-    e: WheelEvent<HTMLInputElement>,
-    key: keyof Time,
-    max: number
-  ) => {
-    e.preventDefault();
-    const step = e.deltaY > 0 ? 1 : -1;
-    const value = (time[key] + step + (max + 1)) % (max + 1);
-    updateTime(key, value);
-  };
+    try {
+      if (timerStartOption === 'now') {
+        const startingDelay = 10 * 1000; // 10 seconds delay
 
-  const handleTouch = (key: keyof Time, max: number) => {
-    let startY: number | null = null;
-
-    const onTouchStart = (e: TouchEvent<HTMLInputElement>) => {
-      startY = e.touches[0].clientY;
-    };
-    const onTouchMove = (e: TouchEvent<HTMLInputElement>) => {
-      if (startY === null) return;
-      const diff = e.touches[0].clientY - startY;
-      if (Math.abs(diff) > 15) {
-        const step = diff > 0 ? 1 : -1;
-        const value = (time[key] + step + (max + 1)) % (max + 1);
-        updateTime(key, value);
-        startY = e.touches[0].clientY;
+        const data = {
+          start_time: start.getTime() + gmt6Offset + startingDelay,
+          end_time:
+            new Date(start.getTime() + durationMs).getTime() +
+            gmt6Offset +
+            startingDelay,
+          mode, // 'up' or 'down'
+        };
+        await startStopWatch({ deviceId: device._id, data }).unwrap();
+        toast.success('Stopwatch Started', {
+          description: `Stopwatch started in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
+        });
       }
-    };
-    const onTouchEnd = () => {
-      startY = null;
-    };
 
-    return { onTouchStart, onTouchMove, onTouchEnd };
+      // for scheduled
+      if (timerStartOption === 'schedule' && (!date || !time)) {
+        return toast.error('Date and Time Required', {
+          description: 'Please select both date and time for scheduled start.',
+        });
+      }
+      const scheduledTimestamp =
+        date && time
+          ? new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate(),
+              parseInt(time.split(':')[0], 10),
+              parseInt(time.split(':')[1], 10),
+              parseInt(time.split(':')[2], 10)
+            ).getTime() + gmt6Offset
+          : null;
+
+      // validate scheduled time is in the future
+      if (
+        timerStartOption === 'schedule' &&
+        scheduledTimestamp &&
+        scheduledTimestamp < new Date().getTime() + gmt6Offset
+      ) {
+        return toast.error('Invalid Scheduled Time', {
+          description: 'Please select a future date and time.',
+        });
+      }
+
+      if (!scheduledTimestamp) {
+        return;
+      }
+
+      const data = {
+        start_time: scheduledTimestamp,
+        end_time: scheduledTimestamp + durationMs,
+        mode, // 'up' or 'down'
+      };
+      console.log(data);
+
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error('Update Failed', {
+        description: error?.data?.message || 'Failed to update device mode.',
+      });
+    }
   };
 
   return (
-    <div className="font-orbitron flex items-center justify-center">
-      <div className="text-center">
-        <div className="mb-6 flex justify-center space-x-8">
-          {(['h', 'm', 's'] as (keyof Time)[]).map((key, idx) => {
-            const max = key === 'h' ? 23 : 59;
-            const labels = ['Hours', 'Minutes', 'Seconds'];
-            const touch = handleTouch(key, max);
-            return (
-              <div key={key} className="flex flex-col items-center">
+    <Card>
+      <CardContent className="grid items-center gap-6 md:grid-cols-2">
+        <div>
+          <div className="mx-auto flex w-fit items-center justify-center gap-2 font-mono">
+            <Timer onSetTime={setTimer} />
+          </div>
+          <div className="flex items-center justify-center gap-6 pt-4">
+            <p>Count Down</p>
+            <div className="mt-1">
+              <Switch
+                className="scale-125 cursor-pointer"
+                checked={mode === 'up'}
+                onCheckedChange={(checked) => setMode(checked ? 'up' : 'down')}
+              />
+            </div>
+            <p>Count Up</p>
+          </div>
+        </div>
+        <div className="">
+          <div className="bg-primary/[0.01] mb-6 rounded-xl p-6">
+            <h3 className="mb-4 font-semibold">Choose Timer Start Option</h3>
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center">
                 <input
-                  type="text"
-                  value={formatValue(time[key])}
-                  className={
-                    'text-primary bg-primary/[0.01] flex h-[140px] w-[140px] appearance-none items-center justify-center rounded-md border text-center text-6xl font-bold'
-                  }
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    const val =
-                      parseInt(e.target.value.replace(/\D/g, '')) || 0;
-                    updateTime(key, Math.min(max, Math.max(0, val)));
-                  }}
-                  onWheel={(e) => handleWheel(e, key, max)}
-                  onTouchStart={touch.onTouchStart}
-                  onTouchMove={touch.onTouchMove}
-                  onTouchEnd={touch.onTouchEnd}
+                  type="radio"
+                  id="start-now"
+                  name="start-option"
+                  value={timerStartOption}
+                  checked={timerStartOption === 'now'}
+                  onChange={() => setTimerStartOption('now')}
+                  className="form-radio text-primary focus:ring-primary"
                 />
-                <div className="text-muted-foreground mt-2 text-sm">
-                  {labels[idx]}
+                <label
+                  htmlFor="start-now"
+                  className="text-muted-foreground ml-2"
+                >
+                  Start Now
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  id="set-schedule"
+                  name="start-option"
+                  value={timerStartOption}
+                  checked={timerStartOption === 'schedule'}
+                  onChange={() => setTimerStartOption('schedule')}
+                  className="form-radio text-primary focus:ring-primary"
+                />
+                <label
+                  htmlFor="set-schedule"
+                  className="text-muted-foreground ml-2"
+                >
+                  Set a Schedule
+                </label>
+              </div>
+            </div>
+
+            {timerStartOption === 'schedule' && (
+              <div id="schedule-fields" className="mt-4 space-y-4">
+                <div className="flex gap-4">
+                  <div className="flex flex-col gap-3">
+                    <Label htmlFor="date-picker" className="px-1">
+                      Date
+                    </Label>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          id="date-picker"
+                          className="w-32 justify-between font-normal"
+                        >
+                          {date ? date.toLocaleDateString() : 'Select date'}
+                          <ChevronDownIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          captionLayout="dropdown"
+                          // show current data
+                          disabled={(date) =>
+                            date < new Date(new Date().setHours(0, 0, 0, 0))
+                          }
+                          onSelect={(date) => {
+                            setDate(date);
+                            setOpen(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <Label htmlFor="time-picker" className="px-1">
+                      Time
+                    </Label>
+                    <Input
+                      type="time"
+                      id="time-picker"
+                      step="1"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                    />
+                  </div>
                 </div>
               </div>
-            );
-          })}
+            )}
+          </div>
+          <div>
+            <Button className="w-full" onClick={handleStartStopWatch}>
+              Activate Timer
+            </Button>
+          </div>
         </div>
-      </div>
-    </div>
+
+        {/* <ClockTimer /> */}
+      </CardContent>
+    </Card>
   );
-}
+};
+
+export default StopWatchNew;

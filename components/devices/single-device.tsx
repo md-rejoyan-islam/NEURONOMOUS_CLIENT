@@ -24,8 +24,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '../ui/breadcrumb';
-import { Button } from '../ui/button';
-import { Switch } from '../ui/switch';
 import DeviceAllowedUsers from './device-allowed-users';
 import FirmwareUpdate from './firmware-update';
 import FontChange from './font-change';
@@ -34,7 +32,8 @@ import NoticeMessage from './notice-message';
 import RestartDevice from './restart-device';
 import SceneChange from './scene-change';
 import ScheduledNotice from './scheduled-notice';
-import StopwatchTimer from './stop-watch';
+import StopTimer from './stop-timer';
+import StopWatchNew from './stop-watch';
 import TimeFormatChange from './time-format-change';
 
 export default function SingleDevice({ id }: { id: string }) {
@@ -274,7 +273,7 @@ export default function SingleDevice({ id }: { id: string }) {
                   <CardContent>
                     <CardTitle className="flex items-center justify-between gap-2">
                       <div className="flex items-center">
-                        <Cog className="text-primary h-5 w-5" />
+                        <Cog className="text-primary mr-2 h-7 w-7" />
                         Select Device Mode
                       </div>
                       <TabsList>
@@ -408,43 +407,15 @@ export default function SingleDevice({ id }: { id: string }) {
                   <NoticeMessage id={id} refetch={refetch} />
                 </TabsContent>
                 <TabsContent value="timer">
-                  <Card>
-                    <CardContent className="">
-                      <div className="mx-auto flex w-fit items-center justify-center gap-2 font-mono">
-                        <StopwatchTimer />
-                        {/* <div className="text-center">
-                          <h3>Hours</h3>
-                          <SwiperTimer index={24} />
-                        </div>
-                        <div>
-                          <span className="text-8xl">:</span>
-                        </div>
-                        <div className="text-center">
-                          <h3>Minutes</h3>
-                          <SwiperTimer index={60} />
-                        </div>
-                        <div>
-                          <span className="text-8xl">:</span>
-                        </div>
-                        <div className="text-center">
-                          <h3>Seconds</h3>
-                          <SwiperTimer index={60} />
-                        </div> */}
-                      </div>
-                      <div className="flex items-center justify-center gap-6 pt-4">
-                        <p>Count Down</p>
-                        <div className="mt-1">
-                          <Switch className="scale-125 cursor-pointer" />
-                        </div>
-                        <p>Count Up</p>
-                      </div>
-                      <div>
-                        <Button className="mt-4 w-full">Set Timer</Button>
-                      </div>
-
-                      {/* <ClockTimer /> */}
-                    </CardContent>
-                  </Card>
+                  {device.mode !== 'timer' && !!device.stopwatches.length && (
+                    <StopTimer
+                      stopwatchId={device.stopwatches[0]?._id}
+                      id={device._id}
+                    />
+                  )}
+                  <div className="max-w-lgs mx-auto w-full">
+                    <StopWatchNew device={device} />
+                  </div>
                 </TabsContent>
               </Tabs>
             </div>

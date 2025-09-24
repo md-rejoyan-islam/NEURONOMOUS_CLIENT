@@ -106,7 +106,7 @@ export interface IDevice {
   id: string;
   mac_id: string | null;
   status: 'online' | 'offline';
-  mode: 'clock' | 'notice';
+  mode: 'clock' | 'notice' | 'timer';
   notice: string | null;
   name: string | null;
   uptime: number;
@@ -123,6 +123,12 @@ export interface IDevice {
   allowed_users: string[]; // Array of user IDs allowed to access the device
   pending_notice: boolean; // Indicates if there is a pending notice to be sent
   timestamp: string;
+  stopwatches: {
+    _id: string; // Unique ID for the stopwatch
+    start_time: number; // Unix timestamp in milliseconds
+    end_time: number; // Unix timestamp in milliseconds
+    mode: 'up' | 'down'; // 'up' for count up, 'down' for count down
+  }[];
   scheduled_notices: {
     id: string; // Unique ID for the scheduled notice
     notice: string;

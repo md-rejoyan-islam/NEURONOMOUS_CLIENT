@@ -20,6 +20,7 @@ const SceneChange = ({ device, id }: { device: IDevice; id: string }) => {
   const [currentScene, setCurrentScene] = useState<
     'scene0' | 'scene1' | 'scene2'
   >(device.scene || 'scene1');
+  console.log('Current Scene:', device);
 
   const handleModeSubmit = async () => {
     try {
@@ -66,7 +67,7 @@ const SceneChange = ({ device, id }: { device: IDevice; id: string }) => {
         </div>
         <Button
           onClick={handleModeSubmit}
-          disabled={isLoading}
+          disabled={isLoading || device.scene === currentScene}
           className="w-full"
         >
           {isLoading ? (
