@@ -263,6 +263,7 @@ export const devicesApi = createApi({
           start_time: number;
           end_time: number;
           mode: 'up' | 'down';
+          is_scheduled: boolean;
         };
       }
     >({

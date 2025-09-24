@@ -34,7 +34,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
 
     try {
       if (timerStartOption === 'now') {
-        const startingDelay = 10 * 1000; // 10 seconds delay
+        const startingDelay = 0 * 1000; // 10 seconds delay
 
         const data = {
           start_time: start.getTime() + gmt6Offset + startingDelay,
@@ -43,7 +43,11 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
             gmt6Offset +
             startingDelay,
           mode, // 'up' or 'down'
+          is_scheduled: false,
         };
+
+        console.log(data);
+
         await startStopWatch({ deviceId: device._id, data }).unwrap();
         toast.success('Stopwatch Started', {
           description: `Stopwatch started in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
@@ -84,11 +88,16 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
       }
 
       const data = {
-        start_time: scheduledTimestamp,
-        end_time: scheduledTimestamp + durationMs,
+        start_time: scheduledTimestamp - gmt6Offset,
+        end_time: scheduledTimestamp + durationMs - gmt6Offset,
         mode, // 'up' or 'down'
+        is_scheduled: true,
       };
       console.log(data);
+      await startStopWatch({ deviceId: device._id, data }).unwrap();
+      toast.success('Scheduled Stopwatch Set', {
+        description: `Stopwatch scheduled to start in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
+      });
 
       // eslint-disable-next-line
     } catch (error: any) {
@@ -110,7 +119,6 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
             <div className="mt-1">
               <Switch
                 className="scale-125 cursor-pointer"
-                checked={mode === 'up'}
                 onCheckedChange={(checked) => setMode(checked ? 'up' : 'down')}
               />
             </div>
