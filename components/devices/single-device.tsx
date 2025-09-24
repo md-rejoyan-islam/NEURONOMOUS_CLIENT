@@ -286,12 +286,7 @@ export default function SingleDevice({ id }: { id: string }) {
                 </Card>
 
                 <TabsContent value="clock" className="mt-4">
-                  <ModeChange
-                    device={device}
-                    currentMode={device.mode}
-                    newMode="clock"
-                    id={id}
-                  />
+                  <ModeChange device={device} newMode="clock" id={id} />
                   {/* <Card>
                     <CardContent className="">
                       <div className="flex items-center justify-between space-y-2">
@@ -351,12 +346,7 @@ export default function SingleDevice({ id }: { id: string }) {
                   </div>
                 </TabsContent>
                 <TabsContent value="notice">
-                  <ModeChange
-                    device={device}
-                    currentMode={device.mode}
-                    newMode="notice"
-                    id={id}
-                  />
+                  <ModeChange device={device} newMode="notice" id={id} />
                   {/* <Card className="mb-6">
                     <CardContent className="">
                       <div className="flex items-center justify-between space-y-2">
