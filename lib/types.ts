@@ -127,7 +127,7 @@ export interface IDevice {
     _id: string; // Unique ID for the stopwatch
     start_time: number; // Unix timestamp in milliseconds
     end_time: number; // Unix timestamp in milliseconds
-    mode: 'up' | 'down'; // 'up' for count up, 'down' for count down
+    count_type: 'up' | 'down'; // 'up' for count up, 'down' for count down
   }[];
   scheduled_notices: {
     id: string; // Unique ID for the scheduled notice

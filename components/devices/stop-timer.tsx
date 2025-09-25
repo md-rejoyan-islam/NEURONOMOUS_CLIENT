@@ -7,10 +7,12 @@ import { Label } from '../ui/label';
 
 const StopTimer = ({
   stopwatchId,
-  id,
+
+  deviceId,
 }: {
   stopwatchId: string;
-  id: string;
+
+  deviceId: string;
 }) => {
   // Form states
   //   const [mode, setMode] = useState<'clock' | 'notice'>(device.mode);
@@ -19,7 +21,7 @@ const StopTimer = ({
   const handleStopSubmit = async () => {
     try {
       await stopTimer({
-        deviceId: id,
+        deviceId,
         stopwatchId,
       }).unwrap();
 

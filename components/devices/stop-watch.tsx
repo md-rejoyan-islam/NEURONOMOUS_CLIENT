@@ -16,9 +16,9 @@ type Time = { h: number; m: number; s: number };
 
 const StopWatchNew = ({ device }: { device: IDevice }) => {
   const [timer, setTimer] = useState<Time>({ h: 0, m: 0, s: 0 });
-  const [mode, setMode] = useState<'up' | 'down'>('up');
+  const [mode, setMode] = useState<'up' | 'down'>('down');
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState<string>('12:00:00');
 
   const [startStopWatch] = useStartStopWatchMutation();
@@ -37,19 +37,17 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
         const startingDelay = 0 * 1000; // 10 seconds delay
 
         const data = {
-          start_time: start.getTime() + gmt6Offset + startingDelay,
+          start_time: start.getTime() + startingDelay,
           end_time:
-            new Date(start.getTime() + durationMs).getTime() +
-            gmt6Offset +
-            startingDelay,
-          mode, // 'up' or 'down'
+            new Date(start.getTime() + durationMs).getTime() + startingDelay,
+          count_type: mode, // 'up' or 'down'
           is_scheduled: false,
         };
 
         console.log(data);
 
         await startStopWatch({ deviceId: device._id, data }).unwrap();
-        toast.success('Stopwatch Started', {
+        return toast.success('Stopwatch Started', {
           description: `Stopwatch started in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
         });
       }
@@ -90,7 +88,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
       const data = {
         start_time: scheduledTimestamp - gmt6Offset,
         end_time: scheduledTimestamp + durationMs - gmt6Offset,
-        mode, // 'up' or 'down'
+        count_type: mode, // 'up' or 'down'
         is_scheduled: true,
       };
       console.log(data);

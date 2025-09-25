@@ -12,10 +12,11 @@ import {
   useGetAllScheduledNoticesQuery,
   useGetDeviceQuery,
 } from '@/queries/devices';
-import { Bell, Clock, Cog, Cuboid, Wifi, WifiOff } from 'lucide-react';
+import { Bell, Clock, Cog, Cuboid, Trash2, Wifi, WifiOff } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import SmallLoading from '../loading/small-loading';
+import NormalTable from '../table/normal-table';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -47,6 +48,10 @@ export default function SingleDevice({ id }: { id: string }) {
   } = useGetDeviceQuery({ id });
 
   const { data: schedules, refetch } = useGetAllScheduledNoticesQuery({ id });
+
+  const runningStopwatch = device?.stopwatches?.find(
+    (sw) => sw.start_time < Date.now() && sw.end_time > Date.now()
+  );
 
   useEffect(() => {
     if (!device) return;
@@ -268,7 +273,7 @@ export default function SingleDevice({ id }: { id: string }) {
         <div className="space-y-6">
           <div>
             <div>
-              <Tabs defaultValue={device.mode} className="space-y-4">
+              <Tabs defaultValue={'clock'} className="space-y-4">
                 <Card className="py-4">
                   <CardContent>
                     <CardTitle className="flex items-center justify-between gap-2">
@@ -397,15 +402,65 @@ export default function SingleDevice({ id }: { id: string }) {
                   <NoticeMessage id={id} refetch={refetch} />
                 </TabsContent>
                 <TabsContent value="timer">
-                  {device.mode !== 'timer' && !!device.stopwatches.length && (
+                  {device.mode !== 'timer' && runningStopwatch && (
                     <StopTimer
-                      stopwatchId={device.stopwatches[0]?._id}
-                      id={device._id}
+                      stopwatchId={runningStopwatch._id}
+                      deviceId={device._id}
                     />
                   )}
                   <div className="max-w-lgs mx-auto w-full">
                     <StopWatchNew device={device} />
                   </div>
+
+                  <Card className="mt-6">
+                    <CardContent>
+                      <h2 className="mb-4 text-lg font-medium">
+                        Schedule History
+                      </h2>
+                      <NormalTable
+                        headers={[
+                          '#',
+                          'Duration',
+                          'Status',
+                          'Start Time',
+                          'End Time',
+                          'Type',
+                          'Actions',
+                        ]}
+                        data={
+                          device?.stopwatches?.map((schedule, index) => [
+                            index + 1,
+                            Math.round(
+                              (schedule.end_time - schedule.start_time) / 60000
+                            ) + ' mins',
+                            <Badge
+                              key={schedule._id + 'status' + index}
+                              variant={'outline'}
+                            >
+                              {schedule.start_time > Date.now()
+                                ? 'Scheduled'
+                                : schedule.end_time > Date.now()
+                                  ? 'Running'
+                                  : 'Completed'}
+                            </Badge>,
+                            new Date(schedule.start_time).toLocaleString(),
+                            new Date(schedule.end_time).toLocaleString(),
+                            schedule.count_type === 'up'
+                              ? 'Count Up'
+                              : 'Count Down',
+                            <button
+                              key={schedule._id + 'delete' + index}
+                              className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
+                              // onClick={() => setDeleteId(fw._id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>,
+                          ]) || []
+                        }
+                        noDataMessage="No scheduled stopwatches found."
+                      />
+                    </CardContent>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </div>

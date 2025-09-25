@@ -262,14 +262,14 @@ export const devicesApi = createApi({
         data: {
           start_time: number;
           end_time: number;
-          mode: 'up' | 'down';
+          count_type: 'up' | 'down';
           is_scheduled: boolean;
         };
       }
     >({
       query: ({ deviceId, data }) => ({
-        url: `/clock-devices/${deviceId}/start-stopwatch`,
-        method: 'PATCH',
+        url: `/clock-devices/${deviceId}/stopwatch`,
+        method: 'POST',
         body: data,
       }),
       invalidatesTags: (result, error, { deviceId }) => [
@@ -281,8 +281,8 @@ export const devicesApi = createApi({
       { deviceId: string; stopwatchId: string }
     >({
       query: ({ deviceId, stopwatchId }) => ({
-        url: `/clock-devices/${deviceId}/stop-stopwatch/${stopwatchId}`,
-        method: 'PATCH',
+        url: `/clock-devices/${deviceId}/stopwatch/${stopwatchId}`,
+        method: 'DELETE',
       }),
       invalidatesTags: (result, error, { deviceId }) => [
         { type: 'Device', id: deviceId },
