@@ -23,11 +23,11 @@ export default function DevicesComponent({
     }${type ? `type=${type}&` : ''}
       `.slice(0, -1);
 
-  const { refetch: refetchAllDevices } = useGetAllDevicesQuery({
+  const { refetch: refetchAllDevices, isLoading } = useGetAllDevicesQuery({
     query: queryString,
   });
 
-  const { data: user, isLoading } = useProfileQuery();
+  const { data: user } = useProfileQuery();
 
   if (isLoading) {
     return <DeviceSkeleton />;

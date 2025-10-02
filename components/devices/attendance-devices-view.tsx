@@ -56,7 +56,7 @@ const AttendanceDevicesView = ({
       return acc + (device?.group ? 0 : 1);
     }, 0) || 0;
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(query?.search || '');
 
   const searchParams = useSearchParams();
   const router = useRouter();
