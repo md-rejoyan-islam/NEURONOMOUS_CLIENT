@@ -3,16 +3,34 @@ pipeline {
         label 'test'
     }
     environment {
-        WORKSPACE_DIR = '/home/workspace/Test'
+        WORKSPACE_DIR = '/home/workspace/IOT-CLIENT'
         WORK_DIR = '/home/apps/client'
-        GIT_REPO = 'git@github.com:md-rejoyan-islam/SUST_EEE_IOT_CLIENT.git'
+        GIT_REPO = 'https://github.com/md-rejoyan-islam/SUST_EEE_IOT_CLIENT.git'
     }
     stages {
         stage('Clone Repository') {
             steps {
                 script {
                         echo 'Cloning repository into workspace'
-                        git branch: 'main', url: "${GIT_REPO}"
+                        git branch: 'main', url: "${GIT_REPO}", credentialsId: 'github-pat-for-client'
+                        echo '✅ Repository cloned successfully'
+                        // Get current branch name and commit SHA
+                        String branchName = sh(
+                        script: 'git rev-parse --abbrev-ref HEAD',
+                        returnStdout: true
+                            ).trim()
+
+                        String commitSHA = sh(
+                                script: 'git rev-parse HEAD',
+                                returnStdout: true
+                        ).trim()
+
+                        // Store the values in the global 'env' map for use in post-build steps
+                        env.GIT_BRANCH = branchName
+                        env.GIT_COMMIT = commitSHA
+
+                        echo "Current Branch: ${env.CURRENT_GIT_BRANCH}"
+                        echo "Current Commit: ${env.CURRENT_GIT_COMMIT}"
                 }
             }
         }
