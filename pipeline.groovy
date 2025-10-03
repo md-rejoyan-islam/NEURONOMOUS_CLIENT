@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'test'
+        label 'neuronomous'
     }
     triggers {
         githubPush()
@@ -43,8 +43,8 @@ pipeline {
                     def envContent = '''
                         API_URL = http://localhost:5050
                         NEXT_PUBLIC_API_URL = http://localhost:5050
-                        NEXT_PUBLIC_NODE_ENV = development
-                        NODE_ENV = development
+                        NEXT_PUBLIC_NODE_ENV = production
+                        NODE_ENV = production
                         NEXT_PUBLIC_CLIENT_URL = https://neuronomous.net
                         '''
                     writeFile file: "${WORKSPACE}/.env", text: envContent
