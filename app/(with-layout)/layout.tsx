@@ -9,6 +9,7 @@ export default function Layout({
   console.log('Rendering Dashboard Layout');
   console.log('Rendering Dashboard Layout2');
   console.log('Rendering Dashboard Layout2');
+  console.log('Rendering Dashboard Layout2');
 
   return <DashboardLayout>{children}</DashboardLayout>;
 }
