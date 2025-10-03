@@ -111,12 +111,18 @@ export const devicesApi = createApi({
     }),
     sendNoticeToDevice: builder.mutation<
       void,
-      { id: string; notice: string; duration?: number }
+      {
+        id: string;
+        notice: string;
+        is_scheduled: boolean;
+        start_time: number;
+        end_time: number;
+      }
     >({
-      query: ({ id, notice, duration }) => ({
+      query: ({ id, notice, is_scheduled, start_time, end_time }) => ({
         url: `/clock-devices/${id}/send-notice`,
         method: 'PATCH',
-        body: { notice, duration },
+        body: { notice, is_scheduled, start_time, end_time },
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Device', id }],
     }),
@@ -132,22 +138,7 @@ export const devicesApi = createApi({
       invalidatesTags: (result, error, { deviceIds }) =>
         deviceIds.map((id) => ({ type: 'Device', id })),
     }),
-    sendScheduledNotice: builder.mutation<
-      void,
-      {
-        id: string;
-        notice: string;
-        startTime: number;
-        endTime: number;
-      }
-    >({
-      query: ({ id, notice, startTime, endTime }) => ({
-        url: `/clock-devices/${id}/scheduled-notice`,
-        method: 'PATCH',
-        body: { notice, startTime, endTime },
-      }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Device', id }],
-    }),
+
     sendScheduledNoticeToSelectedDevices: builder.mutation<
       void,
       {
@@ -303,7 +294,6 @@ export const {
   useGetAllDevicesQuery,
   useChangeDeviceModeMutation,
   useSendNoticeToDeviceMutation,
-  useSendScheduledNoticeMutation,
   useGetAllScheduledNoticesQuery,
   useCancelScheduledNoticeMutation,
   useGiveDeviceAccessToUserMutation,

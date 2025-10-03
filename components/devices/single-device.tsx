@@ -135,6 +135,7 @@ export default function SingleDevice({ id }: { id: string }) {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {user &&
+                device.status === 'online' &&
                 ['admin', 'superadmin'].includes(user?.role) &&
                 device?.available_firmwares?.length > 0 && (
                   <div>
@@ -192,6 +193,12 @@ export default function SingleDevice({ id }: { id: string }) {
               </div>
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
+                  Board
+                </Label>
+                <p className="font-semibold capitalize">{device?.type}</p>
+              </div>
+              <div>
+                <Label className="text-muted-foreground text-sm font-medium">
                   Last Timestamp
                 </Label>
                 <p className="font-semibold">
@@ -201,12 +208,6 @@ export default function SingleDevice({ id }: { id: string }) {
                 </p>
               </div>
 
-              <div>
-                <Label className="text-muted-foreground text-sm font-medium">
-                  Uptime
-                </Label>
-                <p className="font-semibold">{device?.uptime}</p>
-              </div>
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
                   Current Font
@@ -257,13 +258,13 @@ export default function SingleDevice({ id }: { id: string }) {
                   Current Notice
                 </Label>
                 <p className="mt-1 text-orange-700 dark:text-orange-300">
-                  {device.notice}
+                  {device.notice?.message || 'N/A'}
                 </p>
-                {device.duration && (
+                {/* {device.duration && (
                   <p className="mt-2 text-sm text-orange-600 dark:text-orange-400">
                     Duration: {device.duration} minutes
                   </p>
-                )}
+                )} */}
               </div>
             )}
           </CardContent>
@@ -292,52 +293,6 @@ export default function SingleDevice({ id }: { id: string }) {
 
                 <TabsContent value="clock" className="mt-4">
                   <ModeChange device={device} newMode="clock" id={id} />
-                  {/* <Card>
-                    <CardContent className="">
-                      <div className="flex items-center justify-between space-y-2">
-                        <div>
-                          <Label className="text-lg font-medium">
-                            <CalendarCog className="text-primary mr-2 inline-block h-5 w-5" />
-                            Enable Clock Mode
-                          </Label>
-                          <p className="text-sm">
-                            Switch the device to Clock mode to display time
-                            prominently.
-                          </p>
-                        </div>
-                        <Button
-                          disabled={device.mode === 'clock'}
-                          onClick={() => {
-                            fetch('/api/devices/mode', {
-                              method: 'POST',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({
-                                id: device.id,
-                                mode: 'clock',
-                              }),
-                            })
-                              .then((res) => {
-                                if (!res.ok) {
-                                  throw new Error('Failed to change mode');
-                                }
-                                return res.json();
-                              })
-                              .then(() => {
-                                refetchDevice();
-                              })
-                              .catch((err) => {
-                                console.error(err);
-                                alert('Error changing device mode');
-                              });
-                          }}
-                        >
-                          Switch to Clock Mode
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card> */}
 
                   <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {device.type === 'double' && (
@@ -352,54 +307,13 @@ export default function SingleDevice({ id }: { id: string }) {
                 </TabsContent>
                 <TabsContent value="notice">
                   <ModeChange device={device} newMode="notice" id={id} />
-                  {/* <Card className="mb-6">
-                    <CardContent className="">
-                      <div className="flex items-center justify-between space-y-2">
-                        <div>
-                          <Label className="text-lg font-medium">
-                            <Bell className="text-primary mr-2 inline-block h-5 w-5" />
-                            Enable Notice Mode
-                          </Label>
-                          <p className="text-sm">
-                            Switch the device to Notice mode to display
-                            important messages.
-                          </p>
-                        </div>
-                        <Button
-                          disabled={device.mode === 'notice'}
-                          onClick={() => {
-                            fetch('/api/devices/mode', {
-                              method: 'POST',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({
-                                id: device.id,
-                                mode: 'clock',
-                              }),
-                            })
-                              .then((res) => {
-                                if (!res.ok) {
-                                  throw new Error('Failed to change mode');
-                                }
-                                return res.json();
-                              })
-                              .then(() => {
-                                refetchDevice();
-                              })
-                              .catch((err) => {
-                                console.error(err);
-                                alert('Error changing device mode');
-                              });
-                          }}
-                        >
-                          Switch to Clock Mode
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card> */}
+
                   {/* Notice Message Control */}
-                  <NoticeMessage id={id} refetch={refetch} />
+                  <NoticeMessage
+                    id={id}
+                    refetch={refetch}
+                    status={device.status}
+                  />
                 </TabsContent>
                 <TabsContent value="timer">
                   {device.mode !== 'timer' && runningStopwatch && (
@@ -465,11 +379,6 @@ export default function SingleDevice({ id }: { id: string }) {
               </Tabs>
             </div>
           </div>
-
-          {/* mode change  */}
-          {/* {<ModeChange device={device} id={id} />} */}
-          {/* Notice Message Control */}
-          {/* <NoticeMessage id={id} refetch={refetch} /> */}
         </div>
       </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

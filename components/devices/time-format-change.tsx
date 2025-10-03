@@ -13,7 +13,7 @@ const TimeFormatChange = ({ device }: { device: IDevice }) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TimerReset className="text-primary h-5 w-5" />
-          Time Format Control
+          Time Format Control <span className="text-sm">( Coming Soon )</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -32,11 +32,7 @@ const TimeFormatChange = ({ device }: { device: IDevice }) => {
           </RadioGroup>
         </div>
 
-        <Button
-          onClick={() => {}}
-          // disabled={}
-          className="w-full"
-        >
+        <Button onClick={() => {}} disabled={true} className="w-full">
           {isChangeFontTime ? (
             <>
               <RefreshCw className="mr-2 h-4 w-4 animate-spin" />

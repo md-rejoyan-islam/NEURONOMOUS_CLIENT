@@ -62,7 +62,7 @@ const ScheduledNotice = ({
                 </TableHeader>
                 <TableBody>
                   {schedules?.map((notice, index) => (
-                    <TableRow key={notice.id}>
+                    <TableRow key={notice._id}>
                       <TableCell className="font-medium">
                         <div>
                           <div>{index + 1}</div>
@@ -86,7 +86,7 @@ const ScheduledNotice = ({
                         <Trash
                           className="h-5 w-5 cursor-pointer text-red-500 hover:text-red-600"
                           onClick={() =>
-                            cancelScheduledNoticeHandler(notice.id)
+                            cancelScheduledNoticeHandler(notice._id)
                           }
                         />
                       </TableCell>

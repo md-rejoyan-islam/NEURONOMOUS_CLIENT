@@ -55,7 +55,9 @@ const ModeChange = ({
             </p>
           </div>
           <Button
-            disabled={device.mode === newMode || isLoading}
+            disabled={
+              device.mode === newMode || isLoading || device.status !== 'online'
+            }
             onClick={handleModeSubmit}
           >
             Switch to <span className="capitalize">{newMode}</span> Mode

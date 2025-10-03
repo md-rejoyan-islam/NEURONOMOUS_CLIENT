@@ -107,21 +107,19 @@ export interface IDevice {
   mac_id: string | null;
   status: 'online' | 'offline';
   mode: 'clock' | 'notice' | 'timer';
-  notice: string | null;
+  notice: {
+    message: string | null;
+    is_pending: boolean;
+  };
   name: string | null;
-  uptime: number;
-  end_time: number | null; // Unix timestamp in milliseconds, can be null
   firmware_version: string | null;
   type: 'single' | 'double';
   scene: 'scene0' | 'scene1' | 'scene2' | null;
   free_heap: number;
   location: string | null;
   last_seen: number; // Unix timestamp in milliseconds
-  duration: number | null; // duration in minutes, can be null
-  start_time: number | null; // Unix timestamp in milliseconds, can be null
   last_firmware_update: number | null; // Unix timestamp in milliseconds, can be null
   allowed_users: string[]; // Array of user IDs allowed to access the device
-  pending_notice: boolean; // Indicates if there is a pending notice to be sent
   timestamp: string;
   stopwatches: {
     _id: string; // Unique ID for the stopwatch
@@ -142,7 +140,7 @@ export interface IDevice {
 }
 
 export interface IScheduledNotice {
-  id: string; // Unique ID for the scheduled notice
+  _id: string; // Unique ID for the scheduled notice
   notice: string;
   start_time: Date | string; // Date object or ISO string
   end_time: Date | string; // Date object or ISO string

@@ -7,10 +7,7 @@ import { Bell, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 
 import { dateTimeDurationValidation } from '@/lib/helper';
-import {
-  useSendNoticeToDeviceMutation,
-  useSendScheduledNoticeMutation,
-} from '@/queries/devices';
+import { useSendNoticeToDeviceMutation } from '@/queries/devices';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import DatetimeRange from '../groups/bulk-operation/datetime-range';
@@ -19,9 +16,11 @@ import DurationMinutes from '../groups/bulk-operation/duration-minutes';
 const NoticeMessage = ({
   id,
   refetch,
+  status,
 }: {
   id: string;
   refetch?: () => void;
+  status: 'online' | 'offline' | 'unknown' | undefined;
 }) => {
   const [notice, setNotice] = useState('');
   const [durationType, setDurationType] = useState<
@@ -34,8 +33,7 @@ const NoticeMessage = ({
   const [endDate, setEndDate] = useState<Date>();
   const [endTime, setEndTime] = useState('12:00');
   const [sendNotice, { isLoading }] = useSendNoticeToDeviceMutation();
-  const [sendScheduleNotice, { isLoading: isScheduleLoading }] =
-    useSendScheduledNoticeMutation();
+
   const handleNoticeSubmit = async () => {
     if (!notice.trim()) {
       toast('Validation Error', {
@@ -43,6 +41,8 @@ const NoticeMessage = ({
       });
       return;
     }
+
+    const date = new Date();
 
     try {
       const response = dateTimeDurationValidation({
@@ -59,12 +59,17 @@ const NoticeMessage = ({
         await sendNotice({
           id,
           notice,
+          is_scheduled: false,
+          start_time: 0,
+          end_time: 0,
         }).unwrap();
       } else if (durationType === 'minutes') {
         await sendNotice({
           id,
           notice,
-          duration: +durationMinutes,
+          is_scheduled: false,
+          start_time: 0,
+          end_time: date.getTime() + +durationMinutes * 60 * 1000,
         }).unwrap();
       } else if (durationType === 'datetime') {
         // get unix time from startDate and StartTime
@@ -82,12 +87,19 @@ const NoticeMessage = ({
           `${format(endDate, 'yyyy-MM-dd')}T${endTime}:00`
         ).getTime();
 
-        await sendScheduleNotice({
+        await sendNotice({
           id,
           notice,
-          startTime: startTimeInUnix,
-          endTime: endTimeInUnix,
+          start_time: startTimeInUnix,
+          end_time: endTimeInUnix,
+          is_scheduled: true,
         }).unwrap();
+        // await sendScheduleNotice({
+        //   id,
+        //   notice,
+        //   startTime: startTimeInUnix,
+        //   endTime: endTimeInUnix,
+        // }).unwrap();
 
         refetch?.();
       }
@@ -186,10 +198,14 @@ const NoticeMessage = ({
 
         <Button
           onClick={handleNoticeSubmit}
-          disabled={isLoading || isScheduleLoading || !notice.trim()}
+          disabled={
+            isLoading ||
+            !notice.trim() ||
+            (status === 'offline' && durationType !== 'datetime')
+          }
           className="w-full"
         >
-          {isLoading || isScheduleLoading ? (
+          {isLoading ? (
             <>
               <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
               Sending Notice...

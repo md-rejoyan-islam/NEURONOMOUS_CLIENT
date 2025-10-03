@@ -16,6 +16,7 @@ type Time = { h: number; m: number; s: number };
 
 const StopWatchNew = ({ device }: { device: IDevice }) => {
   const [timer, setTimer] = useState<Time>({ h: 0, m: 0, s: 0 });
+
   const [mode, setMode] = useState<'up' | 'down'>('down');
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -44,9 +45,8 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
           is_scheduled: false,
         };
 
-        console.log(data);
-
         await startStopWatch({ deviceId: device._id, data }).unwrap();
+        setTimer({ h: 0, m: 0, s: 0 });
         return toast.success('Stopwatch Started', {
           description: `Stopwatch started in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
         });
@@ -91,7 +91,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
         count_type: mode, // 'up' or 'down'
         is_scheduled: true,
       };
-      console.log(data);
+      setTimer({ h: 0, m: 0, s: 0 });
       await startStopWatch({ deviceId: device._id, data }).unwrap();
       toast.success('Scheduled Stopwatch Set', {
         description: `Stopwatch scheduled to start in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
@@ -110,7 +110,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
       <CardContent className="grid items-center gap-6 md:grid-cols-2">
         <div>
           <div className="mx-auto flex w-fit items-center justify-center gap-2 font-mono">
-            <Timer onSetTime={setTimer} />
+            <Timer onSetTime={setTimer} timer={timer} />
           </div>
           <div className="flex items-center justify-center gap-6 pt-4">
             <p>Count Down</p>
@@ -219,7 +219,14 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
             )}
           </div>
           <div>
-            <Button className="w-full" onClick={handleStartStopWatch}>
+            <Button
+              className="w-full"
+              disabled={
+                (timer.h === 0 && timer.m === 0 && timer.s === 0) ||
+                (device.status === 'offline' && timerStartOption !== 'schedule')
+              }
+              onClick={handleStartStopWatch}
+            >
               Activate Timer
             </Button>
           </div>

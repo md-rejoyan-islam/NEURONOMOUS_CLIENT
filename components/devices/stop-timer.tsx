@@ -7,11 +7,9 @@ import { Label } from '../ui/label';
 
 const StopTimer = ({
   stopwatchId,
-
   deviceId,
 }: {
   stopwatchId: string;
-
   deviceId: string;
 }) => {
   // Form states

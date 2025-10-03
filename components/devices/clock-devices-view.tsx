@@ -301,7 +301,7 @@ const ClockDevicesView = ({
                     Current Notice:
                   </p>
                   <p className="text-sm text-orange-700 dark:text-orange-300">
-                    {device.notice}
+                    {device.notice?.message || 'N/A'}
                   </p>
                 </div>
               )}

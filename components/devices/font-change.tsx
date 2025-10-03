@@ -19,7 +19,7 @@ const FontChange = ({ device }: { device: IDevice }) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TypeOutline className="text-primary h-5 w-5" />
-          Font Control
+          Font Control <span className="text-sm">( Coming Soon )</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -40,6 +40,7 @@ const FontChange = ({ device }: { device: IDevice }) => {
         <Button
           onClick={() => {}}
           // disabled={isChangeFontTime}
+          disabled={true}
           className="w-full"
         >
           {isChangeFontTime ? (
