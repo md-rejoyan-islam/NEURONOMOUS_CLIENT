@@ -5,5 +5,7 @@ export default function Layout({
 }: {
   readonly children: React.ReactNode;
 }) {
+  console.log('Rendering Dashboard Layout');
+
   return <DashboardLayout>{children}</DashboardLayout>;
 }
