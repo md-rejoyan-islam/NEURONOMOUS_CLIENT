@@ -5,7 +5,6 @@ pipeline {
     triggers {
         githubPush()
     }
-
     environment {
         WORKSPACE_DIR = '/home/workspace/IOT-CLIENT'
         WORK_DIR = '/home/apps/client'
