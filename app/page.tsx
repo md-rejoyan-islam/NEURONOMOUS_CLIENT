@@ -1,6 +1,7 @@
 import HomepageFooter from '@/components/homepage/footer';
 import HomepageHeader from '@/components/homepage/header';
 import HomepageMenuItems from '@/components/homepage/menu-items';
+import clsx from 'clsx';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -26,7 +27,11 @@ export const metadata: Metadata = {
 
 export default function App() {
   return (
-    <section className="bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-[#050816] dark:text-slate-200">
+    <section
+      className={clsx(
+        'bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-[#050816] dark:text-slate-200'
+      )}
+    >
       <HomepageHeader />
 
       <main>

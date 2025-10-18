@@ -20,6 +20,8 @@ import {
 import Image from 'next/image';
 
 import { useEffect, useRef, useState } from 'react';
+import CustomDesignServices from './custom-design-services';
+import WhyChooseUs from './why-choose-us';
 
 type CounterProps = {
   from?: number;
@@ -82,13 +84,19 @@ const HomepageMenuItems = () => {
       transition: { duration: 0.6, ease: easeOut },
     },
   };
+
   return (
     <>
       {/* HERO SECTION */}
       <section
         id="home"
-        className="relative bg-[radial-gradient(circle_at_top_left,rgba(79,70,229,0.1)_0%,transparent_30%),radial-gradient(circle_at_bottom_right,rgba(20,184,166,0.1)_0%,transparent_30%)] pt-32 pb-20 md:pt-40 md:pb-32 lg:pt-48 dark:bg-[radial-gradient(circle_at_top_left,rgba(79,70,229,0.2)_0%,transparent_30%),radial-gradient(circle_at_bottom_right,rgba(20,184,166,0.2)_0%,transparent_30%)]"
+        className="relative bg-[radial-gradient(circle_at_top_left,rgba(79,70,229,0.1)_0%,transparent_30%),radial-gradient(circle_at_bottom_right,rgba(20,184,166,0.1)_0%,transparent_30%)] pt-32 pb-20 md:pt-40 md:pb-32 lg:pt-40 dark:bg-[radial-gradient(circle_at_top_left,rgba(79,70,229,0.2)_0%,transparent_30%),radial-gradient(circle_at_bottom_right,rgba(20,184,166,0.2)_0%,transparent_30%)]"
       >
+        <motion.div variants={itemVariants} className="mb-6 text-center">
+          <span className="bg-primary/10 text-primary inline-block rounded-full px-4 py-2 text-sm font-semibold">
+            ✨ Next Generation IoT Solutions
+          </span>
+        </motion.div>
         <motion.div
           className="container mx-auto max-w-7xl px-4 text-center sm:px-6"
           initial="hidden"
@@ -101,16 +109,16 @@ const HomepageMenuItems = () => {
           >
             Smart IoT Solutions for{' '}
             <span className="bg-gradient-to-r from-indigo-500 to-teal-500 bg-clip-text text-transparent">
-              Modern Education
+              Modern Enterprise
             </span>
           </motion.h1>
           <motion.p
             variants={itemVariants}
             className="mx-auto mb-12 max-w-3xl text-base text-slate-600 sm:text-lg md:text-xl dark:text-slate-400"
           >
-            Revolutionize your classroom with our intelligent digital clocks and
-            automated attendance systems. Save time, increase efficiency, and
-            embrace the future of educational technology.
+            Transform your business with custom-designed IoT devices and
+            intelligent automation. From smart clocks to enterprise solutions,
+            we deliver innovation tailored to your needs.
           </motion.p>
           <motion.div variants={itemVariants} className="mt-12">
             <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-8 text-center md:flex-row md:gap-12 lg:gap-16">
@@ -118,7 +126,7 @@ const HomepageMenuItems = () => {
                 <Counter
                   to={500}
                   suffix="+"
-                  className="text-4xl font-bold md:text-5xl"
+                  className="text-4xl font-bold text-teal-500 md:text-5xl"
                 />
                 <p className="mt-2 text-base text-slate-600 md:text-lg dark:text-slate-400">
                   Devices Deployed
@@ -129,7 +137,7 @@ const HomepageMenuItems = () => {
                 <Counter
                   to={99.9}
                   suffix="%"
-                  className="text-4xl font-bold md:text-5xl"
+                  className="text-4xl font-bold text-teal-500 md:text-5xl"
                 />
                 <p className="mt-2 text-base text-slate-600 md:text-lg dark:text-slate-400">
                   Uptime
@@ -137,7 +145,9 @@ const HomepageMenuItems = () => {
               </div>
               <div className="h-px w-2/3 bg-slate-200 md:h-16 md:w-px dark:bg-slate-800/50"></div>
               <div className="flex-1">
-                <p className="text-4xl font-bold md:text-5xl">24/7</p>
+                <p className="text-4xl font-bold text-teal-500 md:text-5xl">
+                  24/7
+                </p>
                 <p className="mt-2 text-base text-slate-600 md:text-lg dark:text-slate-400">
                   Support
                 </p>
@@ -239,7 +249,7 @@ const HomepageMenuItems = () => {
             variants={itemVariants}
             className="mx-auto mb-16 max-w-2xl text-slate-600 dark:text-slate-400"
           >
-            Seamless integration through secure MQTT communication.
+            Seamless integration through industry-leading MQTT protocols
           </motion.p>
           <div className="relative mx-auto flex max-w-5xl flex-col items-center justify-between md:flex-row">
             <div
@@ -503,9 +513,10 @@ const HomepageMenuItems = () => {
               </div>
             </motion.div>
             <motion.div variants={itemVariants}>
-              <span className="font-semibold text-teal-400">
-                Neuronomous Smart Display
+              <span className="bg-primary/10 text-primary inline-block rounded-full px-4 py-2 text-xs font-semibold">
+                ✨ Neuronomous Smart Display
               </span>
+
               <h2 className="mt-2 mb-4 text-3xl font-bold md:text-4xl">
                 More Than Just Time
               </h2>
@@ -548,8 +559,8 @@ const HomepageMenuItems = () => {
               </div>
             </motion.div>
             <motion.div variants={itemVariants} className="lg:order-1">
-              <span className="font-semibold text-indigo-400">
-                Neuronomous Attendance Terminal
+              <span className="bg-primary/10 text-primary inline-block rounded-full px-4 py-2 text-xs font-semibold">
+                ✨ Neuronomous Attendance Terminal
               </span>
               <h2 className="mt-2 mb-4 text-3xl font-bold md:text-4xl">
                 Attendance, Automated
@@ -581,6 +592,9 @@ const HomepageMenuItems = () => {
           </div>
         </div>
       </motion.section>
+
+      <CustomDesignServices />
+      <WhyChooseUs />
 
       {/* CONTACT SECTION */}
       <motion.section
