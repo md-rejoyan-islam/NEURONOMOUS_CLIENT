@@ -16,7 +16,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
 
   return (
-    <Card className="my-10 w-full max-w-md">
+    <Card className="border-border/60 my-10 w-full max-w-md shadow-none">
       <CardHeader className="pb-6 text-center">
         <div className="mb-4 flex justify-center">
           <div className="bg-primary rounded-full p-3">

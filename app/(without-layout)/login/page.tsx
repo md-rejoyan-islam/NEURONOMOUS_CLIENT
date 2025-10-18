@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <Card className="my-10 w-full max-w-md">
+    <Card className="border-border/60 my-10 w-full max-w-md shadow-none">
       <CardHeader className="pb-4 text-center">
         <div className="mb-2 flex justify-center">
           <Link href={'/'}>
