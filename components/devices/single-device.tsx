@@ -9,12 +9,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { socketManager } from '@/lib/socket';
 import { useProfileQuery } from '@/queries/auth';
 import {
+  useDeleteStopWatchScheduleMutation,
   useGetAllScheduledNoticesQuery,
   useGetDeviceQuery,
 } from '@/queries/devices';
 import { Bell, Clock, Cog, Cuboid, Trash2, Wifi, WifiOff } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { toast } from 'sonner';
 import SmallLoading from '../loading/small-loading';
 import NormalTable from '../table/normal-table';
 import {
@@ -52,6 +54,26 @@ export default function SingleDevice({ id }: { id: string }) {
   const runningStopwatch = device?.stopwatches?.find(
     (sw) => sw.start_time < Date.now() && sw.end_time > Date.now()
   );
+
+  const [deleteStopWatchSchedule, { isLoading: isDeletingSchedule }] =
+    useDeleteStopWatchScheduleMutation();
+  const deleteSchedule = async (scheduleId: string) => {
+    console.log('click');
+
+    try {
+      await deleteStopWatchSchedule({ deviceId: id, scheduleId }).unwrap();
+      refetchDevice();
+      toast.success('Scheduled Stopwatch Deleted', {
+        description: 'The scheduled stopwatch has been successfully deleted.',
+      });
+      // eslint-disable-next-line
+    } catch (error: any) {
+      toast.error('Deletion Failed', {
+        description:
+          error?.data?.message || 'Failed to delete the scheduled stopwatch.',
+      });
+    }
+  };
 
   useEffect(() => {
     if (!device) return;
@@ -376,7 +398,8 @@ export default function SingleDevice({ id }: { id: string }) {
                             <button
                               key={schedule._id + 'delete' + index}
                               className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"
-                              // onClick={() => setDeleteId(fw._id)}
+                              onClick={() => deleteSchedule(schedule._id)}
+                              disabled={isDeletingSchedule}
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>,

@@ -279,6 +279,18 @@ export const devicesApi = createApi({
         { type: 'Device', id: deviceId },
       ],
     }),
+    deleteStopWatchSchedule: builder.mutation<
+      void,
+      { deviceId: string; scheduleId: string }
+    >({
+      query: ({ deviceId, scheduleId }) => ({
+        url: `/clock-devices/${deviceId}/stopwatch/${scheduleId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, { deviceId }) => [
+        { type: 'Device', id: deviceId },
+      ],
+    }),
   }),
 });
 
@@ -303,4 +315,5 @@ export const {
   useSendScheduledNoticeToSelectedDevicesMutation,
   useUpdateDeviceFirmwareMutation,
   useDeviceRestartByIdMutation,
+  useDeleteStopWatchScheduleMutation,
 } = devicesApi;
