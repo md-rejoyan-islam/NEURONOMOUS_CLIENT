@@ -107,9 +107,9 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
 
   return (
     <Card>
-      <CardContent className="grid items-center gap-6 md:grid-cols-2">
+      <CardContent className="grid items-center gap-6 lg:grid-cols-2">
         <div>
-          <div className="mx-auto flex w-fit items-center justify-center gap-2 font-mono">
+          <div className="mx-auto flex w-full items-center justify-center gap-2 font-mono">
             <Timer onSetTime={setTimer} timer={timer} />
           </div>
           <div className="flex items-center justify-center gap-6 pt-4">
@@ -165,7 +165,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
 
             {timerStartOption === 'schedule' && (
               <div id="schedule-fields" className="mt-4 space-y-4">
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
                   <div className="flex flex-col gap-3">
                     <Label htmlFor="date-picker" className="px-1">
                       Date
@@ -231,8 +231,6 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
             </Button>
           </div>
         </div>
-
-        {/* <ClockTimer /> */}
       </CardContent>
     </Card>
   );

@@ -40,7 +40,7 @@ const ModeChange = ({
   return (
     <Card className="mb-6">
       <CardContent className="">
-        <div className="flex items-center justify-between space-y-2">
+        <div className="flex flex-wrap items-center justify-between space-y-2">
           <div>
             <Label className="text-lg font-medium">
               <ShieldCheck className="text-primary inline-block h-6 w-6" />
@@ -48,7 +48,7 @@ const ModeChange = ({
               <span className="capitalize">{newMode}</span>
               Mode
             </Label>
-            <p className="pt-2 text-sm">
+            <p className="pt-2 text-xs">
               {newMode === 'notice'
                 ? 'Switch the device to Notice mode to display important messages.'
                 : 'Switch the device to Clock mode to show the current time.'}

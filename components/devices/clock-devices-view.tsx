@@ -289,6 +289,12 @@ const ClockDevicesView = ({
                 </span>
               </div>
               <div className="flex justify-between">
+                <span className="text-muted-foreground">Firmware Version:</span>
+                <span className="text-sm font-medium">
+                  {device?.firmware_version || 'N/A'}
+                </span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-muted-foreground">Location:</span>
                 <span className="text-xs font-medium">
                   {device.location || 'N/A'}

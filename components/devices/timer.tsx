@@ -75,7 +75,7 @@ export default function Timer({
                   type="text"
                   value={formatValue(timer[key])}
                   className={
-                    'text-primary bg-primary/[0.01] flex h-[140px] w-[140px] appearance-none items-center justify-center rounded-md border text-center text-6xl font-bold'
+                    'text-primary bg-primary/[0.01] flex size-16 appearance-none items-center justify-center rounded-md border text-center text-4xl font-bold sm:h-24 sm:w-24 sm:text-5xl xl:h-[140px] xl:w-[140px] xl:text-6xl'
                   }
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     const val =

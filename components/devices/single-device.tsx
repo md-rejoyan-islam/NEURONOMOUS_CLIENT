@@ -153,13 +153,15 @@ export default function SingleDevice({ id }: { id: string }) {
                 <Label className="text-muted-foreground text-sm font-medium">
                   Device ID
                 </Label>
-                <p className="font-semibold capitalize">{device?.id}</p>
+                <p className="text-sm font-semibold capitalize sm:text-base">
+                  {device?.id}
+                </p>
               </div>
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
                   Device Name
                 </Label>
-                <p className="font-semibold capitalize">
+                <p className="text-sm font-semibold capitalize sm:text-base">
                   {device?.name || 'N/A'}
                 </p>
               </div>
@@ -167,7 +169,9 @@ export default function SingleDevice({ id }: { id: string }) {
                 <Label className="text-muted-foreground text-sm font-medium">
                   Status
                 </Label>
-                <p className="font-semibold capitalize">{device?.status}</p>
+                <p className="text-sm font-semibold capitalize sm:text-base">
+                  {device?.status}
+                </p>
               </div>
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
@@ -179,7 +183,7 @@ export default function SingleDevice({ id }: { id: string }) {
                   ) : (
                     <Bell className="h-4 w-4 text-orange-500" />
                   )}
-                  <span className="font-semibold capitalize">
+                  <span className="text-sm font-semibold capitalize sm:text-base">
                     {device?.mode}
                   </span>
                 </div>
@@ -189,19 +193,23 @@ export default function SingleDevice({ id }: { id: string }) {
                 <Label className="text-muted-foreground text-sm font-medium">
                   Location
                 </Label>
-                <p className="font-semibold">{device?.location || 'N/A'}</p>
+                <p className="text-sm font-semibold capitalize sm:text-base">
+                  {device?.location || 'N/A'}
+                </p>
               </div>
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
                   Board
                 </Label>
-                <p className="font-semibold capitalize">{device?.type}</p>
+                <p className="text-sm font-semibold capitalize sm:text-base">
+                  {device?.type}
+                </p>
               </div>
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
                   Last Timestamp
                 </Label>
-                <p className="font-semibold">
+                <p className="text-sm font-semibold sm:text-base">
                   {device?.timestamp
                     ? new Date(device?.timestamp).toLocaleString()
                     : 'N/A'}
@@ -212,13 +220,15 @@ export default function SingleDevice({ id }: { id: string }) {
                 <Label className="text-muted-foreground text-sm font-medium">
                   Current Font
                 </Label>
-                <p className="font-semibold">{device?.font || 'N/A'}</p>
+                <p className="text-sm font-semibold capitalize sm:text-base">
+                  {device?.font || 'N/A'}
+                </p>
               </div>
               <div>
                 <Label className="text-muted-foreground text-sm font-medium">
                   Time Format
                 </Label>
-                <p className="text-sm font-semibold">
+                <p className="text-sm font-semibold capitalize sm:text-base">
                   {device?.time_format || 'N/A'}
                 </p>
               </div>
@@ -226,7 +236,7 @@ export default function SingleDevice({ id }: { id: string }) {
                 <Label className="text-muted-foreground text-sm font-medium">
                   Current Version
                 </Label>
-                <p className="text-lg font-semibold">
+                <p className="text-sm font-semibold capitalize sm:text-base">
                   {device?.firmware_version || 'N/A'}
                 </p>
               </div>
@@ -236,7 +246,7 @@ export default function SingleDevice({ id }: { id: string }) {
                     <Label className="text-muted-foreground text-sm font-medium">
                       Mac ID
                     </Label>
-                    <p className="text-lg font-semibold">
+                    <p className="text-sm font-semibold sm:text-base">
                       {device?.mac_id || 'N/A'}
                     </p>
                   </div>
@@ -244,7 +254,7 @@ export default function SingleDevice({ id }: { id: string }) {
                     <Label className="text-muted-foreground text-sm font-medium">
                       Free Heap
                     </Label>
-                    <p className="text-lg font-semibold">
+                    <p className="text-sm font-semibold sm:text-base">
                       {device?.free_heap || 'N/A'}
                     </p>
                   </div>
@@ -277,12 +287,12 @@ export default function SingleDevice({ id }: { id: string }) {
               <Tabs defaultValue={'clock'} className="space-y-4">
                 <Card className="py-4">
                   <CardContent>
-                    <CardTitle className="flex items-center justify-between gap-2">
-                      <div className="flex items-center">
+                    <CardTitle className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-1 items-center">
                         <Cog className="text-primary mr-2 h-7 w-7" />
                         Select Device Mode
                       </div>
-                      <TabsList>
+                      <TabsList className="">
                         <TabsTrigger value="clock">Clock</TabsTrigger>
                         <TabsTrigger value="notice">Notice</TabsTrigger>
                         <TabsTrigger value="timer">Timer</TabsTrigger>
@@ -322,7 +332,7 @@ export default function SingleDevice({ id }: { id: string }) {
                       deviceId={device._id}
                     />
                   )}
-                  <div className="max-w-lgs mx-auto w-full">
+                  <div className="mx-auto w-full">
                     <StopWatchNew device={device} />
                   </div>
 
@@ -344,9 +354,10 @@ export default function SingleDevice({ id }: { id: string }) {
                         data={
                           device?.stopwatches?.map((schedule, index) => [
                             index + 1,
-                            Math.round(
-                              (schedule.end_time - schedule.start_time) / 60000
-                            ) + ' mins',
+                            (
+                              (schedule.end_time - schedule.start_time) /
+                              60000
+                            ).toFixed(2) + ' Mins',
                             <Badge
                               key={schedule._id + 'status' + index}
                               variant={'outline'}
