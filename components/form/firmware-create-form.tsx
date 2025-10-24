@@ -158,9 +158,7 @@ const FirmwareCreateForm = () => {
         </div>
         {errors.file && (
           <p className="text-sm text-red-600">
-            {errors.file &&
-            typeof errors.file === 'object' &&
-            'message' in errors.file
+            {typeof errors.file === 'object' && 'message' in errors.file
               ? String((errors.file as { message?: string }).message)
               : null}
           </p>

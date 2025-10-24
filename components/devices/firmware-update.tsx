@@ -59,13 +59,13 @@ const FirmwareUpdate = ({
     const handler = (message: { status: string }) => {
       const { status } = message;
       const messageValue = status.split(': ')[1];
-      const value = messageValue?.split('%')[0];
+      const value = +messageValue?.split('%')[0];
 
       // if (messageValue === 'Started') {
       //   setUpdateMessage('Starting update...');
       // } else
 
-      if (typeof +value === 'number' && +value >= 0 && +value <= 100) {
+      if (+value >= 0 && +value <= 100) {
         setFailedUpdate(false);
         setUpdateMessage('');
         setProgress(+value);

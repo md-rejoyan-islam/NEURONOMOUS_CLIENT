@@ -451,8 +451,7 @@ const GroupStudents = ({
               </Label>
               {fileErros.file && (
                 <p className="text-sm text-red-600">
-                  {fileErros.file &&
-                  typeof fileErros.file === 'object' &&
+                  {typeof fileErros.file === 'object' &&
                   'message' in fileErros.file
                     ? String((fileErros.file as { message?: string }).message)
                     : null}
