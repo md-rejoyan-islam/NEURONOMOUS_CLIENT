@@ -115,7 +115,7 @@ export const courseApi = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.courses?.map(({ _id }) => ({
+              ...result.courses.map(({ _id }) => ({
                 type: 'Course' as const,
                 id: _id,
               })),

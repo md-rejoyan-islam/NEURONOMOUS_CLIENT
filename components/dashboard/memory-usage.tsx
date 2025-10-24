@@ -13,10 +13,10 @@ const MemoryUsage = ({ memory }: { memory: IMemory }) => {
         <Server className="text-muted-foreground h-4 w-4" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{memory?.memoryUsagePercent}%</div>
+        <div className="text-2xl font-bold">{memory.memoryUsagePercent}%</div>
         <Progress value={+(memory.memoryUsagePercent || 0)} className="mt-2" />
         <p className="text-muted-foreground mt-2 text-xs">
-          {+(memory?.memoryUsagePercent || 0) < 70 ? (
+          {+(memory.memoryUsagePercent || 0) < 70 ? (
             <span className="flex items-center gap-1 text-green-500">
               <CheckCircle className="h-3 w-3" /> Good
             </span>

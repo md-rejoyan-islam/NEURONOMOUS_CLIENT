@@ -55,7 +55,7 @@ const GroupAttendanceDeviceView = ({
                         <div>
                           <h3 className="font-semibold">
                             {(device.allowed_users?.length &&
-                              device?.allowed_users[0]?.first_name) ||
+                              device.allowed_users[0]?.first_name) ||
                               'Instructor not assigned'}
                           </h3>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -89,12 +89,12 @@ const GroupAttendanceDeviceView = ({
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Mail className="text-primary mr-2 h-4 w-4" />
                         {(device.allowed_users?.length &&
-                          device?.allowed_users[0]?.email) ||
+                          device.allowed_users[0]?.email) ||
                           'No Instructor Email'}
                       </div>
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <School className="text-primary mr-2 h-4 w-4" />
-                        {device?.group?.name || 'No Group Assigned'}
+                        {device.group?.name || 'No Group Assigned'}
                       </div>
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <WifiPen className="text-primary mr-2 h-4 w-4" />
@@ -104,7 +104,7 @@ const GroupAttendanceDeviceView = ({
                     <div className="mt-6 flex w-full items-center justify-between gap-4">
                       <div className="w-full">
                         <Link
-                          href={`/devices/attendance/${device?._id}`}
+                          href={`/devices/attendance/${device._id}`}
                           className="block"
                         >
                           <Button className="w-full">View Details</Button>

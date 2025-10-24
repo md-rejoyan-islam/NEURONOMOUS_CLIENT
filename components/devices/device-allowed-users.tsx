@@ -104,7 +104,8 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
           <CardContent>
             <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-track-gray-800 dark:scrollbar-thumb-gray-600 overflow-x-auto">
               <div className="min-w-[800px]">
-                {(allowedUsers?.length ?? 0) > 0 ? (
+                {
+                  // allowedUsers.length ? (
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -129,10 +130,10 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
                             </div>
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
-                            {user?.first_name} {user?.last_name}
+                            {user.first_name} {user.last_name}
                           </TableCell>
-                          <TableCell>{user?.email}</TableCell>
-                          <TableCell>{user?.role}</TableCell>
+                          <TableCell>{user.email}</TableCell>
+                          <TableCell>{user.role}</TableCell>
 
                           <TableCell
                             className="text-muted-foreground hidden text-sm md:table-cell"
@@ -150,18 +151,19 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
                       ))}
                     </TableBody>
                   </Table>
-                ) : (
-                  <div className="py-12 text-center">
-                    <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
-                    <h3 className="mb-2 text-lg font-medium">
-                      No Allowed Users
-                    </h3>
-                    <p className="text-muted-foreground">
-                      There are currently no users allowed to access this
-                      device.
-                    </p>
-                  </div>
-                )}
+                  // ) : (
+                  //   <div className="py-12 text-center">
+                  //     <AlertTriangle className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+                  //     <h3 className="mb-2 text-lg font-medium">
+                  //       No Allowed Users
+                  //     </h3>
+                  //     <p className="text-muted-foreground">
+                  //       There are currently no users allowed to access this
+                  //       device.
+                  //     </p>
+                  //   </div>
+                  // )
+                }
               </div>
             </div>
           </CardContent>

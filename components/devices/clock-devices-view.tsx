@@ -208,7 +208,7 @@ const ClockDevicesView = ({
           {/* Bulk Operation & Search */}
 
           <div className="flex gap-2 min-[500px]:ml-auto">
-            <BulkOperationModel devices={devices || []} />
+            <BulkOperationModel devices={devices} />
           </div>
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
             <div className="relative">
@@ -291,7 +291,7 @@ const ClockDevicesView = ({
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Firmware Version:</span>
                 <span className="text-sm font-medium">
-                  {device?.firmware_version || 'N/A'}
+                  {device.firmware_version || 'N/A'}
                 </span>
               </div>
               <div className="flex justify-between">

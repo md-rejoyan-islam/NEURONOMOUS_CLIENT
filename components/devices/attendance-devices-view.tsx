@@ -223,7 +223,7 @@ const AttendanceDevicesView = ({
                       <div>
                         <h3 className="font-semibold">
                           {(device.allowed_users?.length &&
-                            device?.allowed_users[0]?.first_name) ||
+                            device.allowed_users[0]?.first_name) ||
                             device.group?.admin.first_name ||
                             'No Admin Assigned'}
                         </h3>
@@ -256,13 +256,13 @@ const AttendanceDevicesView = ({
                     <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                       <Mail className="text-primary mr-2 h-4 w-4" />
                       {(device.allowed_users?.length &&
-                        device?.allowed_users[0]?.email) ||
+                        device.allowed_users[0]?.email) ||
                         device.group?.admin.email ||
                         'No Admin Assigned'}
                     </div>
                     <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                       <School className="text-primary mr-2 h-4 w-4" />
-                      {device?.group?.name || 'No Group Assigned'}
+                      {device.group?.name || 'No Group Assigned'}
                     </div>
                     <div className="flex items-center justify-between border-t pt-4">
                       <div className="text-center">

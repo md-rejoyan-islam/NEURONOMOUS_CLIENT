@@ -43,7 +43,8 @@ import { toast } from 'sonner';
 export default function SingleUserComponent({ userId }: { userId: string }) {
   const { data: user, isLoading, error } = useGetUserByIdQuery(userId);
 
-  const [updateUserById] = useUpdateUserByIdMutation();
+  const [updateUserById, { isLoading: isUpdateLoading }] =
+    useUpdateUserByIdMutation();
 
   const { data: devices, refetch: refetchDevices } = useGetAllGroupDevicesQuery(
     user?.group || '',
@@ -373,7 +374,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
               disabled={isLoading}
               className="flex-1 bg-green-600 text-white hover:bg-green-700"
             >
-              {isLoading ? (
+              {isUpdateLoading ? (
                 <>
                   <User className="mr-2 h-4 w-4 animate-pulse" />
                   Updating...

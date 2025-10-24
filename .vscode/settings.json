@@ -1,4 +1,4 @@
 {
-  "deepscan.enable": false,
+  "deepscan.enable": true,
   "deepscan.ignoreConfirmWarning": true
 }

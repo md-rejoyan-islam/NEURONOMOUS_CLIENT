@@ -37,7 +37,7 @@ const GroupClocksView = ({
             ))}
           </div>
 
-          {filteredDevices?.length === 0 && (
+          {filteredDevices.length === 0 && (
             <div className="py-12 text-center">
               <div className="text-muted-foreground mb-4">
                 <BoxesIcon className="mx-auto h-16 w-16" />
