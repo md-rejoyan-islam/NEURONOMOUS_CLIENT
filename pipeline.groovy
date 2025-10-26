@@ -53,17 +53,22 @@ pipeline {
             }
         }
 
-        stage('Npm Build') {
+        stage('PNPM Build') {
             steps {
                 script {
-                        echo '🔹 Installing dependencies...'
-                        // Export PATH and verify Node/npm
-                        sh '''
-                            export PATH=/root/.nvm/versions/node/v22.19.0/bin:$PATH
-                            npm install
-                            npm run build
-                        '''
-                        echo '✅ Build completed successfully'
+                    echo '🔹 Installing dependencies with pnpm...'
+                    sh '''
+                        # Ensure Node and PNPM paths
+                        export PATH=/root/.nvm/versions/node/v22.19.0/bin:$PATH
+                        # Install PNPM if not installed
+                        if ! command -v pnpm &> /dev/null
+                        then
+                            npm install -g pnpm
+                        fi
+                        pnpm install
+                        pnpm build
+                    '''
+                    echo '✅ PNPM Build completed successfully'
                 }
             }
         }
