@@ -8,9 +8,20 @@ export function proxy(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
+  console.log(request);
+  console.log(request.nextUrl,request.destination);
+  
+  
+
   const isPublicRoute = publicRoutes.includes(pathname);
 
+  console.log("isPublicRoute:", isPublicRoute);
+  
+console.log("pathname",pathname);
+
   if (pathname === "/" || pathname.startsWith("/course-enroll")) {
+    console.log("in");
+    
     return NextResponse.next();
   }
 

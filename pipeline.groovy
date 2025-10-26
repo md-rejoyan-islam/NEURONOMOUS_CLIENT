@@ -101,7 +101,7 @@ pipeline {
                             export PATH=/root/.nvm/versions/node/v22.19.0/bin:\$PATH
                             cd ${WORK_DIR}
                             # Reload if already running, else start
-                            pm2 reload client || pm2 start npm --name "client" -- run start
+                            pm2 reload client || pm2 start pnpm --name "client" -- run start
                         """
                         echo '✅ PM2 reloaded successfully'
                 }
