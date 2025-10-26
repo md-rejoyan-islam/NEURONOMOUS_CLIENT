@@ -6,7 +6,6 @@ import { courseApi } from '@/queries/course';
 import { devicesApi } from '@/queries/devices';
 import { firmwareApi } from '@/queries/firmware';
 import { groupApi } from '@/queries/group';
-import { logsApi } from '@/queries/logs';
 import { notificationsApi } from '@/queries/notifications';
 import { openApi } from '@/queries/open';
 import { studentApi } from '@/queries/student';
@@ -26,7 +25,6 @@ export const store = configureStore({
     [firmwareApi.reducerPath]: firmwareApi.reducer,
     [summaryApi.reducerPath]: summaryApi.reducer,
     [contactApi.reducerPath]: contactApi.reducer,
-    [logsApi.reducerPath]: logsApi.reducer,
     [attendanceDevicesApi.reducerPath]: attendanceDevicesApi.reducer,
     [courseApi.reducerPath]: courseApi.reducer,
     [openApi.reducerPath]: openApi.reducer,
@@ -47,7 +45,6 @@ export const store = configureStore({
       firmwareApi.middleware,
       summaryApi.middleware,
       contactApi.middleware,
-      logsApi.middleware,
       attendanceDevicesApi.middleware,
       courseApi.middleware,
       openApi.middleware,
