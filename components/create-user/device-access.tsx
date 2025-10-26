@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { IDevice } from '@/lib/types';
+import { IAttendanceDevice, IDevice } from '@/lib/types';
 import { TableIcon } from 'lucide-react';
 import { Badge } from '../ui/badge';
 const DeviceAccess = ({
@@ -13,10 +13,27 @@ const DeviceAccess = ({
   handleDeviceToggle,
 }: {
   selectedDevices: string[];
-  devices: IDevice[];
+  devices: {
+    deviceType: string;
+    device: IDevice | IAttendanceDevice;
+  }[];
   handleSelectAllDevices: () => void;
   handleDeviceToggle: (deviceId: string) => void;
 }) => {
+  const clockDevices = devices
+    .filter(
+      (d): d is { deviceType: 'clock'; device: IDevice } =>
+        d.deviceType === 'clock'
+    )
+    .map(({ device }) => device);
+
+  const attendanceDevices = devices
+    .filter(
+      (d): d is { deviceType: 'attendance'; device: IAttendanceDevice } =>
+        d.deviceType === 'attendance'
+    )
+    .map(({ device }) => device);
+
   return (
     <Card>
       <CardHeader>
@@ -41,10 +58,11 @@ const DeviceAccess = ({
         </div>
 
         <div className="max-h-64 space-y-3 overflow-y-auto">
-          {devices.map((device) => (
+          <Label className="text-xs">Clock Devices</Label>
+          {clockDevices.map((device) => (
             <div
               key={device._id}
-              className="flex items-start space-x-3 rounded-lg border p-3"
+              className="flex items-center space-x-3 rounded-lg border p-3"
             >
               <Checkbox
                 id={device._id}
@@ -73,7 +91,41 @@ const DeviceAccess = ({
               </div>
             </div>
           ))}
+
+          <Label className="text-xs">Attendance Devices</Label>
+          {attendanceDevices.map((device) => (
+            <div
+              key={device._id}
+              className="flex items-center space-x-3 rounded-lg border p-3"
+            >
+              <Checkbox
+                id={device._id}
+                checked={selectedDevices.includes(device._id)}
+                onCheckedChange={() => handleDeviceToggle(device._id)}
+              />
+              <div className="min-w-0 flex-1">
+                <Label htmlFor={device._id} className="cursor-pointer">
+                  <div className="text-sm font-medium">{device.id}</div>
+
+                  <Badge
+                    variant={
+                      device.status === 'online' ? 'default' : 'secondary'
+                    }
+                    className={`mt-1 text-xs ${
+                      device.status === 'online'
+                        ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
+                        : ''
+                    }`}
+                  >
+                    {device.status}
+                  </Badge>
+                </Label>
+              </div>
+            </div>
+          ))}
         </div>
+
+        <hr />
 
         <div className="text-muted-foreground bg-muted/50 rounded-lg p-3 text-sm">
           <strong>{selectedDevices.length}</strong> of{' '}

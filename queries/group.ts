@@ -28,6 +28,11 @@ export interface ISingeGroupResponse {
   data: IGroupWithPopulatedData;
 }
 
+interface IGetAllGroupsResponse {
+  deviceType: 'clock' | 'attendance';
+  device: IDevice | IAttendanceDevice;
+}
+
 export interface IGetAllUsersResponse {
   success: boolean;
   data: IUser[];
@@ -475,8 +480,10 @@ export const groupApi = createApi({
           last_name: string;
           email: string;
           password: string;
-          deviceIds: string[];
-          deviceType: 'clock' | 'attendance';
+          devices: {
+            deviceIds: string[];
+            deviceType: 'clock' | 'attendance';
+          }[];
           phone?: string;
           notes?: string;
         };
@@ -532,7 +539,7 @@ export const groupApi = createApi({
     // transformResponse: (response) =>
     //   (response as ISuccessResponse<IUse    []>).data,
     // invalidatesTags
-    getAllGroupDevices: builder.query<IDevice[], string>({
+    getAllGroupDevices: builder.query<IGetAllGroupsResponse[], string>({
       query: (id) => {
         console.log('Fetching devices for group ID:', id);
 
@@ -542,7 +549,7 @@ export const groupApi = createApi({
         };
       },
       transformResponse: (response) =>
-        (response as ISuccessResponse<IDevice[]>).data,
+        (response as ISuccessResponse<IGetAllGroupsResponse[]>).data,
     }),
     getClocksInGroup: builder.query<
       IDevice[],

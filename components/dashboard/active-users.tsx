@@ -6,7 +6,7 @@ import { useGetUsersQuery } from '@/queries/users';
 import { Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const ActiveUsers = () => {
+const ActiveUsers = ({ usersList }: { usersList: string[] }) => {
   const { data: users } = useGetUsersQuery();
   const [activeUsers, setActiveUsers] = useState<string[]>([]);
 
@@ -16,17 +16,28 @@ const ActiveUsers = () => {
     if (!socket) return;
 
     socket.emit('active-users', {}, (payload: string[]) => {
-      setActiveUsers(payload);
+      const filteredActiveUsers = payload.filter((userId) =>
+        usersList.includes(userId)
+      );
+      console.log(payload);
+
+      console.log(usersList);
+      console.log(filteredActiveUsers);
+
+      setActiveUsers(filteredActiveUsers);
     });
 
     socket.on('active-users', (payload: string[]) => {
-      setActiveUsers(payload);
+      const filteredActiveUsers = payload.filter((userId) =>
+        usersList.includes(userId)
+      );
+      setActiveUsers(filteredActiveUsers);
     });
 
     return () => {
       socket.off('active-users');
     };
-  }, []);
+  }, [usersList]);
 
   return (
     <Card>

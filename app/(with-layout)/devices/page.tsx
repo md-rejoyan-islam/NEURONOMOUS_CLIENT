@@ -14,13 +14,17 @@ const DevicesPage = async ({
     status?: string;
     search?: string;
     type?: string;
+    deviceType?: 'clock' | 'attendance';
   }>;
 }) => {
-  const { mode, status, search, type } = await searchParams;
+  const { mode, status, search, type, deviceType } = await searchParams;
 
   return (
     <div className="space-y-6 p-4 sm:p-6">
-      <DevicesComponent query={{ mode, status, search, type }} />
+      <DevicesComponent
+        query={{ mode, status, search, type }}
+        dType={deviceType}
+      />
     </div>
   );
 };

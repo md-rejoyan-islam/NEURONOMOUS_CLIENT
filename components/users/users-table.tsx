@@ -167,6 +167,7 @@ const UsersTable = ({
       skip: user?.role !== 'admin' || !user?.group,
     }
   );
+  console.log('allgroup', allGroupDevices);
 
   useEffect(() => {
     setFilteredUsers(users);
@@ -343,7 +344,7 @@ const UsersTable = ({
         </CardContent>
       </Card>
 
-      {/* Create Admin Modal */}
+      {/* Create User Modal */}
       <CreateUserModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}

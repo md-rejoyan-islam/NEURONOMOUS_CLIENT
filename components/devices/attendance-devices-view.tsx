@@ -1,5 +1,4 @@
 import { useProfileQuery } from '@/queries/auth';
-import { useGetAllDevicesQuery } from '@/queries/devices';
 import {
   Bell,
   TabletsIcon as Devices,
@@ -32,22 +31,18 @@ import {
 const AttendanceDevicesView = ({
   query,
 }: {
-  query?: { mode?: string; status?: string; search?: string; type?: string };
+  query?: { status?: string; search?: string };
 }) => {
-  const { mode, status, search, type } = query || {};
+  const { status, search } = query || {};
   const {
     data: attendanceDevices,
     isLoading,
     error,
-  } = useGetAllAttendanceDevicesQuery({});
-
-  const queryString =
-    `${mode ? `mode=${mode}&` : ''}${status ? `status=${status}&` : ''}${
+  } = useGetAllAttendanceDevicesQuery({
+    query: `${status ? `status=${status}&` : ''}${
       search ? `search=${search}&` : ''
-    }${type ? `type=${type}&` : ''}
-        `.slice(0, -1);
-
-  const { data: devices = [] } = useGetAllDevicesQuery({ query: queryString });
+    }`.slice(0, -1),
+  });
 
   const { data: user } = useProfileQuery();
 
@@ -72,14 +67,14 @@ const AttendanceDevicesView = ({
     router.push(`/devices?${params.toString()}`);
   };
 
-  const filteredDevices = devices.filter((device) => {
-    const matchesSearch =
-      device?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      device?.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      device?.location?.toLowerCase().includes(searchTerm.toLowerCase());
+  // const filteredDevices = devices.filter((device) => {
+  //   const matchesSearch =
+  //     device?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     device?.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     device?.location?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesSearch;
-  });
+  //   return matchesSearch;
+  // });
 
   const handleSorting = (value: string) => {
     if (value === 'all') {
@@ -179,7 +174,7 @@ const AttendanceDevicesView = ({
                 handleSorting(value);
               }}
               disabled={isLoading}
-              defaultValue={status || mode || type || 'all'}
+              defaultValue={status || 'all'}
             >
               <SelectTrigger className="w-full text-sm sm:text-base">
                 <SelectValue placeholder="Filter devices" />
@@ -288,7 +283,7 @@ const AttendanceDevicesView = ({
         ))}
       </div>
 
-      {filteredDevices.length === 0 && (
+      {attendanceDevices?.length === 0 && (
         <div className="py-12 text-center">
           <div className="text-muted-foreground mb-4">
             <Devices className="mx-auto h-16 w-16" />

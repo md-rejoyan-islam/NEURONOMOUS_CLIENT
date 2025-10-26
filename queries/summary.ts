@@ -31,16 +31,7 @@ interface IDashboardSummary {
   totalUsers?: number;
   totalStudents?: number;
   totalGroups?: number;
-  cpu?: {
-    cores: number;
-    cpuUsagePercent: string;
-  };
-  memory?: {
-    total: number;
-    free: number;
-    used: number;
-    memoryUsagePercent: string;
-  };
+  users?: string[];
 }
 
 interface IGroupSummary {

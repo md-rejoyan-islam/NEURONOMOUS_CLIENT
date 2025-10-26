@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { IDevice } from '@/lib/types';
+import { IAttendanceDevice, IDevice } from '@/lib/types';
 import { UserCreateInput, userCreateSchema } from '@/lib/validations';
 import { useAddUserToGroupWithDevicesMutation } from '@/queries/group';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,7 +24,10 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 interface CreateAdminModalProps {
   isOpen: boolean;
   onClose: () => void;
-  devices: IDevice[];
+  devices: {
+    deviceType: string;
+    device: IDevice | IAttendanceDevice;
+  }[];
   groupId: string;
   groupUserRefetch?: () => void;
 }
@@ -61,7 +64,7 @@ export function CreateUserModal({
     if (selectedDevices.length === devices.length) {
       setSelectedDevices([]);
     } else {
-      setSelectedDevices(devices.map((device) => device._id) || []);
+      setSelectedDevices(devices.map((device) => device.device._id));
     }
   };
 
@@ -73,12 +76,37 @@ export function CreateUserModal({
             'Please select at least one device for the user to control.',
         });
       }
+
+      const clockDeviceIds = devices
+        .filter((d) => d.deviceType === 'clock')
+        .map((d) => d.device._id);
+
+      const attendanceDeviceIds = devices
+        .filter((d) => d.deviceType === 'attendance')
+        .map((d) => d.device._id);
+
+      const selectedClockDeviceIds = selectedDevices.filter((id) =>
+        clockDeviceIds.includes(id)
+      );
+
+      const selectedAttendanceDeviceIds = selectedDevices.filter((id) =>
+        attendanceDeviceIds.includes(id)
+      );
+
       const payload = {
         ...data,
         phone: data.phone || '',
         notes: data.notes || '',
-        deviceIds: selectedDevices,
-        deviceType: 'clock' as const,
+        devices: [
+          {
+            deviceIds: selectedClockDeviceIds,
+            deviceType: 'clock' as const,
+          },
+          {
+            deviceIds: selectedAttendanceDeviceIds,
+            deviceType: 'attendance' as const,
+          },
+        ],
       };
 
       const result = await createUserWithDevices({
@@ -119,7 +147,7 @@ export function CreateUserModal({
               <UserPlus className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h3 className="text-xl">Create New Admin</h3>
+              <h3 className="text-xl">Create New User</h3>
               <p className="text-xs">Add a new user to control IoT devices</p>
             </div>
           </DialogTitle>

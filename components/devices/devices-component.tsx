@@ -8,15 +8,20 @@ import AddDeviceModal from '../groups/add-device-modal';
 import DeviceSkeleton from '../loading/device-skeleton';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import AttendanceDevicesView from './attendance-devices-view';
 import ClockDevicesView from './clock-devices-view';
 
 export default function DevicesComponent({
   query,
+  dType = 'clock',
 }: {
   query?: { mode?: string; status?: string; search?: string; type?: string };
+  dType?: 'clock' | 'attendance';
 }) {
   const { mode, status, search, type } = query || {};
+  const [deviceType, setDeviceType] = useState<'clock' | 'attendance'>(dType);
   const queryString =
     `${mode ? `mode=${mode}&` : ''}${status ? `status=${status}&` : ''}${
       search ? `search=${search}&` : ''
@@ -28,6 +33,19 @@ export default function DevicesComponent({
   });
 
   const { data: user } = useProfileQuery();
+
+  const router = useRouter();
+
+  const handleDeviceTypeChange = (deviceType: 'clock' | 'attendance') => {
+    const params = new URLSearchParams();
+    if (mode) params.append('mode', mode);
+    if (status) params.append('status', status);
+    if (search) params.append('search', search);
+    if (type) params.append('type', type);
+    params.append('deviceType', deviceType);
+    setDeviceType(deviceType);
+    router.replace(`/devices?${params.toString()}`);
+  };
 
   if (isLoading) {
     return <DeviceSkeleton />;
@@ -57,7 +75,12 @@ export default function DevicesComponent({
       </div>
 
       <div className="flex w-full flex-col gap-6 py-3">
-        <Tabs defaultValue="clock">
+        <Tabs
+          defaultValue={deviceType}
+          onValueChange={(value) =>
+            handleDeviceTypeChange(value as 'clock' | 'attendance')
+          }
+        >
           <TabsList className="w-full sm:w-fit">
             <TabsTrigger value="clock" className="w-full sm:w-fit">
               <Clock className="mr-2 h-4 w-4" />
@@ -77,9 +100,6 @@ export default function DevicesComponent({
           </TabsContent>
         </Tabs>
       </div>
-
-      {/* </CardContent> */}
-      {/* </Card> */}
     </div>
   );
 }

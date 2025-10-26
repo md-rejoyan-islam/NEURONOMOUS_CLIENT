@@ -87,7 +87,7 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z
   .object({
-    resetCode: z.string().min(7, 'Reset code must be 7 digits'),
+    resetCode: z.string().min(6, 'Reset code must be 6 digits'),
     newPassword: z.string().min(6, 'Password must be at least 6 characters'),
     confirmPassword: z.string().min(1, 'Please confirm your password'),
   })

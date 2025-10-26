@@ -12,7 +12,7 @@ export const attendanceDevicesApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/proxy/api/v1',
   }),
-  keepUnusedDataFor: 0,
+  // keepUnusedDataFor: 0,
   tagTypes: ['Attendance'],
   endpoints: (builder) => ({
     getAllAttendanceDevices: builder.query<

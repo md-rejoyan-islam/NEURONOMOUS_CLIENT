@@ -2,8 +2,6 @@
 import SimpleSummaryCard from '@/components/cards/simple-summary-card';
 import ActiveClockDevice from '@/components/dashboard/active-clock-device';
 import ActiveUsers from '@/components/dashboard/active-users';
-import CpuUsage from '@/components/dashboard/cpu-usage';
-import MemoryUsage from '@/components/dashboard/memory-usage';
 import TimeDateShow from '@/components/dashboard/time-date.show';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -142,17 +140,20 @@ export default function Dashboard() {
       </section>
 
       {/* System Overview */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-        {data?.role === 'superadmin' && data?.cpu && (
-          <CpuUsage cpu={data?.cpu} />
-        )}
-        {data?.role === 'superadmin' && data?.memory && (
-          <MemoryUsage memory={data?.memory} />
-        )}
-
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2">
         <ActiveClockDevice />
-        {data?.role !== 'user' && <ActiveUsers />}
+        {data?.role !== 'user' && <ActiveUsers usersList={data?.users || []} />}
 
+        {/* <SimpleSummaryCard
+          label="Attendance Performance"
+          value={70 + '%'}
+          icon={<Sigma className="text-primary h-6 w-6" />}
+          valueColor="text-primary"
+        /> */}
+
+        {/* summary download options for superadmin ( clock devices, attendance devices, users, groups ) */}
+      </section>
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
         <SimpleSummaryCard
           label="Total Clocks Devices"
           value={data?.totalClockDevices || 0}
@@ -191,14 +192,6 @@ export default function Dashboard() {
             valueColor="text-primary"
           />
         )}
-        {/* <SimpleSummaryCard
-          label="Attendance Performance"
-          value={70 + '%'}
-          icon={<Sigma className="text-primary h-6 w-6" />}
-          valueColor="text-primary"
-        /> */}
-
-        {/* summary download options for superadmin ( clock devices, attendance devices, users, groups ) */}
       </section>
 
       {data?.role !== 'user' && <hr />}
