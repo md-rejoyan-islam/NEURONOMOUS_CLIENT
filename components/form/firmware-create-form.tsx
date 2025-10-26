@@ -22,13 +22,13 @@ import TextField from './text-field';
 
 const FirmwareCreateForm = () => {
   const [dragActive, setDragActive] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadFirmware, { isLoading: isUploading }] =
     useCreateFirmwareMutation();
 
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     clearErrors,
     resetField,
@@ -60,6 +60,7 @@ const FirmwareCreateForm = () => {
 
       if (binFile) {
         setValue('file', binFile);
+        setSelectedFile(binFile);
         clearErrors('file');
         toast.success('File selected: ', {
           description: `Selected: ${binFile.name}`,
@@ -77,6 +78,7 @@ const FirmwareCreateForm = () => {
     const file = e.target.files?.[0];
     if (file) {
       setValue('file', file);
+      setSelectedFile(file);
     }
   };
 
@@ -96,6 +98,7 @@ const FirmwareCreateForm = () => {
       reset();
       resetField('file');
       resetField('device_type');
+      setSelectedFile(null);
 
       // eslint-disable-next-line
     } catch (error: any) {
@@ -150,9 +153,9 @@ const FirmwareCreateForm = () => {
           <p className="mt-2 text-xs text-gray-500">
             Only .bin files up to 5MB
           </p>
-          {watch('file') && (
+          {selectedFile && (
             <p className="mt-2 text-sm text-green-600">
-              Selected: {(watch('file') as File)?.name}
+              Selected: {selectedFile.name}
             </p>
           )}
         </div>

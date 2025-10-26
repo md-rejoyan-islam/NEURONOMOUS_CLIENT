@@ -9,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { IGroupWithPopulatedData } from '@/lib/types';
 import { UserCreateInput, userCreateSchema } from '@/lib/validations';
 import { useProfileQuery } from '@/queries/auth';
 import {
@@ -40,7 +39,6 @@ const CreateUserFrom = () => {
   });
 
   const { data: groups } = useGetAllGroupsQuery('');
-  const [selectedGroup] = useState<IGroupWithPopulatedData | null>(null);
 
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [creating] = useState(false);
@@ -87,6 +85,8 @@ const CreateUserFrom = () => {
         deviceIds: selectedDevices,
         deviceType: 'clock' as const,
       };
+
+      console.log(payload, createUserWithDevices);
 
       // const result = await createUserWithDevices({
       //   id: selectedGroup?._id || '',

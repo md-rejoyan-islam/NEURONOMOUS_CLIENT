@@ -29,7 +29,7 @@ import {
   Upload,
   UserPlus,
 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -51,8 +51,8 @@ const GroupStudents = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [editStudentId, setEditStudentId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>(search);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const { data: students, isLoading } = useGetDepartmentStudentsQuery(
     {
@@ -81,7 +81,6 @@ const GroupStudents = ({
   });
   const {
     handleSubmit: handleFileSubmit,
-    watch,
     setValue: setFile,
     clearErrors,
     reset: resetFile,
@@ -95,15 +94,17 @@ const GroupStudents = ({
   };
   const handleSearch = (value: string) => {
     setSearchTerm(value);
-    const query = new URLSearchParams(Array.from(searchParams.entries()));
+    const currentUrl = new URL(window.location.href);
     if (value) {
-      query.set('search', value);
+      currentUrl.searchParams.set('search', value);
     } else {
-      query.delete('search');
+      currentUrl.searchParams.delete('search');
     }
-    query.delete('page');
+    currentUrl.searchParams.delete('page');
     const timer = setTimeout(() => {
-      router.push(`${window.location.pathname}?${query.toString()}`);
+      router.push(
+        `${window.location.pathname}?${currentUrl.searchParams.toString()}`
+      );
     }, 500);
 
     return () => clearTimeout(timer);
@@ -126,6 +127,7 @@ const GroupStudents = ({
       const binFile = files.find((file) => file.name.endsWith('.json'));
       if (binFile) {
         setFile('file', binFile);
+        setSelectedFile(binFile);
         clearErrors('file');
         toast.success('File selected: ', {
           description: `Selected: ${binFile.name}`,
@@ -142,6 +144,7 @@ const GroupStudents = ({
     const file = e.target.files?.[0];
     if (file) {
       setFile('file', file);
+      setSelectedFile(file);
     }
   };
 
@@ -188,6 +191,7 @@ const GroupStudents = ({
         description: `Students have been uploaded successfully.`,
       });
       setCreateModal(false);
+      setSelectedFile(null);
       resetFile();
 
       // eslint-disable-next-line
@@ -387,7 +391,14 @@ const GroupStudents = ({
           </form>
         </DialogContent>
       </Dialog>
-      <Dialog open={createModal} onOpenChange={() => setCreateModal(false)}>
+      <Dialog
+        open={createModal}
+        onOpenChange={() => {
+          setCreateModal(false);
+          setSelectedFile(null);
+          resetFile();
+        }}
+      >
         <DialogContent className="sm:max-w-[500px]">
           <AlertDialogHeader className="">
             <DialogTitle className="flex items-center gap-2">
@@ -442,9 +453,9 @@ const GroupStudents = ({
                   <p className="mt-2 text-xs text-gray-500">
                     Only .json files up to 10MB
                   </p>
-                  {watch('file') && (
+                  {selectedFile && (
                     <p className="mt-2 text-sm text-green-600">
-                      Selected: {(watch('file') as File)?.name}
+                      Selected: {selectedFile.name}
                     </p>
                   )}
                 </div>

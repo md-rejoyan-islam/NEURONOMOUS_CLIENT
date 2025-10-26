@@ -39,7 +39,6 @@ export function ChangePasswordModal({
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
   } = useForm<ChangePasswordInput>({
     resolver: zodResolver(changePasswordSchema),
   });
@@ -101,8 +100,8 @@ export function ChangePasswordModal({
             error={errors.confirmPassword?.message}
             props={register('confirmPassword', {
               required: 'Please confirm your new password',
-              validate: (value) =>
-                value === watch('newPassword') || 'Passwords do not match',
+              // validate: (value) =>
+              //   value === watch('newPassword') || 'Passwords do not match',
             })}
             disabled={isLoading}
           />

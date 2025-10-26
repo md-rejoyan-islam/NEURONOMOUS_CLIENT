@@ -1,7 +1,0 @@
-{
-  "extends": ["recommended"],
-  "rules": {
-    "no-unused-vars": "warn",
-    "no-implicit-coercion": "off"
-  }
-}

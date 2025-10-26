@@ -15,7 +15,7 @@ import {
 } from '@/queries/devices';
 import { Bell, Clock, Cog, Cuboid, Trash2, Wifi, WifiOff } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import SmallLoading from '../loading/small-loading';
 import NormalTable from '../table/normal-table';
@@ -41,6 +41,7 @@ import TimeFormatChange from './time-format-change';
 
 export default function SingleDevice({ id }: { id: string }) {
   const { data: user } = useProfileQuery();
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
 
   const {
     data: device,
@@ -52,7 +53,7 @@ export default function SingleDevice({ id }: { id: string }) {
   const { data: schedules, refetch } = useGetAllScheduledNoticesQuery({ id });
 
   const runningStopwatch = device?.stopwatches?.find(
-    (sw) => sw.start_time < Date.now() && sw.end_time > Date.now()
+    (sw) => sw.start_time < currentTime && sw.end_time > currentTime
   );
 
   const [deleteStopWatchSchedule, { isLoading: isDeletingSchedule }] =
@@ -74,6 +75,15 @@ export default function SingleDevice({ id }: { id: string }) {
       });
     }
   };
+
+  useEffect(() => {
+    // Update current time every second
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!device) return;
@@ -384,9 +394,9 @@ export default function SingleDevice({ id }: { id: string }) {
                               key={schedule._id + 'status' + index}
                               variant={'outline'}
                             >
-                              {schedule.start_time > Date.now()
+                              {schedule.start_time > currentTime
                                 ? 'Scheduled'
-                                : schedule.end_time > Date.now()
+                                : schedule.end_time > currentTime
                                   ? 'Running'
                                   : 'Completed'}
                             </Badge>,

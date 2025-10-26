@@ -15,12 +15,6 @@ export interface FirmwareCreateInput {
   description: string;
 }
 
-interface ISuccessResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
-}
-
 export const firmwareApi = createApi({
   reducerPath: 'firmwareApi',
   baseQuery: fetchBaseQuery({
