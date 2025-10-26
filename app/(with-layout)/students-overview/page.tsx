@@ -1,17 +1,17 @@
-'use client';
-import NormalTable from '@/components/table/normal-table';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useGetAllStudentsSummaryQuery } from '@/queries/student';
-import { DoorClosedLocked } from 'lucide-react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+"use client";
+import NormalTable from "@/components/table/normal-table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useGetAllStudentsSummaryQuery } from "@/queries/student";
+import { DoorClosedLocked } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const Page = () => {
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || '1';
-  const limit = searchParams.get('limit') || '20';
+  const page = searchParams.get("page") || "1";
+  const limit = searchParams.get("limit") || "20";
 
   const { data } = useGetAllStudentsSummaryQuery(`page=${page}&limit=${limit}`);
 
@@ -65,15 +65,15 @@ const Page = () => {
         <CardContent>
           <NormalTable
             headers={[
-              '#',
-              'Name',
-              'Registration',
-              'Session',
-              'Attendance',
-              'Percentage',
-              'Courses',
-              'Retaken',
-              'Department',
+              "#",
+              "Name",
+              "Registration",
+              "Session",
+              "Attendance",
+              "Percentage",
+              "Courses",
+              "Retaken",
+              "Department",
             ]}
             isLoading={false}
             totalItems={data?.pagination.items || 0}
@@ -101,7 +101,7 @@ const Page = () => {
                 student.department.name,
               ]) || []
             }
-            noDataMessage={'No students found.'}
+            noDataMessage={"No students found."}
           />
         </CardContent>
       </Card>

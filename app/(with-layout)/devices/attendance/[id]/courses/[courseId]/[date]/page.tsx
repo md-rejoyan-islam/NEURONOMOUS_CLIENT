@@ -1,19 +1,19 @@
-'use client';
-import { Card } from '@/components/ui/card';
-import { DoorClosedLocked } from 'lucide-react';
+"use client";
+import { Card } from "@/components/ui/card";
+import { DoorClosedLocked } from "lucide-react";
 
-import NormalTable from '@/components/table/normal-table';
-import { Badge } from '@/components/ui/badge';
-import { CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
+import NormalTable from "@/components/table/normal-table";
+import { Badge } from "@/components/ui/badge";
+import { CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import {
   useGetAttendanceRecordByDateQuery,
   useManuallyAttendanceRecordToggleMutation,
-} from '@/queries/course';
-import { useParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
-import { toast } from 'sonner';
+} from "@/queries/course";
+import { useParams } from "next/navigation";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 const Page = () => {
   const params = useParams();
@@ -22,10 +22,10 @@ const Page = () => {
 
   const { data: record, isLoading } = useGetAttendanceRecordByDateQuery(
     { courseId: courseId, date },
-    { skip: !courseId || !date }
+    { skip: !courseId || !date },
   );
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredRecord = useMemo(() => {
     if (!searchTerm) return record;
@@ -36,7 +36,7 @@ const Page = () => {
         (student) =>
           student.name.toLowerCase().includes(lowercasedTerm) ||
           student.registration_number.toLowerCase().includes(lowercasedTerm) ||
-          student.session.toLowerCase().includes(lowercasedTerm)
+          student.session.toLowerCase().includes(lowercasedTerm),
       ),
     };
   }, [record, searchTerm]);
@@ -47,14 +47,14 @@ const Page = () => {
   const handleAttendanceToggle = async (studentId: string) => {
     try {
       await recordToggle({ courseId: courseId, date, studentId }).unwrap();
-      toast.success('Attendance Record Updated', {
+      toast.success("Attendance Record Updated", {
         description: `Attendance record has been updated successfully.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to update record', {
+      toast.error("Failed to update record", {
         description:
-          error?.data?.message || 'Something went wrong. Please try again.',
+          error?.data?.message || "Something went wrong. Please try again.",
       });
     }
   };
@@ -127,8 +127,8 @@ const Page = () => {
                       (record?.present_students?.length /
                         record?.enrolled_students.length) *
                       100
-                    ).toFixed(2) + '%'
-                  : '0%'}
+                    ).toFixed(2) + "%"
+                  : "0%"}
               </p>
             </div>
           </div>
@@ -158,12 +158,12 @@ const Page = () => {
         <CardContent>
           <NormalTable
             headers={[
-              '#',
-              'Registration',
-              'Student Name',
-              'Sesstion',
-              'PresentBy',
-              'Status',
+              "#",
+              "Registration",
+              "Student Name",
+              "Sesstion",
+              "PresentBy",
+              "Status",
             ]}
             isLoading={isLoading}
             noDataMessage="No attendance records found."
@@ -173,20 +173,20 @@ const Page = () => {
                 rcd.registration_number,
                 rcd.name,
                 rcd.session,
-                <Badge variant={'outline'} key={'badge-' + rcd._id}>
+                <Badge variant={"outline"} key={"badge-" + rcd._id}>
                   {record?.present_students?.find(
                     (student) =>
                       student.student.registration_number ===
-                      rcd.registration_number
-                  )?.presentBy || ''}
+                      rcd.registration_number,
+                  )?.presentBy || ""}
                 </Badge>,
-                <div className="flex items-center" key={'div-' + rcd._id}>
+                <div className="flex items-center" key={"div-" + rcd._id}>
                   <Switch
                     className="scale-[1.1] cursor-pointer data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-600"
                     defaultChecked={record?.present_students.some(
                       (student) =>
                         student.student.registration_number ===
-                        rcd.registration_number
+                        rcd.registration_number,
                     )}
                     onCheckedChange={() => handleAttendanceToggle(rcd._id)}
                     disabled={isToggleLoading}
@@ -195,7 +195,7 @@ const Page = () => {
                   {record?.present_students.some(
                     (student) =>
                       student.student.registration_number ===
-                      rcd.registration_number
+                      rcd.registration_number,
                   ) ? (
                     <span className="ml-2 font-medium text-green-600">
                       Present

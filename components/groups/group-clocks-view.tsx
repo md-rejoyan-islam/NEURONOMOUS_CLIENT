@@ -1,12 +1,12 @@
-import { IDevice } from '@/lib/types';
-import { BoxesIcon } from 'lucide-react';
-import { Card, CardContent } from '../ui/card';
-import { Skeleton } from '../ui/skeleton';
-import SingleGroupDevice from './single-group-device';
+import { IDevice } from "@/lib/types";
+import { BoxesIcon } from "lucide-react";
+import { Card, CardContent } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
+import SingleGroupDevice from "./single-group-device";
 
 const GroupClocksView = ({
   id,
-  searchTerm = '',
+  searchTerm = "",
   filteredDevices = [],
   isLoading,
 }: {
@@ -45,8 +45,8 @@ const GroupClocksView = ({
               <h3 className="mb-2 text-lg font-medium">No devices found</h3>
               <p className="text-muted-foreground">
                 {searchTerm
-                  ? 'Try adjusting your search terms.'
-                  : 'Connect your IoT devices to get started.'}
+                  ? "Try adjusting your search terms."
+                  : "Connect your IoT devices to get started."}
               </p>
             </div>
           )}

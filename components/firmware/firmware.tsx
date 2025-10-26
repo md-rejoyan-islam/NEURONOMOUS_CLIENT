@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Card,
@@ -6,20 +6,20 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
-import DownloadFirmware from '@/components/firmware/download-firmware';
-import FirmwareStatusChange from '@/components/firmware/firmware-status-change';
-import FirmwareCreateForm from '@/components/form/firmware-create-form';
-import NormalTable from '@/components/table/normal-table';
+import DownloadFirmware from "@/components/firmware/download-firmware";
+import FirmwareStatusChange from "@/components/firmware/firmware-status-change";
+import FirmwareCreateForm from "@/components/form/firmware-create-form";
+import NormalTable from "@/components/table/normal-table";
 import {
   useDeleteFirmwareMutation,
   useGetAllFirmwareQuery,
-} from '@/queries/firmware';
-import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import DeleteConfirmationDialog from '../dialog-box/delete-confirmation-dialog';
+} from "@/queries/firmware";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import DeleteConfirmationDialog from "../dialog-box/delete-confirmation-dialog";
 
 export default function Firmware({
   page,
@@ -31,7 +31,7 @@ export default function Firmware({
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data, isLoading } = useGetAllFirmwareQuery(
-    `page=${page}&limit=${limit}`
+    `page=${page}&limit=${limit}`,
   );
 
   const [deleteFirmware, { isLoading: isDeleting }] =
@@ -42,25 +42,25 @@ export default function Firmware({
 
     try {
       await deleteFirmware(deleteId).unwrap();
-      toast.success('firmware deleted successfully', {
+      toast.success("firmware deleted successfully", {
         description: `Firmware ${deleteId} has been deleted.`,
       });
       setDeleteId(null);
       // eslint-disable-next-line
     } catch (error) {
-      toast.error('Delete failed', {
-        description: 'Failed to delete firmware. Please try again.',
+      toast.error("Delete failed", {
+        description: "Failed to delete firmware. Please try again.",
       });
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -94,14 +94,14 @@ export default function Firmware({
               itemsPerPage={data?.pagination?.limit || 10}
               totalItems={data?.pagination?.items || 0}
               headers={[
-                '#',
-                'Version',
-                'File Size',
-                'Status',
-                'Device Type',
-                'Description',
-                'Upload Date',
-                'Actions',
+                "#",
+                "Version",
+                "File Size",
+                "Status",
+                "Device Type",
+                "Description",
+                "Upload Date",
+                "Actions",
               ]}
               isLoading={isLoading}
               noDataMessage="No firmware versions available."

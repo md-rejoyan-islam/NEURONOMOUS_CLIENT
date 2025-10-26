@@ -1,5 +1,5 @@
-import { IAttendanceDeviceWithUsers, IDevice } from '@/lib/types';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IAttendanceDeviceWithUsers, IDevice } from "@/lib/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface ISuccessResponse<T> {
   success: boolean;
@@ -8,30 +8,30 @@ interface ISuccessResponse<T> {
 }
 
 export const attendanceDevicesApi = createApi({
-  reducerPath: 'attendacneDevicesApi',
+  reducerPath: "attendacneDevicesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1',
+    baseUrl: "/api/proxy/api/v1",
   }),
   // keepUnusedDataFor: 0,
-  tagTypes: ['Attendance'],
+  tagTypes: ["Attendance"],
   endpoints: (builder) => ({
     getAllAttendanceDevices: builder.query<
       IAttendanceDeviceWithUsers[],
       { query?: string }
     >({
       query: ({ query }) => ({
-        url: `/attendance-devices?${query ? query : ''}`,
-        method: 'GET',
+        url: `/attendance-devices?${query ? query : ""}`,
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IAttendanceDeviceWithUsers[]>).data,
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Attendance' as const, id })),
-              'Attendance',
+              ...result.map(({ id }) => ({ type: "Attendance" as const, id })),
+              "Attendance",
             ]
-          : ['Attendance'],
+          : ["Attendance"],
     }),
     getAttendanceDeviceById: builder.query<
       IAttendanceDeviceWithUsers,
@@ -39,22 +39,22 @@ export const attendanceDevicesApi = createApi({
     >({
       query: ({ id }) => ({
         url: `/attendance-devices/${id}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IAttendanceDeviceWithUsers>).data,
       providesTags: (result, error, { id }) =>
-        result ? [{ type: 'Attendance', id }] : ['Attendance'],
+        result ? [{ type: "Attendance", id }] : ["Attendance"],
     }),
     // You can add more endpoints like create, update, delete if needed
     getDevices: builder.query<IDevice, { id: string }>({
       query: ({ id }) => ({
         url: `/clock-devices/${id}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice>).data,
-      providesTags: ['Attendance'],
+      providesTags: ["Attendance"],
     }),
   }),
 });

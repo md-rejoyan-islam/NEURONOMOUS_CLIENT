@@ -1,50 +1,50 @@
-import { IFirmware, ISuccessResponseWithPagination } from '@/lib/types';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IFirmware, ISuccessResponseWithPagination } from "@/lib/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Firmware {
   _id: string;
   version: number;
-  type: 'single' | 'double';
+  type: "single" | "double";
   file: Buffer;
   description: string;
 }
 export interface FirmwareCreateInput {
   version: number;
-  type: 'single' | 'double';
+  type: "single" | "double";
   file: Buffer;
   description: string;
 }
 
 export const firmwareApi = createApi({
-  reducerPath: 'firmwareApi',
+  reducerPath: "firmwareApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1',
+    baseUrl: "/api/proxy/api/v1",
   }),
-  tagTypes: ['Firmware'],
+  tagTypes: ["Firmware"],
   endpoints: (builder) => ({
     getAllFirmware: builder.query<
       ISuccessResponseWithPagination<IFirmware[]>,
       string
     >({
       query: (query) => ({
-        url: `/firmwares${query ? `?${query}` : ''}`,
-        method: 'GET',
+        url: `/firmwares${query ? `?${query}` : ""}`,
+        method: "GET",
       }),
       providesTags: (result) =>
         result && result.data
           ? [
               ...result.data.map(({ _id }) => ({
-                type: 'Firmware' as const,
+                type: "Firmware" as const,
                 id: _id,
               })),
-              'Firmware',
+              "Firmware",
             ]
-          : ['Firmware'],
+          : ["Firmware"],
     }),
     downloadFirmware: builder.query<Blob, string>({
       query: (id) => ({
         url: `/firmwares/${id}/download`,
-        method: 'GET',
+        method: "GET",
         responseHandler: async (response) => {
           const buffer = await response.arrayBuffer();
           return new Uint8Array(buffer);
@@ -54,30 +54,30 @@ export const firmwareApi = createApi({
     deleteFirmware: builder.mutation<void, string>({
       query: (id) => ({
         url: `/firmwares/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Firmware'],
+      invalidatesTags: ["Firmware"],
     }),
     createFirmware: builder.mutation<Firmware, FormData>({
       query: (firmware) => {
         return {
-          url: '/firmwares',
-          method: 'POST',
+          url: "/firmwares",
+          method: "POST",
           body: firmware,
         };
       },
-      invalidatesTags: ['Firmware'],
+      invalidatesTags: ["Firmware"],
     }),
     firmwareStatusChange: builder.mutation<
       void,
-      { id: string; status: 'active' | 'inactive' }
+      { id: string; status: "active" | "inactive" }
     >({
       query: ({ id, status }) => ({
         url: `/firmwares/${id}/status`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { status },
       }),
-      invalidatesTags: ['Firmware'],
+      invalidatesTags: ["Firmware"],
     }),
   }),
 });

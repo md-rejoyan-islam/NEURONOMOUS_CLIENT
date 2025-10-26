@@ -1,26 +1,26 @@
-'use client';
-import InputField from '@/components/form/input-field';
-import NormalTable from '@/components/table/normal-table';
-import { AlertDialogHeader } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+"use client";
+import InputField from "@/components/form/input-field";
+import NormalTable from "@/components/table/normal-table";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import {
   EditStudentInDepartmentInput,
   editStudentInDepartmentSchema,
   StudentsUploadInput,
   studentsUploadSchema,
-} from '@/lib/validations';
+} from "@/lib/validations";
 import {
   useAddStudentsInDepartmentMutation,
   useEditStudentInDepartmentMutation,
   useGetDepartmentStudentsQuery,
   useRemoveStudentForDepartmentMutation,
-} from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   NotebookPen,
   PackagePlus,
@@ -28,12 +28,12 @@ import {
   Trash2,
   Upload,
   UserPlus,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
-import { useForm } from 'react-hook-form';
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
 
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
 const GroupStudents = ({
   _id,
@@ -57,11 +57,11 @@ const GroupStudents = ({
   const { data: students, isLoading } = useGetDepartmentStudentsQuery(
     {
       id: String(_id),
-      query: `page=${page}&limit=${limit}${search ? `&search=${search}` : ''}`,
+      query: `page=${page}&limit=${limit}${search ? `&search=${search}` : ""}`,
     },
     {
       skip: !_id,
-    }
+    },
   );
   const [editStudent, { isLoading: isEditLoading }] =
     useEditStudentInDepartmentMutation();
@@ -96,14 +96,14 @@ const GroupStudents = ({
     setSearchTerm(value);
     const currentUrl = new URL(window.location.href);
     if (value) {
-      currentUrl.searchParams.set('search', value);
+      currentUrl.searchParams.set("search", value);
     } else {
-      currentUrl.searchParams.delete('search');
+      currentUrl.searchParams.delete("search");
     }
-    currentUrl.searchParams.delete('page');
+    currentUrl.searchParams.delete("page");
     const timer = setTimeout(() => {
       router.push(
-        `${window.location.pathname}?${currentUrl.searchParams.toString()}`
+        `${window.location.pathname}?${currentUrl.searchParams.toString()}`,
       );
     }, 500);
 
@@ -112,9 +112,9 @@ const GroupStudents = ({
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
+    if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
-    } else if (e.type === 'dragleave') {
+    } else if (e.type === "dragleave") {
       setDragActive(false);
     }
   }, []);
@@ -124,26 +124,26 @@ const GroupStudents = ({
       e.stopPropagation();
       setDragActive(false);
       const files = Array.from(e.dataTransfer.files);
-      const binFile = files.find((file) => file.name.endsWith('.json'));
+      const binFile = files.find((file) => file.name.endsWith(".json"));
       if (binFile) {
-        setFile('file', binFile);
+        setFile("file", binFile);
         setSelectedFile(binFile);
-        clearErrors('file');
-        toast.success('File selected: ', {
+        clearErrors("file");
+        toast.success("File selected: ", {
           description: `Selected: ${binFile.name}`,
         });
       } else {
-        toast.error('Invalid file type', {
-          description: 'Please select a .json file',
+        toast.error("Invalid file type", {
+          description: "Please select a .json file",
         });
       }
     },
-    [clearErrors, setFile]
+    [clearErrors, setFile],
   );
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFile('file', file);
+      setFile("file", file);
       setSelectedFile(file);
     }
   };
@@ -159,7 +159,7 @@ const GroupStudents = ({
         session: data.session,
         rfid: data.rfid,
       }).unwrap();
-      toast.success('Student Updated', {
+      toast.success("Student Updated", {
         description: `Student ${data.name} has been updated successfully.`,
       });
       setIsOpen(false);
@@ -167,27 +167,27 @@ const GroupStudents = ({
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to update student', {
-        description: error?.data?.message || 'Failed to update student.',
+      toast.error("Failed to update student", {
+        description: error?.data?.message || "Failed to update student.",
       });
     }
   };
   const onFileSubmit = async (data: StudentsUploadInput) => {
     try {
       if (!data.file) {
-        return toast.error('Validation Error', {
-          description: 'Please select a .json file to upload.',
+        return toast.error("Validation Error", {
+          description: "Please select a .json file to upload.",
         });
       }
 
       const formData = new FormData();
 
-      formData.append('students', data.file);
-      formData.append('groupId', String(_id));
+      formData.append("students", data.file);
+      formData.append("groupId", String(_id));
 
       await uploadStudents(formData).unwrap();
 
-      toast.success('Students Uploaded', {
+      toast.success("Students Uploaded", {
         description: `Students have been uploaded successfully.`,
       });
       setCreateModal(false);
@@ -196,8 +196,8 @@ const GroupStudents = ({
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to upload students', {
-        description: error?.data?.message || 'Failed to upload students.',
+      toast.error("Failed to upload students", {
+        description: error?.data?.message || "Failed to upload students.",
       });
     }
   };
@@ -207,13 +207,13 @@ const GroupStudents = ({
         groupId: String(_id),
         studentId: id,
       }).unwrap();
-      toast.success('Student Removed', {
+      toast.success("Student Removed", {
         description: `Student has been removed from the group successfully.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to remove student', {
-        description: error?.data?.message || 'Failed to remove student.',
+      toast.error("Failed to remove student", {
+        description: error?.data?.message || "Failed to remove student.",
       });
     }
   };
@@ -259,13 +259,13 @@ const GroupStudents = ({
         <CardContent>
           <NormalTable
             headers={[
-              '# ',
-              'Registation ',
-              'Name',
-              'Session',
-              'phone',
-              'Email',
-              'Action',
+              "# ",
+              "Registation ",
+              "Name",
+              "Session",
+              "phone",
+              "Email",
+              "Action",
             ]}
             isLoading={isLoading}
             noDataMessage="No courses found."
@@ -281,21 +281,21 @@ const GroupStudents = ({
                 student.registration_number,
                 student.name,
                 student.session,
-                student.phone || 'N/A',
+                student.phone || "N/A",
                 student.email,
                 <div key="actions" className="flex items-center gap-3">
                   <button
                     className="cursor-pointer rounded-md bg-blue-100/60 p-2 text-blue-500 hover:bg-blue-200 dark:bg-blue-200/10 dark:hover:bg-blue-200/20"
                     onClick={() => {
                       setEditStudentId(student._id);
-                      setValue('name', student.name);
-                      setValue('email', student.email);
+                      setValue("name", student.name);
+                      setValue("email", student.email);
                       setValue(
-                        'registration_number',
-                        student.registration_number
+                        "registration_number",
+                        student.registration_number,
                       );
-                      setValue('session', student.session);
-                      setValue('rfid', student.rfid || '');
+                      setValue("session", student.session);
+                      setValue("rfid", student.rfid || "");
                       setIsOpen(true);
                     }}
                     title="Edit Student"
@@ -334,7 +334,7 @@ const GroupStudents = ({
               error={errors.name?.message}
               isOptional={false}
               props={{
-                ...register('name'),
+                ...register("name"),
               }}
               type="text"
             />
@@ -345,7 +345,7 @@ const GroupStudents = ({
               error={errors.email?.message}
               isOptional={false}
               props={{
-                ...register('email'),
+                ...register("email"),
               }}
               type="email"
             />
@@ -356,7 +356,7 @@ const GroupStudents = ({
               error={errors.registration_number?.message}
               isOptional={false}
               props={{
-                ...register('registration_number'),
+                ...register("registration_number"),
               }}
               type="text"
             />
@@ -367,7 +367,7 @@ const GroupStudents = ({
               error={errors.session?.message}
               isOptional={false}
               props={{
-                ...register('session'),
+                ...register("session"),
               }}
               type="text"
             />
@@ -378,14 +378,14 @@ const GroupStudents = ({
               error={errors.rfid?.message}
               isOptional={true}
               props={{
-                ...register('rfid'),
+                ...register("rfid"),
               }}
               type="text"
             />
 
             <div className="pt-4">
               <Button type="submit" className="w-full" disabled={isEditLoading}>
-                {isEditLoading ? 'Updating...' : 'Update Student'}
+                {isEditLoading ? "Updating..." : "Update Student"}
               </Button>
             </div>
           </form>
@@ -420,10 +420,10 @@ const GroupStudents = ({
               <Label htmlFor="file-upload" className="w-full pt-1">
                 <div
                   className={cn(
-                    'w-full rounded-lg border-2 border-dashed p-6 text-center transition-colors',
+                    "w-full rounded-lg border-2 border-dashed p-6 text-center transition-colors",
                     dragActive
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
-                      : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
+                      : "border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500",
                   )}
                   onDragEnter={handleDrag}
                   onDragLeave={handleDrag}
@@ -462,8 +462,8 @@ const GroupStudents = ({
               </Label>
               {fileErros.file && (
                 <p className="text-sm text-red-600">
-                  {typeof fileErros.file === 'object' &&
-                  'message' in fileErros.file
+                  {typeof fileErros.file === "object" &&
+                  "message" in fileErros.file
                     ? String((fileErros.file as { message?: string }).message)
                     : null}
                 </p>
@@ -472,7 +472,7 @@ const GroupStudents = ({
 
             <div className="pt-4">
               <Button type="submit" className="w-full" disabled={isfileLoading}>
-                {isfileLoading ? 'Uploading...' : 'Upload Students'}
+                {isfileLoading ? "Uploading..." : "Upload Students"}
               </Button>
             </div>
           </form>

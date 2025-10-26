@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useProfileQuery } from '@/queries/auth';
-import { ChevronLeft, ChevronRight, ChevronsUpDown, User } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { redirect, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useProfileQuery } from "@/queries/auth";
+import { ChevronLeft, ChevronRight, ChevronsUpDown, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect, usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '../ui/collapsible';
-import navigationItems from './navigation-items';
+} from "../ui/collapsible";
+import navigationItems from "./navigation-items";
 
 export function DashboardSidebar({ className }: { className?: string }) {
   const pathname = usePathname();
@@ -24,28 +24,28 @@ export function DashboardSidebar({ className }: { className?: string }) {
 
   const isActive = (path: string) => pathname === path;
 
-  const isSubItemActive = (path: string) => pathname.startsWith('/' + path);
+  const isSubItemActive = (path: string) => pathname.startsWith("/" + path);
   // pathname.split('/')[1] === path.split('/')[1];
 
   const filteredItems = navigationItems.filter(
-    (item) => user && item.roles.includes(user.role)
+    (item) => user && item.roles.includes(user.role),
   );
 
   if (
     user &&
     navigationItems.some(
-      (item) => item.href === pathname && !item.roles.includes(user.role)
+      (item) => item.href === pathname && !item.roles.includes(user.role),
     )
   ) {
-    redirect('/');
+    redirect("/");
   }
 
   return (
     <div
       className={cn(
-        'bg-card relative hidden h-full flex-col border-r transition-all duration-300 md:flex',
-        collapsed ? 'w-16' : 'w-64',
-        className
+        "bg-card relative hidden h-full flex-col border-r transition-all duration-300 md:flex",
+        collapsed ? "w-16" : "w-64",
+        className,
       )}
     >
       {/* Header */}
@@ -54,7 +54,7 @@ export function DashboardSidebar({ className }: { className?: string }) {
           <Link href="/dashboard" className="block">
             <div className="flex items-center gap-2">
               <Image
-                src={'/logo.png'}
+                src={"/logo.png"}
                 alt="Logo"
                 width={36}
                 height={36}
@@ -88,13 +88,13 @@ export function DashboardSidebar({ className }: { className?: string }) {
               {!item.isCollapsible ? (
                 <Link href={item.href} className="block">
                   <Button
-                    variant={isActive(item.href) ? 'secondary' : 'ghost'}
+                    variant={isActive(item.href) ? "secondary" : "ghost"}
                     className={cn(
-                      'h-10 w-full justify-start gap-3',
-                      collapsed && 'px-2',
+                      "h-10 w-full justify-start gap-3",
+                      collapsed && "px-2",
                       isActive(item.href) &&
-                        'bg-primary/10 text-primary hover:bg-primary/20',
-                      collapsed && 'w-10'
+                        "bg-primary/10 text-primary hover:bg-primary/20",
+                      collapsed && "w-10",
                     )}
                   >
                     <Icon className="h-4 w-4 flex-shrink-0" />
@@ -106,15 +106,15 @@ export function DashboardSidebar({ className }: { className?: string }) {
                   <CollapsibleTrigger asChild>
                     <Button
                       variant={
-                        isSubItemActive(item.href) ? 'secondary' : 'ghost'
+                        isSubItemActive(item.href) ? "secondary" : "ghost"
                       }
                       className={cn(
-                        'h-10 w-full justify-between gap-3',
-                        collapsed && 'px-2',
+                        "h-10 w-full justify-between gap-3",
+                        collapsed && "px-2",
                         isSubItemActive(item.href) &&
-                          'bg-primary/10 text-primary hover:bg-primary/20',
+                          "bg-primary/10 text-primary hover:bg-primary/20",
                         // 'text-primary hover:text-primary/80 bg-transparent shadow-none hover:bg-transparent',
-                        collapsed && 'w-10'
+                        collapsed && "w-10",
                       )}
                     >
                       <div className="flex items-center gap-3">
@@ -136,14 +136,14 @@ export function DashboardSidebar({ className }: { className?: string }) {
                           >
                             <Button
                               variant={
-                                isActive(subItem.href) ? 'secondary' : 'ghost'
+                                isActive(subItem.href) ? "secondary" : "ghost"
                               }
                               className={cn(
-                                'hover:text-primary h-8 w-full justify-start gap-3 hover:bg-transparent',
-                                collapsed && 'px-2',
+                                "hover:text-primary h-8 w-full justify-start gap-3 hover:bg-transparent",
+                                collapsed && "px-2",
                                 isActive(subItem.href) &&
-                                  'text-primary hover:text-primary/80 bg-transparent shadow-none hover:bg-transparent',
-                                collapsed && 'w-10'
+                                  "text-primary hover:text-primary/80 bg-transparent shadow-none hover:bg-transparent",
+                                collapsed && "w-10",
                               )}
                             >
                               <SubIcon className="h-4 w-4 flex-shrink-0" />
@@ -178,7 +178,7 @@ export function DashboardSidebar({ className }: { className?: string }) {
                 {user?.first_name} {user?.last_name}
               </p>
               <Badge variant="outline" className="text-xs capitalize">
-                {user?.role === 'superadmin' ? 'Super Admin' : user?.role}
+                {user?.role === "superadmin" ? "Super Admin" : user?.role}
               </Badge>
             </div>
           )}

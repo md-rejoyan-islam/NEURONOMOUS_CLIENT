@@ -1,11 +1,11 @@
-'use client';
-import NormalTable from '@/components/table/normal-table';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useGetStudentCoursesQuery } from '@/queries/student';
-import { DoorClosedLocked } from 'lucide-react';
-import { useParams } from 'next/navigation';
+"use client";
+import NormalTable from "@/components/table/normal-table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useGetStudentCoursesQuery } from "@/queries/student";
+import { DoorClosedLocked } from "lucide-react";
+import { useParams } from "next/navigation";
 
 const Page = () => {
   const params = useParams();
@@ -78,12 +78,12 @@ const Page = () => {
         <CardContent>
           <NormalTable
             headers={[
-              '#',
-              'Course Id',
-              'Course Name',
-              'Session',
-              'Attendance',
-              'Percentage',
+              "#",
+              "Course Id",
+              "Course Name",
+              "Session",
+              "Attendance",
+              "Percentage",
             ]}
             isLoading={false}
             data={

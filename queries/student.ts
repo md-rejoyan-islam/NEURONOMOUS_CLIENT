@@ -1,5 +1,5 @@
-import { IPagination } from '@/lib/types';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IPagination } from "@/lib/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface ISuccessResponse<T> {
   success: boolean;
@@ -46,28 +46,28 @@ interface IStudent {
 }
 
 export const studentApi = createApi({
-  reducerPath: 'studentsApi',
+  reducerPath: "studentsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1/students',
+    baseUrl: "/api/proxy/api/v1/students",
   }),
   keepUnusedDataFor: 0,
-  tagTypes: ['Students'],
+  tagTypes: ["Students"],
   endpoints: (builder) => ({
     getAllStudentsSummary: builder.query<ISuccessResponseSummary, string>({
       query: (query) => ({
         url: `/summary?${query}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) => response as ISuccessResponseSummary,
-      providesTags: ['Students'],
+      providesTags: ["Students"],
     }),
     getStudentCourses: builder.query<ISuccessResponse<IStudent>, string>({
       query: (id) => ({
         url: `/${id}/courses`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) => response as ISuccessResponse<IStudent>,
-      providesTags: ['Students'],
+      providesTags: ["Students"],
     }),
   }),
 });

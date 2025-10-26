@@ -1,10 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { socketManager } from '@/lib/socket';
-import { useGetUsersQuery } from '@/queries/users';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { socketManager } from "@/lib/socket";
+import { useGetUsersQuery } from "@/queries/users";
 
-import { Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Users } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const ActiveUsers = ({ usersList }: { usersList: string[] }) => {
   const { data: users } = useGetUsersQuery();
@@ -15,9 +15,9 @@ const ActiveUsers = ({ usersList }: { usersList: string[] }) => {
 
     if (!socket) return;
 
-    socket.emit('active-users', {}, (payload: string[]) => {
+    socket.emit("active-users", {}, (payload: string[]) => {
       const filteredActiveUsers = payload.filter((userId) =>
-        usersList.includes(userId)
+        usersList.includes(userId),
       );
       console.log(payload);
 
@@ -27,15 +27,15 @@ const ActiveUsers = ({ usersList }: { usersList: string[] }) => {
       setActiveUsers(filteredActiveUsers);
     });
 
-    socket.on('active-users', (payload: string[]) => {
+    socket.on("active-users", (payload: string[]) => {
       const filteredActiveUsers = payload.filter((userId) =>
-        usersList.includes(userId)
+        usersList.includes(userId),
       );
       setActiveUsers(filteredActiveUsers);
     });
 
     return () => {
-      socket.off('active-users');
+      socket.off("active-users");
     };
   }, [usersList]);
 

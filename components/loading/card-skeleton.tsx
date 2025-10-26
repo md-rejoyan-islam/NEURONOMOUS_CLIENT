@@ -1,13 +1,13 @@
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import clsx from 'clsx';
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import clsx from "clsx";
 const CardSkeleton = ({ index }: { index: number }) => {
   return (
     <Card
       className={clsx(
-        'flex-row items-center justify-between p-6',
-        index === 2 && 'hidden lg:flex',
-        index === 1 && 'hidden sm:flex'
+        "flex-row items-center justify-between p-6",
+        index === 2 && "hidden lg:flex",
+        index === 1 && "hidden sm:flex",
       )}
       key={index}
     >

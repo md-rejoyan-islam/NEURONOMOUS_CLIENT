@@ -1,9 +1,9 @@
-import Dashboard from '@/components/dashboard/dashboard';
-import { Metadata } from 'next';
+import Dashboard from "@/components/dashboard/dashboard";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
-  description: 'Overview of your IoT devices and system status',
+  title: "Dashboard",
+  description: "Overview of your IoT devices and system status",
 };
 
 const DashboardPage = () => {

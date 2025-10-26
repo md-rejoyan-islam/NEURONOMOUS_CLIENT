@@ -1,24 +1,24 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
-import { FirmwareFormData, firmwareSchema } from '@/lib/validations';
-import { useCreateFirmwareMutation } from '@/queries/firmware';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Upload } from 'lucide-react';
-import { useCallback, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+"use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { FirmwareFormData, firmwareSchema } from "@/lib/validations";
+import { useCreateFirmwareMutation } from "@/queries/firmware";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Upload } from "lucide-react";
+import { useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import InputField from './input-field';
-import TextField from './text-field';
+} from "../ui/select";
+import InputField from "./input-field";
+import TextField from "./text-field";
 
 const FirmwareCreateForm = () => {
   const [dragActive, setDragActive] = useState<boolean>(false);
@@ -41,9 +41,9 @@ const FirmwareCreateForm = () => {
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
+    if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
-    } else if (e.type === 'dragleave') {
+    } else if (e.type === "dragleave") {
       setDragActive(false);
     }
   }, []);
@@ -56,28 +56,28 @@ const FirmwareCreateForm = () => {
 
       const files = Array.from(e.dataTransfer.files);
 
-      const binFile = files.find((file) => file.name.endsWith('.bin'));
+      const binFile = files.find((file) => file.name.endsWith(".bin"));
 
       if (binFile) {
-        setValue('file', binFile);
+        setValue("file", binFile);
         setSelectedFile(binFile);
-        clearErrors('file');
-        toast.success('File selected: ', {
+        clearErrors("file");
+        toast.success("File selected: ", {
           description: `Selected: ${binFile.name}`,
         });
       } else {
-        toast.error('Invalid file type', {
-          description: 'Please select a .bin file',
+        toast.error("Invalid file type", {
+          description: "Please select a .bin file",
         });
       }
     },
-    [setValue, clearErrors]
+    [setValue, clearErrors],
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setValue('file', file);
+      setValue("file", file);
       setSelectedFile(file);
     }
   };
@@ -85,27 +85,27 @@ const FirmwareCreateForm = () => {
   const onSubmit = async (data: FirmwareFormData) => {
     try {
       const formData = new FormData();
-      formData.append('file', data.file);
-      formData.append('version', data.version);
-      formData.append('description', data.description);
-      formData.append('device_type', data.device_type);
+      formData.append("file", data.file);
+      formData.append("version", data.version);
+      formData.append("description", data.description);
+      formData.append("device_type", data.device_type);
 
       await uploadFirmware(formData).unwrap();
-      toast.success('Firmware uploaded successfully', {
+      toast.success("Firmware uploaded successfully", {
         description: `Version ${data.version} has been uploaded.`,
       });
 
       reset();
-      resetField('file');
-      resetField('device_type');
+      resetField("file");
+      resetField("device_type");
       setSelectedFile(null);
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Upload failed', {
+      toast.error("Upload failed", {
         description:
           error?.data?.message ||
-          'Failed to upload firmware. Please try again.',
+          "Failed to upload firmware. Please try again.",
       });
     }
   };
@@ -120,10 +120,10 @@ const FirmwareCreateForm = () => {
         </Label>
         <div
           className={cn(
-            'rounded-lg border-2 border-dashed p-6 text-center transition-colors',
+            "rounded-lg border-2 border-dashed p-6 text-center transition-colors",
             dragActive
-              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
-              : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
+              ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
+              : "border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500",
           )}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -161,7 +161,7 @@ const FirmwareCreateForm = () => {
         </div>
         {errors.file && (
           <p className="text-sm text-red-600">
-            {typeof errors.file === 'object' && 'message' in errors.file
+            {typeof errors.file === "object" && "message" in errors.file
               ? String((errors.file as { message?: string }).message)
               : null}
           </p>
@@ -175,7 +175,7 @@ const FirmwareCreateForm = () => {
         placeholder="e.g., 2.1.0"
         isOptional={false}
         error={errors.version?.message}
-        props={{ ...register('version') }}
+        props={{ ...register("version") }}
       />
       <div className="space-y-2">
         <Label>
@@ -184,7 +184,7 @@ const FirmwareCreateForm = () => {
         </Label>
         <Select
           onValueChange={(value) =>
-            setValue('device_type', value as 'clock' | 'attendance', {
+            setValue("device_type", value as "clock" | "attendance", {
               shouldValidate: true,
             })
           }
@@ -208,12 +208,12 @@ const FirmwareCreateForm = () => {
         label="Firmware Description"
         placeholder="Brief description of this firmware version..."
         error={errors.description?.message}
-        props={{ ...register('description') }}
+        props={{ ...register("description") }}
         isOptional={false}
       />
 
       <Button type="submit" className="w-full" disabled={isUploading}>
-        {isUploading ? 'Uploading...' : 'Upload Firmware'}
+        {isUploading ? "Uploading..." : "Upload Firmware"}
       </Button>
     </form>
   );

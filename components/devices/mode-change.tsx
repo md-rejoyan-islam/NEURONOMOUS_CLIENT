@@ -1,10 +1,10 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { IDevice } from '@/lib/types';
-import { useChangeDeviceModeMutation } from '@/queries/devices';
-import { ShieldCheck } from 'lucide-react';
-import { toast } from 'sonner';
-import { Button } from '../ui/button';
-import { Label } from '../ui/label';
+import { Card, CardContent } from "@/components/ui/card";
+import { IDevice } from "@/lib/types";
+import { useChangeDeviceModeMutation } from "@/queries/devices";
+import { ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 
 const ModeChange = ({
   device,
@@ -13,7 +13,7 @@ const ModeChange = ({
 }: {
   device: IDevice;
   id: string;
-  newMode: 'clock' | 'notice';
+  newMode: "clock" | "notice";
 }) => {
   // Form states
   //   const [mode, setMode] = useState<'clock' | 'notice'>(device.mode);
@@ -21,18 +21,18 @@ const ModeChange = ({
 
   const handleModeSubmit = async () => {
     try {
-      const mode = device.mode === 'notice' ? 'clock' : 'notice';
+      const mode = device.mode === "notice" ? "clock" : "notice";
 
       await changeMode({ id, mode }).unwrap();
 
-      toast.success('Device Mode Updated', {
+      toast.success("Device Mode Updated", {
         description: `Device mode changed to ${mode}.`,
       });
       // refetch();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update Failed', {
-        description: error?.data?.message || 'Failed to update device mode.',
+      toast.error("Update Failed", {
+        description: error?.data?.message || "Failed to update device mode.",
       });
     }
   };
@@ -49,14 +49,14 @@ const ModeChange = ({
               Mode
             </Label>
             <p className="pt-2 text-xs">
-              {newMode === 'notice'
-                ? 'Switch the device to Notice mode to display important messages.'
-                : 'Switch the device to Clock mode to show the current time.'}
+              {newMode === "notice"
+                ? "Switch the device to Notice mode to display important messages."
+                : "Switch the device to Clock mode to show the current time."}
             </p>
           </div>
           <Button
             disabled={
-              device.mode === newMode || isLoading || device.status !== 'online'
+              device.mode === newMode || isLoading || device.status !== "online"
             }
             onClick={handleModeSubmit}
           >

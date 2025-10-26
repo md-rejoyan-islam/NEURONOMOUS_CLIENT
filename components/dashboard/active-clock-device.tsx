@@ -1,25 +1,25 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { socketManager } from '@/lib/socket';
-import { useGetAllDevicesQuery } from '@/queries/devices';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { socketManager } from "@/lib/socket";
+import { useGetAllDevicesQuery } from "@/queries/devices";
 
-import { CheckCircle, Wifi } from 'lucide-react';
-import { useEffect } from 'react';
+import { CheckCircle, Wifi } from "lucide-react";
+import { useEffect } from "react";
 
 const ActiveClockDevice = () => {
   const { data: devices, refetch: refetchAllDevices } = useGetAllDevicesQuery(
-    {}
+    {},
   );
   const activeDevices =
-    devices?.filter((d) => d.status === 'online').length || 0;
+    devices?.filter((d) => d.status === "online").length || 0;
 
   useEffect(() => {
     const socket = socketManager.connect();
     if (!socket) return;
     const handler = () => refetchAllDevices();
-    socket.on('device:status', handler);
+    socket.on("device:status", handler);
     return () => {
-      socket.off('device:status', handler);
+      socket.off("device:status", handler);
     };
     // eslint-disable-next-line
   }, []);

@@ -1,5 +1,5 @@
-import { Skeleton } from '@/components/ui/skeleton';
-import TableSkeleton from './table-skeleton';
+import { Skeleton } from "@/components/ui/skeleton";
+import TableSkeleton from "./table-skeleton";
 
 const GroupSkeleton = () => {
   return (

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { socketManager } from '@/lib/socket';
-import { useProfileQuery } from '@/queries/auth';
-import { Loader2 } from 'lucide-react';
-import { redirect } from 'next/navigation';
-import { useEffect } from 'react';
+import { socketManager } from "@/lib/socket";
+import { useProfileQuery } from "@/queries/auth";
+import { Loader2 } from "lucide-react";
+import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
 export function AuthGuard({
   children,
@@ -17,21 +17,21 @@ export function AuthGuard({
     if (!data) return;
 
     // Initialize socket connection when app starts (optional)
-    console.log('Initializing socket connection2...');
+    console.log("Initializing socket connection2...");
     const socket = socketManager.connect();
 
     if (socket) {
       socket.auth = { userId: data._id };
-      console.log('Socket manager initialized');
+      console.log("Socket manager initialized");
     } else {
-      console.log('Running without socket connection (offline mode)');
+      console.log("Running without socket connection (offline mode)");
     }
   }, [data]);
 
   if (error) {
     // console.log('ewew');
 
-    redirect('/login');
+    redirect("/login");
   }
 
   if (isLoading) {

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle, Bell, CheckCircle, Info, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertTriangle, Bell, CheckCircle, Info, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Notification {
   id: string;
-  type: 'info' | 'warning' | 'success' | 'error';
+  type: "info" | "warning" | "success" | "error";
   title: string;
   message: string;
   timestamp: string;
@@ -23,35 +23,35 @@ export default function NotificationsPage() {
     // Mock notifications data
     const mockNotifications: Notification[] = [
       {
-        id: '1',
-        type: 'success',
-        title: 'Device Connected',
-        message: 'Device device-001 has successfully connected to the network',
+        id: "1",
+        type: "success",
+        title: "Device Connected",
+        message: "Device device-001 has successfully connected to the network",
         timestamp: new Date().toISOString(),
         read: false,
       },
       {
-        id: '2',
-        type: 'warning',
-        title: 'High Memory Usage',
+        id: "2",
+        type: "warning",
+        title: "High Memory Usage",
         message:
-          'System memory usage has exceeded 80%. Consider optimizing resources.',
+          "System memory usage has exceeded 80%. Consider optimizing resources.",
         timestamp: new Date(Date.now() - 3600000).toISOString(),
         read: false,
       },
       {
-        id: '3',
-        type: 'info',
-        title: 'User Login',
-        message: 'User john.doe@example.com logged in successfully',
+        id: "3",
+        type: "info",
+        title: "User Login",
+        message: "User john.doe@example.com logged in successfully",
         timestamp: new Date(Date.now() - 7200000).toISOString(),
         read: true,
       },
       {
-        id: '4',
-        type: 'error',
-        title: 'Device Offline',
-        message: 'Device device-003 has gone offline unexpectedly',
+        id: "4",
+        type: "error",
+        title: "Device Offline",
+        message: "Device device-003 has gone offline unexpectedly",
         timestamp: new Date(Date.now() - 10800000).toISOString(),
         read: true,
       },
@@ -65,11 +65,11 @@ export default function NotificationsPage() {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'success':
+      case "success":
         return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'warning':
+      case "warning":
         return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'error':
+      case "error":
         return <AlertTriangle className="h-5 w-5 text-red-500" />;
       default:
         return <Info className="h-5 w-5 text-blue-500" />;
@@ -78,14 +78,14 @@ export default function NotificationsPage() {
 
   const getNotificationBadge = (type: string) => {
     switch (type) {
-      case 'success':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
-      case 'warning':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
-      case 'error':
-        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+      case "success":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+      case "warning":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+      case "error":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
       default:
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400';
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
     }
   };
 
@@ -95,7 +95,7 @@ export default function NotificationsPage() {
 
   const markAsRead = (id: string) => {
     setNotifications((prev) =>
-      prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif))
+      prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif)),
     );
   };
 
@@ -182,7 +182,7 @@ export default function NotificationsPage() {
                   Warnings
                 </p>
                 <p className="text-2xl font-bold text-yellow-600">
-                  {notifications.filter((n) => n.type === 'warning').length}
+                  {notifications.filter((n) => n.type === "warning").length}
                 </p>
               </div>
               <div className="rounded-full bg-yellow-100 p-3 dark:bg-yellow-900/20">
@@ -200,7 +200,7 @@ export default function NotificationsPage() {
                   Errors
                 </p>
                 <p className="text-2xl font-bold text-red-600">
-                  {notifications.filter((n) => n.type === 'error').length}
+                  {notifications.filter((n) => n.type === "error").length}
                 </p>
               </div>
               <div className="rounded-full bg-red-100 p-3 dark:bg-red-900/20">
@@ -226,8 +226,8 @@ export default function NotificationsPage() {
                 key={notification.id}
                 className={`rounded-lg border p-4 transition-colors ${
                   notification.read
-                    ? 'bg-muted/30 border-border'
-                    : 'bg-card border-primary/20 shadow-sm'
+                    ? "bg-muted/30 border-border"
+                    : "bg-card border-primary/20 shadow-sm"
                 }`}
               >
                 <div className="flex items-start gap-4">

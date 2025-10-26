@@ -1,6 +1,6 @@
-'use client';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+"use client";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const InputField = ({
   label,

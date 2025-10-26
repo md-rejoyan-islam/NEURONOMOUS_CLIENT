@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 
-import PasswordField from '@/components/form/password-field';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { getRoleColor, getRoleLabel } from '@/lib/helper';
-import { IUser } from '@/lib/types';
+import PasswordField from "@/components/form/password-field";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { getRoleColor, getRoleLabel } from "@/lib/helper";
+import { IUser } from "@/lib/types";
 import {
   AuthChangePasswordInput,
   authChangePasswordSchema,
   profileUpdateSchema,
   type ProfileUpdateInput,
-} from '@/lib/validations';
+} from "@/lib/validations";
 import {
   useChangePasswordMutation,
   useProfileQuery,
   useUpdateProfileMutation,
-} from '@/queries/auth';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@/queries/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Calendar,
   Clock,
@@ -36,17 +36,17 @@ import {
   Save,
   Shield,
   User,
-} from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const { data } = useProfileQuery();
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [mode, setMode] = useState<'view' | 'edit'>('view');
+  const [mode, setMode] = useState<"view" | "edit">("view");
   const [user] = useState<IUser | null>(data || null);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -67,18 +67,18 @@ export default function ProfilePage() {
         currentPassword: data.currentPassword,
       }).unwrap();
 
-      toast.success('Password Changed', {
-        description: 'Your password has been updated successfully.',
+      toast.success("Password Changed", {
+        description: "Your password has been updated successfully.",
       });
       reset();
 
       setIsOpen(false);
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Password Change Failed', {
+      toast.error("Password Change Failed", {
         description:
           error?.data?.message ||
-          'Failed to change password. Please try again.',
+          "Failed to change password. Please try again.",
       });
     }
   };
@@ -91,11 +91,11 @@ export default function ProfilePage() {
   } = useForm<ProfileUpdateInput>({
     resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
-      first_name: user?.first_name || '',
-      last_name: user?.last_name || '',
-      phone: user?.phone || '',
-      address: user?.address || '',
-      notes: user?.notes || '',
+      first_name: user?.first_name || "",
+      last_name: user?.last_name || "",
+      phone: user?.phone || "",
+      address: user?.address || "",
+      notes: user?.notes || "",
     },
   });
 
@@ -122,16 +122,16 @@ export default function ProfilePage() {
     try {
       await updateProfile(updatedUser).unwrap();
 
-      toast.success('Profile Updated', {
-        description: 'Your profile has been updated successfully.',
+      toast.success("Profile Updated", {
+        description: "Your profile has been updated successfully.",
       });
-      setMode('view');
+      setMode("view");
       setIsEditing(false);
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Profile Update Failed', {
-        description: error?.data?.message || 'Internal server error.',
+      toast.error("Profile Update Failed", {
+        description: error?.data?.message || "Internal server error.",
       });
     } finally {
       setSaving(false);
@@ -140,20 +140,20 @@ export default function ProfilePage() {
 
   const handleCancelEdit = () => {
     if (user) {
-      setValue('first_name', user.first_name);
-      setValue('last_name', user.last_name);
+      setValue("first_name", user.first_name);
+      setValue("last_name", user.last_name);
     }
     setIsEditing(false);
-    setMode('view');
+    setMode("view");
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -204,7 +204,7 @@ export default function ProfilePage() {
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
-                  {...register('first_name')}
+                  {...register("first_name")}
                   disabled={!isEditing || saving}
                 />
                 {errors.first_name && (
@@ -217,7 +217,7 @@ export default function ProfilePage() {
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
-                  {...register('last_name')}
+                  {...register("last_name")}
                   disabled={!isEditing || saving}
                 />
                 {errors.last_name && (
@@ -230,7 +230,7 @@ export default function ProfilePage() {
                 <Label htmlFor="lastName">Phone Number</Label>
                 <Input
                   id="phone"
-                  {...register('phone')}
+                  {...register("phone")}
                   disabled={!isEditing || saving}
                 />
                 {errors.phone && (
@@ -241,7 +241,7 @@ export default function ProfilePage() {
                 <Label htmlFor="lastName">Address</Label>
                 <Input
                   id="phone"
-                  {...register('address')}
+                  {...register("address")}
                   disabled={!isEditing || saving}
                 />
                 {errors.address && (
@@ -263,11 +263,11 @@ export default function ProfilePage() {
               <Separator />
 
               <div className="flex gap-2">
-                {mode === 'view' ? (
+                {mode === "view" ? (
                   <Button
                     onClick={(e) => {
                       e.preventDefault();
-                      setMode('edit');
+                      setMode("edit");
                       setIsEditing(true);
                     }}
                     type="button"
@@ -324,7 +324,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Status</span>
               <Badge
-                variant={user.status === 'active' ? 'default' : 'secondary'}
+                variant={user.status === "active" ? "default" : "secondary"}
               >
                 {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
               </Badge>
@@ -373,11 +373,11 @@ export default function ProfilePage() {
               label="New Password"
               placeholder="Enter new password"
               error={changePasswordErrors.newPassword?.message}
-              props={changePasswordRegister('newPassword', {
-                required: 'New password is required',
+              props={changePasswordRegister("newPassword", {
+                required: "New password is required",
                 minLength: {
                   value: 6,
-                  message: 'Password must be at least 6 characters',
+                  message: "Password must be at least 6 characters",
                 },
               })}
               disabled={isLoading}
@@ -386,7 +386,7 @@ export default function ProfilePage() {
               label="Current Password"
               placeholder="Enter your current password"
               error={changePasswordErrors.currentPassword?.message}
-              props={{ ...changePasswordRegister('currentPassword') }}
+              props={{ ...changePasswordRegister("currentPassword") }}
               disabled={isLoading}
             />
 

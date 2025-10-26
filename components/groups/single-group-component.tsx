@@ -1,6 +1,6 @@
-'use client';
-import SimpleSummaryCard from '@/components/cards/simple-summary-card';
-import AddDeviceModal from '@/components/groups/add-device-modal';
+"use client";
+import SimpleSummaryCard from "@/components/cards/simple-summary-card";
+import AddDeviceModal from "@/components/groups/add-device-modal";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,29 +8,29 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 import {
   useGetAttendanceDevicesInGroupQuery,
   useGetClocksInGroupQuery,
   useGetGroupdByIdQuery,
-} from '@/queries/group';
-import { Bell, Boxes, Search, TabletsIcon, Wifi, WifiOff } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import GroupSkeleton from '../loading/group-skeleton';
-import { Card, CardContent, CardTitle } from '../ui/card';
-import { Input } from '../ui/input';
+} from "@/queries/group";
+import { Bell, Boxes, Search, TabletsIcon, Wifi, WifiOff } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import GroupSkeleton from "../loading/group-skeleton";
+import { Card, CardContent, CardTitle } from "../ui/card";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import BulkOperationModel from './bulk-operation-model';
-import GroupAttendanceDeviceView from './group-attendance-device-view';
-import GroupDevicesView from './group-clocks-view';
+} from "../ui/select";
+import BulkOperationModel from "./bulk-operation-model";
+import GroupAttendanceDeviceView from "./group-attendance-device-view";
+import GroupDevicesView from "./group-clocks-view";
 
 const SingleGroupComponent = ({
   _id,
@@ -38,12 +38,12 @@ const SingleGroupComponent = ({
   search,
 }: {
   _id: string;
-  deviceType: 'clock' | 'attendance';
+  deviceType: "clock" | "attendance";
   search?: string;
 }) => {
   const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState<string>(search || '');
-  const [deviceType, setDeviceType] = useState<'clock' | 'attendance'>(dType);
+  const [searchTerm, setSearchTerm] = useState<string>(search || "");
+  const [deviceType, setDeviceType] = useState<"clock" | "attendance">(dType);
 
   const {
     data: group,
@@ -61,8 +61,8 @@ const SingleGroupComponent = ({
         search: searchTerm,
       },
       {
-        skip: !_id || deviceType !== 'clock',
-      }
+        skip: !_id || deviceType !== "clock",
+      },
     );
 
   const { data: attendanceDevices, isLoading: isAttendanceLoading } =
@@ -72,13 +72,13 @@ const SingleGroupComponent = ({
         search: searchTerm,
       },
       {
-        skip: !_id || deviceType !== 'attendance',
-      }
+        skip: !_id || deviceType !== "attendance",
+      },
     );
 
-  const handleDeviceTypeChange = (value: 'clock' | 'attendance') => {
+  const handleDeviceTypeChange = (value: "clock" | "attendance") => {
     setDeviceType(value);
-    setSearchTerm('');
+    setSearchTerm("");
     router.push(`/groups/all/${_id}?deviceType=${value}`);
   };
 
@@ -88,7 +88,7 @@ const SingleGroupComponent = ({
     const timeout = setTimeout(() => {
       if (term) {
         router.replace(
-          `/groups/all/${_id}?deviceType=${deviceType}&search=${term}`
+          `/groups/all/${_id}?deviceType=${deviceType}&search=${term}`,
         );
       } else {
         router.replace(`/groups/all/${_id}?deviceType=${deviceType}`);
@@ -103,7 +103,7 @@ const SingleGroupComponent = ({
   }
 
   if (error) {
-    throw new Error('Failed to fetch group data');
+    throw new Error("Failed to fetch group data");
   }
 
   return (
@@ -165,14 +165,14 @@ const SingleGroupComponent = ({
               </h3>
               <p className="mt-1 text-sm font-semibold">
                 {group?.createdAt
-                  ? new Date(group?.createdAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
+                  ? new Date(group?.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })
-                  : 'N/A'}
+                  : "N/A"}
               </p>
             </div>
             <div className="">
@@ -201,7 +201,7 @@ const SingleGroupComponent = ({
               </h3>
               <p className="mt-1 text-sm font-semibold">
                 <Link
-                  href={'/groups/all/' + _id + '/courses'}
+                  href={"/groups/all/" + _id + "/courses"}
                   rel="noopener noreferrer"
                   className="mt-1 font-semibold text-blue-600 hover:underline"
                 >
@@ -215,7 +215,7 @@ const SingleGroupComponent = ({
               </h3>
               <p className="mt-1 text-sm font-semibold">
                 <Link
-                  href={'/groups/all/' + _id + '/students'}
+                  href={"/groups/all/" + _id + "/students"}
                   rel="noopener noreferrer"
                   className="mt-1 font-semibold text-blue-600 hover:underline"
                 >
@@ -230,7 +230,7 @@ const SingleGroupComponent = ({
               </h3>
               <p className="mt-1 text-sm font-semibold">
                 <Link
-                  href={'/groups/all/' + _id + '/users'}
+                  href={"/groups/all/" + _id + "/users"}
                   rel="noopener noreferrer"
                   className="mt-1 font-semibold text-blue-600 hover:underline"
                 >
@@ -260,7 +260,7 @@ const SingleGroupComponent = ({
                 <Select
                   value={deviceType}
                   onValueChange={(value) =>
-                    handleDeviceTypeChange(value as 'clock' | 'attendance')
+                    handleDeviceTypeChange(value as "clock" | "attendance")
                   }
                 >
                   <SelectTrigger className="w-full min-w-[100px]">
@@ -274,7 +274,7 @@ const SingleGroupComponent = ({
               </div>
             </CardTitle>
             <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-              {deviceType === 'clock' && (
+              {deviceType === "clock" && (
                 <BulkOperationModel
                   devices={clockDevices ?? []}
                   refetch={refetchGroup}
@@ -298,9 +298,9 @@ const SingleGroupComponent = ({
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
         <SimpleSummaryCard
-          label={`Total ${deviceType === 'clock' ? 'Clock' : 'Attendance'} Devices`}
+          label={`Total ${deviceType === "clock" ? "Clock" : "Attendance"} Devices`}
           value={
-            deviceType === 'clock'
+            deviceType === "clock"
               ? (clockDevices?.length ?? 0)
               : (attendanceDevices?.length ?? 0)
           }
@@ -314,9 +314,9 @@ const SingleGroupComponent = ({
           label="Online"
           valueColor="text-green-600"
           value={
-            deviceType === 'clock'
-              ? (clockDevices?.filter((d) => d.status === 'online').length ?? 0)
-              : (attendanceDevices?.filter((d) => d.status === 'online')
+            deviceType === "clock"
+              ? (clockDevices?.filter((d) => d.status === "online").length ?? 0)
+              : (attendanceDevices?.filter((d) => d.status === "online")
                   .length ?? 0)
           }
           icon={<Wifi className="h-6 w-6 text-green-600 dark:text-green-400" />}
@@ -324,21 +324,21 @@ const SingleGroupComponent = ({
         <SimpleSummaryCard
           label="Ofline"
           value={
-            deviceType === 'clock'
-              ? (clockDevices?.filter((d) => d.status === 'offline').length ??
+            deviceType === "clock"
+              ? (clockDevices?.filter((d) => d.status === "offline").length ??
                 0)
-              : (attendanceDevices?.filter((d) => d.status === 'offline')
+              : (attendanceDevices?.filter((d) => d.status === "offline")
                   .length ?? 0)
           }
           valueColor="text-red-600"
           icon={<WifiOff className="h-6 w-6 text-red-600 dark:text-red-400" />}
         />
 
-        {deviceType === 'clock' && (
+        {deviceType === "clock" && (
           <SimpleSummaryCard
             label="Notice Mode"
             valueColor="text-orange-600"
-            value={clockDevices?.filter((d) => d.mode === 'notice').length ?? 0}
+            value={clockDevices?.filter((d) => d.mode === "notice").length ?? 0}
             icon={
               <Bell className="h-6 w-6 text-orange-600 dark:text-orange-400" />
             }
@@ -347,7 +347,7 @@ const SingleGroupComponent = ({
       </div>
 
       {/* Search and Filter */}
-      {deviceType === 'clock' && (
+      {deviceType === "clock" && (
         <GroupDevicesView
           id={_id}
           filteredDevices={clockDevices ?? []}
@@ -355,7 +355,7 @@ const SingleGroupComponent = ({
           isLoading={isClocksLoading}
         />
       )}
-      {deviceType === 'attendance' && (
+      {deviceType === "attendance" && (
         <GroupAttendanceDeviceView
           filteredDevices={attendanceDevices ?? []}
           searchTerm={searchTerm}

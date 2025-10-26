@@ -1,9 +1,9 @@
-import { AlertDialogHeader } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -11,16 +11,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   useGetAllowedUsersForDeviceQuery,
   useGiveDeviceAccessToUserMutation,
   useRevolkDeviceAccessFromUserMutation,
-} from '@/queries/devices';
-import { useGetAllUsersInGroupQuery } from '@/queries/group';
-import { AlertTriangle, KeyRound, LogOut, Users } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
+} from "@/queries/devices";
+import { useGetAllUsersInGroupQuery } from "@/queries/group";
+import { AlertTriangle, KeyRound, LogOut, Users } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,15 +31,15 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
   const handleRevokeAccess = async (userId: string) => {
     try {
       await revolkDeviceAccess({ userId, deviceId: id }).unwrap();
-      toast.success('Device Access Revoked', {
-        description: 'User access to the device has been revoked.',
+      toast.success("Device Access Revoked", {
+        description: "User access to the device has been revoked.",
       });
       refetchAllowUsers();
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log('Error revoking access:', error);
-      toast.error('Failed to revoke access', {
-        description: error?.data?.message || 'Failed to revoke device access.',
+      console.log("Error revoking access:", error);
+      toast.error("Failed to revoke access", {
+        description: error?.data?.message || "Failed to revoke device access.",
       });
     }
   };
@@ -48,15 +48,15 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
     setSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
+        : [...prev, userId],
     );
   };
   const [giveDeviceAccess, { isLoading }] = useGiveDeviceAccessToUserMutation();
   const handleAddUserToDevice = async () => {
     try {
       await giveDeviceAccess({ userIds: selectedUsers, deviceId: id }).unwrap();
-      toast.success('Device Access Granted', {
-        description: 'Selected users have been granted access to the device.',
+      toast.success("Device Access Granted", {
+        description: "Selected users have been granted access to the device.",
       });
       setSelectedUsers([]);
       setIsOpen(false);
@@ -64,23 +64,23 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
 
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log('Error creating group:', error);
+      console.log("Error creating group:", error);
 
-      toast.error('Failed to add device', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Failed to add device", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     }
   };
   const { data: groupMembers } =
     useGetAllUsersInGroupQuery({
-      id: group || '',
-      query: 'limit=1000',
+      id: group || "",
+      query: "limit=1000",
     }) || [];
 
   const withoutAccessUsers =
     groupMembers?.members?.filter(
       (user) =>
-        !allowedUsers?.some((u) => u._id === user._id) && user.role !== 'admin'
+        !allowedUsers?.some((u) => u._id === user._id) && user.role !== "admin",
     ) || [];
   return (
     <>
@@ -140,7 +140,7 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
                             // title="Remove User from Allowed List"
                           >
                             <button
-                              disabled={user.role === 'admin'}
+                              disabled={user.role === "admin"}
                               onClick={() => handleRevokeAccess(user._id)}
                               className="cursor-pointer text-red-500 hover:text-red-600 disabled:cursor-default disabled:text-red-200"
                             >
@@ -194,7 +194,7 @@ const DeviceAllowedUsers = ({ id, group }: { id: string; group?: string }) => {
                     <div className="min-w-0 flex-1">
                       <Label htmlFor={user._id} className="cursor-pointer">
                         <div className="text-sm font-medium">
-                          {user.first_name + ' ' + user.last_name}
+                          {user.first_name + " " + user.last_name}
                         </div>
                         <div className="text-muted-foreground text-xs">
                           {user.email}

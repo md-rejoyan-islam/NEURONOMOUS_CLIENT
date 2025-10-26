@@ -1,23 +1,23 @@
-'use client';
+"use client";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { PackagePlus } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '../ui/button';
-import { Label } from '../ui/label';
+} from "@/components/ui/dialog";
+import { PackagePlus } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import AttendanceDeviceAdd from './attendance-device-add';
-import ClockDeviceAdd from './clock-device-add';
+} from "../ui/select";
+import AttendanceDeviceAdd from "./attendance-device-add";
+import ClockDeviceAdd from "./clock-device-add";
 
 const AddDeviceModal = ({
   groupId,
@@ -28,8 +28,8 @@ const AddDeviceModal = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [deviceType, setDeviceType] = useState<'clock' | 'attendance' | null>(
-    null
+  const [deviceType, setDeviceType] = useState<"clock" | "attendance" | null>(
+    null,
   );
 
   // const onSubmit = async (data: AddDeviceToGroupInput) => {
@@ -80,7 +80,7 @@ const AddDeviceModal = ({
             <Label className="mb-2 block">Select Device Type</Label>
             <Select
               onValueChange={(value) =>
-                setDeviceType(value as 'clock' | 'attendance')
+                setDeviceType(value as "clock" | "attendance")
               }
             >
               <SelectTrigger className="w-full">
@@ -99,14 +99,14 @@ const AddDeviceModal = ({
             </p>
           )}
 
-          {deviceType === 'clock' && (
+          {deviceType === "clock" && (
             <ClockDeviceAdd
               refetchAllDevices={refetchAllDevices}
               groupId={groupId}
               setIsOpen={setIsOpen}
             />
           )}
-          {deviceType === 'attendance' && (
+          {deviceType === "attendance" && (
             <AttendanceDeviceAdd
               refetchAllDevices={refetchAllDevices}
               groupId={groupId}

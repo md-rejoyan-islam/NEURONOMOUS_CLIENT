@@ -1,7 +1,7 @@
-import InputField from '@/components/form/input-field';
-import PasswordField from '@/components/form/password-field';
-import TextField from '@/components/form/text-field';
-import { Button } from '@/components/ui/button';
+import InputField from "@/components/form/input-field";
+import PasswordField from "@/components/form/password-field";
+import TextField from "@/components/form/text-field";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,27 +10,27 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UserCreateInput, userCreateSchema } from '@/lib/validations';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UserCreateInput, userCreateSchema } from "@/lib/validations";
 import {
   useAddUserToGroupWithDevicesMutation,
   useGetAllUsersInGroupQuery,
   useGiveDevicesPermissionToUserMutation,
-} from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const TeacherAssignModel = ({
   isLoading,
@@ -48,11 +48,11 @@ const TeacherAssignModel = ({
   const { data: groupUsers } = useGetAllUsersInGroupQuery(
     {
       id: groupId,
-      query: 'limit=1000',
+      query: "limit=1000",
     },
     {
       skip: !groupId,
-    }
+    },
   );
 
   const {
@@ -64,7 +64,7 @@ const TeacherAssignModel = ({
     resolver: zodResolver(userCreateSchema),
   });
 
-  const users = groupUsers?.members.filter((user) => user.role !== 'admin');
+  const users = groupUsers?.members.filter((user) => user.role !== "admin");
   const [createUserWithDevices] = useAddUserToGroupWithDevicesMutation();
   const [giveDevicePermission] = useGiveDevicesPermissionToUserMutation();
 
@@ -79,7 +79,7 @@ const TeacherAssignModel = ({
 
           devices: [
             {
-              deviceType: 'attendance',
+              deviceType: "attendance",
               deviceIds: [deviceId],
             },
           ],
@@ -87,7 +87,7 @@ const TeacherAssignModel = ({
       }).unwrap();
       if (result.success) {
         setOpen(false);
-        toast.success('Teacher created & Assigned', {
+        toast.success("Teacher created & Assigned", {
           description: `Teacher has been assigned successfully.`,
         });
         setOpen(false);
@@ -96,8 +96,8 @@ const TeacherAssignModel = ({
       }
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to assign teacher', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Failed to assign teacher", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     }
   };
@@ -106,14 +106,14 @@ const TeacherAssignModel = ({
 
   const handleAssignTeacher = async () => {
     if (!teacherId) {
-      return toast.error('Please select a teacher to assign', {
-        description: 'No teacher selected.',
+      return toast.error("Please select a teacher to assign", {
+        description: "No teacher selected.",
       });
     }
     const teacher = users?.find((user) => user._id === teacherId);
     if (!teacher) {
-      return toast.error('Selected teacher not found', {
-        description: 'Please select a valid teacher.',
+      return toast.error("Selected teacher not found", {
+        description: "Please select a valid teacher.",
       });
     }
 
@@ -122,21 +122,21 @@ const TeacherAssignModel = ({
         id: groupId,
         payload: {
           userId: teacherId,
-          deviceType: 'attendance',
+          deviceType: "attendance",
           deviceIds: [deviceId],
         },
       }).unwrap();
       refetch?.();
 
-      toast.success('Teacher Assigned', {
+      toast.success("Teacher Assigned", {
         description: `Teacher has been assigned successfully.`,
       });
       setOpen(false);
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to assign teacher', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Failed to assign teacher", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     }
   };
@@ -186,7 +186,7 @@ const TeacherAssignModel = ({
                     error={errors.first_name?.message}
                     isOptional={false}
                     props={{
-                      ...register('first_name'),
+                      ...register("first_name"),
                     }}
                     type="text"
                   />
@@ -197,7 +197,7 @@ const TeacherAssignModel = ({
                     error={errors.last_name?.message}
                     isOptional={false}
                     props={{
-                      ...register('last_name'),
+                      ...register("last_name"),
                     }}
                     type="text"
                   />
@@ -210,7 +210,7 @@ const TeacherAssignModel = ({
                   error={errors.email?.message}
                   isOptional={false}
                   props={{
-                    ...register('email'),
+                    ...register("email"),
                   }}
                   type="text"
                 />
@@ -219,7 +219,7 @@ const TeacherAssignModel = ({
                   placeholder="Enter password"
                   error={errors.password?.message}
                   props={{
-                    ...register('password'),
+                    ...register("password"),
                   }}
                 />
                 <InputField
@@ -229,7 +229,7 @@ const TeacherAssignModel = ({
                   error={errors.phone?.message}
                   isOptional={true}
                   props={{
-                    ...register('phone'),
+                    ...register("phone"),
                   }}
                   type="text"
                 />
@@ -240,7 +240,7 @@ const TeacherAssignModel = ({
                   error={errors.notes?.message}
                   isOptional={true}
                   props={{
-                    ...register('notes'),
+                    ...register("notes"),
                   }}
                 />
                 <DialogFooter>
@@ -275,7 +275,7 @@ const TeacherAssignModel = ({
                           <SelectItem key={user._id} value={user._id}>
                             <div className="flex flex-col">
                               <span className="font-medium">
-                                {user.first_name + ' ' + user.last_name}
+                                {user.first_name + " " + user.last_name}
                               </span>
                               <span className="text-muted-foreground text-xs">
                                 {user.email}

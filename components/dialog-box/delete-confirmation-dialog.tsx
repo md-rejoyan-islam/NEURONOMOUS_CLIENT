@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   AlertDialog,
@@ -9,8 +9,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { CircleAlert } from 'lucide-react';
+} from "@/components/ui/alert-dialog";
+import { CircleAlert } from "lucide-react";
 
 const DeleteConfirmationDialog = ({
   open,

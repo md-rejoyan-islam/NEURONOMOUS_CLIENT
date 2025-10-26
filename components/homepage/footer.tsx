@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 const HomepageFooter = () => {
   return (
@@ -7,7 +7,7 @@ const HomepageFooter = () => {
         <div className="flex flex-col items-center justify-between text-center md:flex-row md:text-left">
           <a href="#" className="flex items-center space-x-2">
             <Image
-              src={'/logo.png'}
+              src={"/logo.png"}
               alt="Logo"
               width={32}
               height={32}

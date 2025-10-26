@@ -1,6 +1,6 @@
-import { IDevice, IScheduledNotice, IUser } from '@/lib/types';
-import { Device, DeviceUpdate } from '@/lib/validations';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IDevice, IScheduledNotice, IUser } from "@/lib/types";
+import { Device, DeviceUpdate } from "@/lib/validations";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface ISuccessResponse<T> {
   success: boolean;
@@ -9,9 +9,9 @@ interface ISuccessResponse<T> {
 }
 
 export const devicesApi = createApi({
-  reducerPath: 'devicesApi',
+  reducerPath: "devicesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1',
+    baseUrl: "/api/proxy/api/v1",
     // responseHandler: async (response) => {
     //   if (response.status === 301) {
     //     window.location.reload();
@@ -20,41 +20,41 @@ export const devicesApi = createApi({
     // },
   }),
   // keepUnusedDataFor: 0,
-  tagTypes: ['Device', 'ScheduledNotice'],
+  tagTypes: ["Device", "ScheduledNotice"],
   endpoints: (builder) => ({
     getAllDevices: builder.query<IDevice[], { query?: string }>({
       query: ({ query }) => ({
-        url: `/clock-devices?${query ? query : ''}`,
-        method: 'GET',
+        url: `/clock-devices?${query ? query : ""}`,
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice[]>).data,
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Device' as const, id })),
-              'Device',
+              ...result.map(({ id }) => ({ type: "Device" as const, id })),
+              "Device",
             ]
-          : ['Device'],
+          : ["Device"],
     }),
     getDevices: builder.query<IDevice, { id: string }>({
       query: ({ id }) => ({
         url: `/clock-devices/${id}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice>).data,
-      providesTags: ['Device', 'ScheduledNotice'],
+      providesTags: ["Device", "ScheduledNotice"],
     }),
     getDevice: builder.query<IDevice, { id: string }>({
       query: ({ id }) => ({
         url: `/clock-devices/${id}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice>).data,
       providesTags: (result, error, { id }) =>
-        result ? [{ type: 'Device', id }] : ['Device'],
+        result ? [{ type: "Device", id }] : ["Device"],
     }),
     updateDevice: builder.mutation<Device, { id: string; data: DeviceUpdate }>({
       queryFn: async ({ id, data }) => {
@@ -64,23 +64,23 @@ export const devicesApi = createApi({
         const updatedDevice: Device = {
           id,
           name: `Smart Display - ${id}`,
-          status: 'online',
+          status: "online",
           last_seen: new Date().toISOString(),
           mode: data.mode,
           current_notice: data.notice || null,
-          location: 'Sample Location',
+          location: "Sample Location",
           uptime: Math.floor(Math.random() * 604800),
           free_heap: Math.floor(Math.random() * 50000) + 30000,
           duration: data.duration || null,
-          font: data.font || 'Roboto',
-          time_format: data.time_format || '24h',
+          font: data.font || "Roboto",
+          time_format: data.time_format || "24h",
         };
 
         return { data: updatedDevice };
       },
       invalidatesTags: (result, error, { id }) => [
-        { type: 'Device', id },
-        'Device',
+        { type: "Device", id },
+        "Device",
       ],
     }),
     sendNoticeToDevices: builder.mutation<
@@ -91,23 +91,23 @@ export const devicesApi = createApi({
         await new Promise((resolve) => setTimeout(resolve, 1000));
         return { data: undefined };
       },
-      invalidatesTags: ['Device'],
+      invalidatesTags: ["Device"],
     }),
     changeDeviceMode: builder.mutation<void, { id: string; mode: string }>({
       query: ({ id, mode }) => ({
         url: `/clock-devices/${id}/change-mode`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { mode },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Device', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Device", id }],
     }),
     changeDeviceScene: builder.mutation<void, { id: string; scene: string }>({
       query: ({ id, scene }) => ({
         url: `/clock-devices/${id}/change-scene`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { scene },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Device', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Device", id }],
     }),
     sendNoticeToDevice: builder.mutation<
       void,
@@ -121,10 +121,10 @@ export const devicesApi = createApi({
     >({
       query: ({ id, notice, is_scheduled, start_time, end_time }) => ({
         url: `/clock-devices/${id}/send-notice`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { notice, is_scheduled, start_time, end_time },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Device', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Device", id }],
     }),
     sendNoticeToSelectedDevices: builder.mutation<
       void,
@@ -132,11 +132,11 @@ export const devicesApi = createApi({
     >({
       query: ({ deviceIds, notice, duration }) => ({
         url: `/clock-devices/send-notice`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { deviceIds, notice, duration },
       }),
       invalidatesTags: (result, error, { deviceIds }) =>
-        deviceIds.map((id) => ({ type: 'Device', id })),
+        deviceIds.map((id) => ({ type: "Device", id })),
     }),
 
     sendScheduledNoticeToSelectedDevices: builder.mutation<
@@ -150,22 +150,22 @@ export const devicesApi = createApi({
     >({
       query: ({ deviceIds, notice, startTime, endTime }) => ({
         url: `/clock-devices/scheduled-notice`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { deviceIds, notice, startTime, endTime },
       }),
       invalidatesTags: (result, error, { deviceIds }) =>
-        deviceIds.map((id) => ({ type: 'Device', id })),
+        deviceIds.map((id) => ({ type: "Device", id })),
     }),
     getAllScheduledNotices: builder.query<IScheduledNotice[], { id: string }>({
       query: ({ id }) => ({
         url: `/clock-devices/${id}/scheduled-notices`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IScheduledNotice[]>).data,
       providesTags: (result, error, { id }) => [
         {
-          type: 'ScheduledNotice',
+          type: "ScheduledNotice",
           id,
         },
       ],
@@ -176,21 +176,21 @@ export const devicesApi = createApi({
     >({
       query: ({ id, noticeId }) => ({
         url: `/clock-devices/${id}/scheduled-notices/${noticeId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
       invalidatesTags: (result, error, { id }) => [
-        { type: 'ScheduledNotice', id },
+        { type: "ScheduledNotice", id },
       ],
     }),
     getAllowedUsersForDevice: builder.query<IUser[], { id: string }>({
       query: ({ id }) => ({
         url: `/clock-devices/${id}/allowed-users`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IUser[]>).data,
       providesTags: (result, error, { id }) =>
-        result ? [{ type: 'Device', id }] : ['Device'],
+        result ? [{ type: "Device", id }] : ["Device"],
     }),
     // give device access to user by superadmin/admin
     giveDeviceAccessToUser: builder.mutation<
@@ -199,7 +199,7 @@ export const devicesApi = createApi({
     >({
       query: ({ userIds, deviceId }) => ({
         url: `/clock-devices/${deviceId}/give-device-access`,
-        method: 'POST',
+        method: "POST",
         body: { userIds },
       }),
     }),
@@ -209,20 +209,20 @@ export const devicesApi = createApi({
     >({
       query: ({ userId, deviceId }) => ({
         url: `/clock-devices/${deviceId}/revoke-device-access/${userId}`,
-        method: 'POST',
+        method: "POST",
       }),
     }),
     changeSelectedDeviceMode: builder.mutation<
       void,
-      { deviceIds: string[]; mode: 'clock' | 'notice' }
+      { deviceIds: string[]; mode: "clock" | "notice" }
     >({
       query: ({ deviceIds, mode }) => ({
         url: `/clock-devices/change-mode`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { mode, deviceIds },
       }),
       invalidatesTags: (result, error, { deviceIds }) =>
-        deviceIds.map((id) => ({ type: 'Device', id })),
+        deviceIds.map((id) => ({ type: "Device", id })),
     }),
     updateDeviceFirmware: builder.mutation<
       void,
@@ -230,20 +230,20 @@ export const devicesApi = createApi({
     >({
       query: ({ deviceId, firmwareId }) => ({
         url: `/clock-devices/${deviceId}/update-firmware`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { firmwareId },
       }),
       invalidatesTags: (result, error, { deviceId }) => [
-        { type: 'Device', id: deviceId },
+        { type: "Device", id: deviceId },
       ],
     }),
     deviceRestartById: builder.mutation<void, { deviceId: string }>({
       query: ({ deviceId }) => ({
         url: `/clock-devices/${deviceId}/restart`,
-        method: 'PATCH',
+        method: "PATCH",
       }),
       invalidatesTags: (result, error, { deviceId }) => [
-        { type: 'Device', id: deviceId },
+        { type: "Device", id: deviceId },
       ],
     }),
     startStopWatch: builder.mutation<
@@ -253,18 +253,18 @@ export const devicesApi = createApi({
         data: {
           start_time: number;
           end_time: number;
-          count_type: 'up' | 'down';
+          count_type: "up" | "down";
           is_scheduled: boolean;
         };
       }
     >({
       query: ({ deviceId, data }) => ({
         url: `/clock-devices/${deviceId}/stopwatch`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
       invalidatesTags: (result, error, { deviceId }) => [
-        { type: 'Device', id: deviceId },
+        { type: "Device", id: deviceId },
       ],
     }),
     stopStopWatch: builder.mutation<
@@ -273,10 +273,10 @@ export const devicesApi = createApi({
     >({
       query: ({ deviceId, stopwatchId }) => ({
         url: `/clock-devices/${deviceId}/stopwatch/${stopwatchId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
       invalidatesTags: (result, error, { deviceId }) => [
-        { type: 'Device', id: deviceId },
+        { type: "Device", id: deviceId },
       ],
     }),
     deleteStopWatchSchedule: builder.mutation<
@@ -285,10 +285,10 @@ export const devicesApi = createApi({
     >({
       query: ({ deviceId, scheduleId }) => ({
         url: `/clock-devices/${deviceId}/stopwatch/${scheduleId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
       invalidatesTags: (result, error, { deviceId }) => [
-        { type: 'Device', id: deviceId },
+        { type: "Device", id: deviceId },
       ],
     }),
   }),

@@ -4,18 +4,18 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { getStatusColor, getStatusIcon } from '@/lib/helper';
-import { IAttendanceDevice, IDevice } from '@/lib/types';
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { getStatusColor, getStatusIcon } from "@/lib/helper";
+import { IAttendanceDevice, IDevice } from "@/lib/types";
 import {
   useGiveDeviceAccessToUserMutation,
   useRevolkDeviceAccessFromUserMutation,
-} from '@/queries/devices';
+} from "@/queries/devices";
 
-import { MapPin } from 'lucide-react';
-import { Label } from 'recharts';
-import { toast } from 'sonner';
+import { MapPin } from "lucide-react";
+import { Label } from "recharts";
+import { toast } from "sonner";
 
 const UserDeviceAccess = ({
   devices = [],
@@ -35,22 +35,22 @@ const UserDeviceAccess = ({
   const clockDevices = devices
     .filter(
       (
-        d
+        d,
       ): d is {
-        deviceType: 'clock';
+        deviceType: "clock";
         device: IDevice;
-      } => d.deviceType === 'clock'
+      } => d.deviceType === "clock",
     )
     .map(({ device }) => device);
 
   const attendanceDevices = devices
     .filter(
       (
-        d
+        d,
       ): d is {
-        deviceType: 'attendance';
+        deviceType: "attendance";
         device: IAttendanceDevice;
-      } => d.deviceType === 'attendance'
+      } => d.deviceType === "attendance",
     )
     .map(({ device }) => device);
 
@@ -61,16 +61,16 @@ const UserDeviceAccess = ({
           userId: userId,
           deviceId: id,
         }).unwrap();
-        toast.success('Device Access Revoked', {
-          description: 'User access to the device has been revoked.',
+        toast.success("Device Access Revoked", {
+          description: "User access to the device has been revoked.",
         });
       } else {
         await giveDeviceAccessToUsers({
           userIds: [userId],
           deviceId: id,
         }).unwrap();
-        toast.success('Device Access Granted', {
-          description: 'User access to the device has been granted.',
+        toast.success("Device Access Granted", {
+          description: "User access to the device has been granted.",
         });
       }
 
@@ -78,9 +78,9 @@ const UserDeviceAccess = ({
 
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log('Error revoking access:', error);
-      toast.error('Failed to revoke access', {
-        description: error?.data?.message || 'Failed to revoke device access.',
+      console.log("Error revoking access:", error);
+      toast.error("Failed to revoke access", {
+        description: error?.data?.message || "Failed to revoke device access.",
       });
     }
   };
@@ -103,7 +103,7 @@ const UserDeviceAccess = ({
               <div className="flex items-center gap-3">
                 <div
                   className={`h-3 w-3 rounded-full ${getStatusColor(
-                    device.status
+                    device.status,
                   )}`}
                 />
                 <div>
@@ -123,7 +123,7 @@ const UserDeviceAccess = ({
                 onCheckedChange={() =>
                   handleDeviceAccessToggle(
                     device._id,
-                    device.allowed_users?.includes(userId)
+                    device.allowed_users?.includes(userId),
                   )
                 }
               />
@@ -139,7 +139,7 @@ const UserDeviceAccess = ({
               <div className="flex items-center gap-3">
                 <div
                   className={`h-3 w-3 rounded-full ${getStatusColor(
-                    device.status
+                    device.status,
                   )}`}
                 />
                 <div>
@@ -159,7 +159,7 @@ const UserDeviceAccess = ({
                 onCheckedChange={() =>
                   handleDeviceAccessToggle(
                     device._id,
-                    device.allowed_users?.includes(userId)
+                    device.allowed_users?.includes(userId),
                   )
                 }
               />

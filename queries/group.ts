@@ -6,9 +6,9 @@ import {
   IGroupWithPopulatedData,
   IPagination,
   IUser,
-} from '@/lib/types';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IAddGroupRequest } from './users';
+} from "@/lib/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { IAddGroupRequest } from "./users";
 
 export interface LoginRequest {
   email: string;
@@ -30,7 +30,7 @@ export interface ISingeGroupResponse {
 }
 
 interface IGetAllGroupsResponse {
-  deviceType: 'clock' | 'attendance';
+  deviceType: "clock" | "attendance";
   device: IDevice | IAttendanceDevice;
 }
 
@@ -65,9 +65,9 @@ export interface IGetAllGroups {
 }
 
 export const groupApi = createApi({
-  reducerPath: 'groupApi',
+  reducerPath: "groupApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1',
+    baseUrl: "/api/proxy/api/v1",
     responseHandler: async (response) => {
       if (response.status === 301) {
         window.location.reload();
@@ -76,12 +76,12 @@ export const groupApi = createApi({
     },
   }),
   // keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
-  tagTypes: ['Group', 'Device', 'GroupCourse', 'Students'],
+  tagTypes: ["Group", "Device", "GroupCourse", "Students"],
   endpoints: (builder) => ({
     getAllGroups: builder.query<IGetAllGroups[], string>({
       query: (query) => ({
-        url: `/groups` + (query ? `?${query}` : ''),
-        method: 'GET',
+        url: `/groups` + (query ? `?${query}` : ""),
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IGetAllGroups[]>).data,
@@ -89,12 +89,12 @@ export const groupApi = createApi({
         result
           ? [
               ...result.map(({ _id }) => ({
-                type: 'Group' as const,
+                type: "Group" as const,
                 id: _id,
               })),
-              'Group',
+              "Group",
             ]
-          : ['Group'],
+          : ["Group"],
     }),
     createCourseForDepartment: builder.mutation<
       { success: boolean; message?: string },
@@ -106,13 +106,13 @@ export const groupApi = createApi({
     >({
       query: (payload) => ({
         url: `/groups/${payload.groupId}/courses/`,
-        method: 'POST',
+        method: "POST",
         body: {
           name: payload.name,
           code: payload.code,
         },
       }),
-      invalidatesTags: ['GroupCourse'],
+      invalidatesTags: ["GroupCourse"],
       transformResponse: (response) =>
         (response as ISuccessResponse<{ success: boolean; message?: string }>)
           .data,
@@ -122,11 +122,11 @@ export const groupApi = createApi({
       FormData
     >({
       query: (payload) => ({
-        url: `/groups/${payload.get('groupId')}/students`,
-        method: 'POST',
+        url: `/groups/${payload.get("groupId")}/students`,
+        method: "POST",
         body: payload,
       }),
-      invalidatesTags: ['Students'],
+      invalidatesTags: ["Students"],
       transformResponse: (response) =>
         (response as ISuccessResponse<{ success: boolean; message?: string }>)
           .data,
@@ -143,10 +143,10 @@ export const groupApi = createApi({
     >({
       query: (payload) => ({
         url: `/groups/${payload.groupId}/courses/${payload.courseId}`,
-        method: 'DELETE',
+        method: "DELETE",
         body: payload,
       }),
-      invalidatesTags: ['GroupCourse'],
+      invalidatesTags: ["GroupCourse"],
       transformResponse: (response) =>
         (
           response as ISuccessResponse<{
@@ -167,10 +167,10 @@ export const groupApi = createApi({
     >({
       query: (payload) => ({
         url: `/groups/${payload.groupId}/students/${payload.studentId}`,
-        method: 'DELETE',
+        method: "DELETE",
         body: payload,
       }),
-      invalidatesTags: ['Students'],
+      invalidatesTags: ["Students"],
       transformResponse: (response) =>
         (
           response as ISuccessResponse<{
@@ -193,13 +193,13 @@ export const groupApi = createApi({
     >({
       query: (payload) => ({
         url: `/groups/${payload.groupId}/courses/${payload.courseId}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: {
           name: payload.name,
           code: payload.code,
         },
       }),
-      invalidatesTags: ['GroupCourse'],
+      invalidatesTags: ["GroupCourse"],
       transformResponse: (response) =>
         (
           response as ISuccessResponse<{
@@ -225,7 +225,7 @@ export const groupApi = createApi({
     >({
       query: (payload) => ({
         url: `/groups/${payload.groupId}/students/${payload.studentId}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: {
           name: payload.name,
           email: payload.email,
@@ -234,7 +234,7 @@ export const groupApi = createApi({
           session: payload.session,
         },
       }),
-      invalidatesTags: ['Students'],
+      invalidatesTags: ["Students"],
       transformResponse: (response) =>
         (
           response as ISuccessResponse<{
@@ -260,8 +260,8 @@ export const groupApi = createApi({
       { id: string; query?: string }
     >({
       query: ({ id, query }) => ({
-        url: `/groups/${id}/courses${query ? `?${query}` : ''}`,
-        method: 'GET',
+        url: `/groups/${id}/courses${query ? `?${query}` : ""}`,
+        method: "GET",
       }),
       transformResponse: (response) =>
         (
@@ -280,8 +280,8 @@ export const groupApi = createApi({
           }>
         ).data,
       providesTags: (result, error, { id }) => [
-        { type: 'GroupCourse', id },
-        'GroupCourse',
+        { type: "GroupCourse", id },
+        "GroupCourse",
       ],
     }),
     getDepartmentStudents: builder.query<
@@ -305,8 +305,8 @@ export const groupApi = createApi({
       { id: string; query?: string }
     >({
       query: ({ id, query }) => ({
-        url: `/groups/${id}/students` + (query ? `?${query}` : ''),
-        method: 'GET',
+        url: `/groups/${id}/students` + (query ? `?${query}` : ""),
+        method: "GET",
       }),
       transformResponse: (response) =>
         (
@@ -329,8 +329,8 @@ export const groupApi = createApi({
           }>
         ).data,
       providesTags: (result, error, { id }) => [
-        { type: 'Students', id },
-        'Students',
+        { type: "Students", id },
+        "Students",
       ],
     }),
     getAllGroupsForCourseCreation: builder.query<
@@ -338,8 +338,8 @@ export const groupApi = createApi({
       void
     >({
       query: () => ({
-        url: '/groups//all-groups',
-        method: 'GET',
+        url: "/groups//all-groups",
+        method: "GET",
       }),
       transformResponse: (response) =>
         (
@@ -351,23 +351,23 @@ export const groupApi = createApi({
         result
           ? [
               ...result.map(({ _id }) => ({
-                type: 'Group' as const,
+                type: "Group" as const,
                 id: _id,
               })),
-              'Group',
+              "Group",
             ]
-          : ['Group'],
+          : ["Group"],
     }),
     addAdminWithGroup: builder.mutation<
       IGroupWithPopulatedData[],
       IAddGroupRequest
     >({
       query: (payload) => ({
-        url: '/users/create-admin',
-        method: 'POST',
+        url: "/users/create-admin",
+        method: "POST",
         body: payload,
       }),
-      invalidatesTags: ['Group'],
+      invalidatesTags: ["Group"],
       transformResponse: (response) =>
         (response as ISuccessResponse<IGroupWithPopulatedData[]>).data,
     }),
@@ -377,26 +377,26 @@ export const groupApi = createApi({
     >({
       query: ({ id, data }) => ({
         url: `/groups/${id}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
     }),
     getGroupdById: builder.query<IGroupWithPopulatedData, string>({
       query: (id) => ({
         url: `/groups/${id}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IGroupWithPopulatedData>).data,
-      providesTags: (result, error, id) => [{ type: 'Group', id }],
+      providesTags: (result, error, id) => [{ type: "Group", id }],
     }),
     deleteGroupById: builder.mutation<void, string>({
       query: (id) => ({
         url: `/groups/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Group'],
+      invalidatesTags: ["Group"],
     }),
     getAllUsersInGroup: builder.query<
       IUsersInGroup,
@@ -406,10 +406,10 @@ export const groupApi = createApi({
       }
     >({
       query: ({ id, query }) => ({
-        url: `/groups/${id}/users` + (query ? `?${query}` : ''),
-        method: 'GET',
+        url: `/groups/${id}/users` + (query ? `?${query}` : ""),
+        method: "GET",
       }),
-      providesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      providesTags: (result, error, { id }) => [{ type: "Group", id }],
       transformResponse: (response) =>
         (response as ISuccessResponse<IUsersInGroup>).data,
     }),
@@ -444,12 +444,12 @@ export const groupApi = createApi({
     >({
       query: ({ id, payload }) => ({
         url: `/clock-devices/group/${id}`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
       invalidatesTags: (result, error, { id }) => [
-        { type: 'Group', id },
-        'Device',
+        { type: "Group", id },
+        "Device",
       ],
     }),
     addAttendanceDeviceToGroup: builder.mutation<
@@ -463,12 +463,12 @@ export const groupApi = createApi({
     >({
       query: ({ id, payload }) => ({
         url: `/attendance-devices/group/${id}`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
       invalidatesTags: (result, error, { id }) => [
-        { type: 'Group', id },
-        'Device',
+        { type: "Group", id },
+        "Device",
       ],
     }),
     // add user to group and give device access
@@ -483,7 +483,7 @@ export const groupApi = createApi({
           password: string;
           devices: {
             deviceIds: string[];
-            deviceType: 'clock' | 'attendance';
+            deviceType: "clock" | "attendance";
           }[];
           phone?: string;
           notes?: string;
@@ -492,10 +492,10 @@ export const groupApi = createApi({
     >({
       query: ({ id, payload }) => ({
         url: `/groups/${id}/users/add-and-device-permissions`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
     }),
     giveDevicesPermissionToUser: builder.mutation<
       { success: boolean; message?: string },
@@ -504,16 +504,16 @@ export const groupApi = createApi({
         payload: {
           userId: string;
           deviceIds: string[];
-          deviceType: 'clock' | 'attendance';
+          deviceType: "clock" | "attendance";
         };
       }
     >({
       query: ({ id, payload }) => ({
         url: `/groups/${id}/users/add-devices`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
     }),
     // add user to group and give device access
     addUserToGroup: builder.mutation<
@@ -532,21 +532,21 @@ export const groupApi = createApi({
     >({
       query: ({ id, payload }) => ({
         url: `/groups/${id}/users`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
     }),
     // transformResponse: (response) =>
     //   (response as ISuccessResponse<IUse    []>).data,
     // invalidatesTags
     getAllGroupDevices: builder.query<IGetAllGroupsResponse[], string>({
       query: (id) => {
-        console.log('Fetching devices for group ID:', id);
+        console.log("Fetching devices for group ID:", id);
 
         return {
           url: `/groups/${id}/devices`,
-          method: 'GET',
+          method: "GET",
         };
       },
       transformResponse: (response) =>
@@ -560,14 +560,14 @@ export const groupApi = createApi({
       }
     >({
       query: ({ id, search }) => ({
-        url: `/groups/${id}/devices/clocks${search ? `?search=${search}` : ''}`,
-        method: 'GET',
+        url: `/groups/${id}/devices/clocks${search ? `?search=${search}` : ""}`,
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IDevice[]>).data,
       providesTags: (result, error, arg) => [
-        { type: 'Group', id: arg.id },
-        'Device',
+        { type: "Group", id: arg.id },
+        "Device",
       ],
     }),
     getAttendanceDevicesInGroup: builder.query<
@@ -578,14 +578,14 @@ export const groupApi = createApi({
       }
     >({
       query: ({ id, search }) => ({
-        url: `/groups/${id}/devices/attendance${search ? `?search=${search}` : ''}`,
-        method: 'GET',
+        url: `/groups/${id}/devices/attendance${search ? `?search=${search}` : ""}`,
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<IAttendanceDeviceWithUsers[]>).data,
       providesTags: (result, error, arg) => [
-        { type: 'Group', id: arg.id },
-        'Device',
+        { type: "Group", id: arg.id },
+        "Device",
       ],
     }),
     // remove a device from group
@@ -595,9 +595,9 @@ export const groupApi = createApi({
     >({
       query: ({ id, deviceId }) => ({
         url: `/groups/${id}/remove-device/${deviceId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Group', id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "Group", id }],
     }),
   }),
 });

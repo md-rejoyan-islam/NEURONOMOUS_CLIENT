@@ -1,39 +1,39 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { IDevice } from '@/lib/types';
-import { useChangeDeviceSceneMutation } from '@/queries/devices';
-import { Bell, RefreshCw, TypeOutline } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { Button } from '../ui/button';
-import { Label } from '../ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { IDevice } from "@/lib/types";
+import { useChangeDeviceSceneMutation } from "@/queries/devices";
+import { Bell, RefreshCw, TypeOutline } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from "../ui/select";
 
 const SceneChange = ({ device, id }: { device: IDevice; id: string }) => {
   // Form states
   const [changeScene, { isLoading }] = useChangeDeviceSceneMutation();
   const [currentScene, setCurrentScene] = useState<
-    'scene0' | 'scene1' | 'scene2'
-  >(device.scene || 'scene1');
-  console.log('Current Scene:', device);
+    "scene0" | "scene1" | "scene2"
+  >(device.scene || "scene1");
+  console.log("Current Scene:", device);
 
   const handleModeSubmit = async () => {
     try {
       await changeScene({ id, scene: currentScene }).unwrap();
 
-      toast.success('Device Scene Updated', {
+      toast.success("Device Scene Updated", {
         description: `Device scene changed to ${currentScene}.`,
       });
       // refetch();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update Failed', {
-        description: error?.data?.message || 'Failed to update device scene.',
+      toast.error("Update Failed", {
+        description: error?.data?.message || "Failed to update device scene.",
       });
     }
   };
@@ -51,7 +51,7 @@ const SceneChange = ({ device, id }: { device: IDevice; id: string }) => {
           <Label htmlFor="notice">Select Scene</Label>
           <Select
             value={currentScene}
-            onValueChange={(value: 'scene1' | 'scene2') => {
+            onValueChange={(value: "scene1" | "scene2") => {
               setCurrentScene(value);
             }}
           >

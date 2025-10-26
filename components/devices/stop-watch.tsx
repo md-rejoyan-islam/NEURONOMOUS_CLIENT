@@ -1,30 +1,30 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { IDevice } from '@/lib/types';
-import { useStartStopWatchMutation } from '@/queries/devices';
-import { ChevronDownIcon } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { Calendar } from '../ui/calendar';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import Timer from './timer';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { IDevice } from "@/lib/types";
+import { useStartStopWatchMutation } from "@/queries/devices";
+import { ChevronDownIcon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Calendar } from "../ui/calendar";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import Timer from "./timer";
 
 type Time = { h: number; m: number; s: number };
 
 const StopWatchNew = ({ device }: { device: IDevice }) => {
   const [timer, setTimer] = useState<Time>({ h: 0, m: 0, s: 0 });
 
-  const [mode, setMode] = useState<'up' | 'down'>('down');
+  const [mode, setMode] = useState<"up" | "down">("down");
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [time, setTime] = useState<string>('12:00:00');
+  const [time, setTime] = useState<string>("12:00:00");
 
   const [startStopWatch] = useStartStopWatchMutation();
-  const [timerStartOption, setTimerStartOption] = useState<'now' | 'schedule'>(
-    'now'
+  const [timerStartOption, setTimerStartOption] = useState<"now" | "schedule">(
+    "now",
   );
 
   const handleStartStopWatch = async () => {
@@ -34,7 +34,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
     const gmt6Offset = 6 * 60 * 60 * 1000;
 
     try {
-      if (timerStartOption === 'now') {
+      if (timerStartOption === "now") {
         const startingDelay = 0 * 1000; // 10 seconds delay
 
         const data = {
@@ -47,15 +47,15 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
 
         await startStopWatch({ deviceId: device._id, data }).unwrap();
         setTimer({ h: 0, m: 0, s: 0 });
-        return toast.success('Stopwatch Started', {
-          description: `Stopwatch started in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
+        return toast.success("Stopwatch Started", {
+          description: `Stopwatch started in ${mode === "up" ? "Count Up" : "Count Down"} mode.`,
         });
       }
 
       // for scheduled
-      if (timerStartOption === 'schedule' && (!date || !time)) {
-        return toast.error('Date and Time Required', {
-          description: 'Please select both date and time for scheduled start.',
+      if (timerStartOption === "schedule" && (!date || !time)) {
+        return toast.error("Date and Time Required", {
+          description: "Please select both date and time for scheduled start.",
         });
       }
       const scheduledTimestamp =
@@ -64,20 +64,20 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
               date.getFullYear(),
               date.getMonth(),
               date.getDate(),
-              parseInt(time.split(':')[0], 10),
-              parseInt(time.split(':')[1], 10),
-              parseInt(time.split(':')[2], 10)
+              parseInt(time.split(":")[0], 10),
+              parseInt(time.split(":")[1], 10),
+              parseInt(time.split(":")[2], 10),
             ).getTime() + gmt6Offset
           : null;
 
       // validate scheduled time is in the future
       if (
-        timerStartOption === 'schedule' &&
+        timerStartOption === "schedule" &&
         scheduledTimestamp &&
         scheduledTimestamp < new Date().getTime() + gmt6Offset
       ) {
-        return toast.error('Invalid Scheduled Time', {
-          description: 'Please select a future date and time.',
+        return toast.error("Invalid Scheduled Time", {
+          description: "Please select a future date and time.",
         });
       }
 
@@ -93,14 +93,14 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
       };
       setTimer({ h: 0, m: 0, s: 0 });
       await startStopWatch({ deviceId: device._id, data }).unwrap();
-      toast.success('Scheduled Stopwatch Set', {
-        description: `Stopwatch scheduled to start in ${mode === 'up' ? 'Count Up' : 'Count Down'} mode.`,
+      toast.success("Scheduled Stopwatch Set", {
+        description: `Stopwatch scheduled to start in ${mode === "up" ? "Count Up" : "Count Down"} mode.`,
       });
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update Failed', {
-        description: error?.data?.message || 'Failed to update device mode.',
+      toast.error("Update Failed", {
+        description: error?.data?.message || "Failed to update device mode.",
       });
     }
   };
@@ -117,7 +117,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
             <div className="mt-1">
               <Switch
                 className="scale-125 cursor-pointer"
-                onCheckedChange={(checked) => setMode(checked ? 'up' : 'down')}
+                onCheckedChange={(checked) => setMode(checked ? "up" : "down")}
               />
             </div>
             <p>Count Up</p>
@@ -133,8 +133,8 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
                   id="start-now"
                   name="start-option"
                   value={timerStartOption}
-                  checked={timerStartOption === 'now'}
-                  onChange={() => setTimerStartOption('now')}
+                  checked={timerStartOption === "now"}
+                  onChange={() => setTimerStartOption("now")}
                   className="form-radio text-primary focus:ring-primary"
                 />
                 <label
@@ -150,8 +150,8 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
                   id="set-schedule"
                   name="start-option"
                   value={timerStartOption}
-                  checked={timerStartOption === 'schedule'}
-                  onChange={() => setTimerStartOption('schedule')}
+                  checked={timerStartOption === "schedule"}
+                  onChange={() => setTimerStartOption("schedule")}
                   className="form-radio text-primary focus:ring-primary"
                 />
                 <label
@@ -163,7 +163,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
               </div>
             </div>
 
-            {timerStartOption === 'schedule' && (
+            {timerStartOption === "schedule" && (
               <div id="schedule-fields" className="mt-4 space-y-4">
                 <div className="flex flex-wrap gap-4">
                   <div className="flex flex-col gap-3">
@@ -177,7 +177,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
                           id="date-picker"
                           className="w-32 justify-between font-normal"
                         >
-                          {date ? date.toLocaleDateString() : 'Select date'}
+                          {date ? date.toLocaleDateString() : "Select date"}
                           <ChevronDownIcon />
                         </Button>
                       </PopoverTrigger>
@@ -223,7 +223,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
               className="w-full"
               disabled={
                 (timer.h === 0 && timer.m === 0 && timer.s === 0) ||
-                (device.status === 'offline' && timerStartOption !== 'schedule')
+                (device.status === "offline" && timerStartOption !== "schedule")
               }
               onClick={handleStartStopWatch}
             >

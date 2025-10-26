@@ -1,19 +1,19 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const contactApi = createApi({
-  reducerPath: 'contactApi',
+  reducerPath: "contactApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1',
+    baseUrl: "/api/proxy/api/v1",
   }),
-  tagTypes: ['Contact'],
+  tagTypes: ["Contact"],
   endpoints: (builder) => ({
     submitContactForm: builder.mutation<
       void,
       { name: string; email: string; message: string }
     >({
       query: (formData) => ({
-        url: '/contact',
-        method: 'POST',
+        url: "/contact",
+        method: "POST",
         body: formData,
       }),
     }),

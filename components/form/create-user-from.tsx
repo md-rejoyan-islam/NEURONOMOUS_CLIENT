@@ -1,31 +1,31 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { UserCreateInput, userCreateSchema } from '@/lib/validations';
-import { useProfileQuery } from '@/queries/auth';
+} from "@/components/ui/select";
+import { UserCreateInput, userCreateSchema } from "@/lib/validations";
+import { useProfileQuery } from "@/queries/auth";
 import {
   useAddUserToGroupWithDevicesMutation,
   useGetAllGroupsQuery,
-} from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Save, Shield, User, UserPlus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import DeviceAccess from '../create-user/device-access';
-import SmallLoading from '../loading/small-loading';
-import InputField from './input-field';
-import PasswordField from './password-field';
-import TextField from './text-field';
+} from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Save, Shield, User, UserPlus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import DeviceAccess from "../create-user/device-access";
+import SmallLoading from "../loading/small-loading";
+import InputField from "./input-field";
+import PasswordField from "./password-field";
+import TextField from "./text-field";
 
 const CreateUserFrom = () => {
   const { data: currentUser, isLoading } = useProfileQuery();
@@ -38,7 +38,7 @@ const CreateUserFrom = () => {
     resolver: zodResolver(userCreateSchema),
   });
 
-  const { data: groups } = useGetAllGroupsQuery('');
+  const { data: groups } = useGetAllGroupsQuery("");
 
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [creating] = useState(false);
@@ -54,7 +54,7 @@ const CreateUserFrom = () => {
     setSelectedDevices((prev) =>
       prev.includes(deviceId)
         ? prev.filter((id) => id !== deviceId)
-        : [...prev, deviceId]
+        : [...prev, deviceId],
     );
   };
 
@@ -73,17 +73,17 @@ const CreateUserFrom = () => {
   const onSubmit = async (data: UserCreateInput) => {
     try {
       if (selectedDevices.length === 0) {
-        return toast.error('Validation Error', {
+        return toast.error("Validation Error", {
           description:
-            'Please select at least one device for the user to control.',
+            "Please select at least one device for the user to control.",
         });
       }
       const payload = {
         ...data,
-        phone: data.phone || '',
-        notes: data.notes || '',
+        phone: data.phone || "",
+        notes: data.notes || "",
         deviceIds: selectedDevices,
-        deviceType: 'clock' as const,
+        deviceType: "clock" as const,
       };
 
       console.log(payload, createUserWithDevices);
@@ -102,13 +102,13 @@ const CreateUserFrom = () => {
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Login Failed', {
-        description: error?.data?.message || 'Internal server error.',
+      toast.error("Login Failed", {
+        description: error?.data?.message || "Internal server error.",
       });
     }
   };
 
-  if (!currentUser || currentUser.role !== 'superadmin') {
+  if (!currentUser || currentUser.role !== "superadmin") {
     return null;
   }
 
@@ -136,7 +136,7 @@ const CreateUserFrom = () => {
                   placeholder="Enter first name"
                   isOptional={false}
                   error={errors.first_name?.message}
-                  props={{ ...register('first_name') }}
+                  props={{ ...register("first_name") }}
                 />
                 <InputField
                   name="lastName"
@@ -144,7 +144,7 @@ const CreateUserFrom = () => {
                   placeholder="Enter last name"
                   isOptional={false}
                   error={errors.last_name?.message}
-                  props={{ ...register('last_name') }}
+                  props={{ ...register("last_name") }}
                 />
               </div>
               <InputField
@@ -153,14 +153,14 @@ const CreateUserFrom = () => {
                 placeholder="Enter email address"
                 isOptional={false}
                 error={errors.email?.message}
-                props={{ ...register('email') }}
+                props={{ ...register("email") }}
               />
 
               <PasswordField
                 label="Password"
                 placeholder="Enter password"
                 error={errors.password?.message}
-                props={{ ...register('password') }}
+                props={{ ...register("password") }}
               />
 
               {/* Additional Info */}
@@ -193,7 +193,7 @@ const CreateUserFrom = () => {
                   placeholder="Enter phone number"
                   isOptional={true}
                   error={errors.phone?.message}
-                  props={{ ...register('phone') }}
+                  props={{ ...register("phone") }}
                 />
               </div>
               <TextField
@@ -201,7 +201,7 @@ const CreateUserFrom = () => {
                 label="Notes"
                 placeholder="Additional notes about the user..."
                 error={errors.notes?.message}
-                props={{ ...register('notes') }}
+                props={{ ...register("notes") }}
               />
             </CardContent>
           </Card>
@@ -224,7 +224,7 @@ const CreateUserFrom = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => router.push('/users')}
+          onClick={() => router.push("/users")}
           className="w-full sm:w-auto"
         >
           Cancel

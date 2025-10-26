@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface ISuccessResponse<T> {
   success: boolean;
@@ -21,17 +21,17 @@ interface IEnrollmentResponse {
 }
 
 export const openApi = createApi({
-  reducerPath: 'openApi',
+  reducerPath: "openApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1/open',
+    baseUrl: "/api/proxy/api/v1/open",
   }),
   keepUnusedDataFor: 0,
-  tagTypes: ['Course'],
+  tagTypes: ["Course"],
   endpoints: (builder) => ({
     getEnrollmentCourseById: builder.query<ICourse, string>({
       query: (id) => ({
         url: `/course-enroll/${id}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) =>
         (response as ISuccessResponse<ICourse>).data,
@@ -42,7 +42,7 @@ export const openApi = createApi({
     >({
       query: ({ courseId, registration_number }) => ({
         url: `/course-enroll/${courseId}`,
-        method: 'POST',
+        method: "POST",
         body: { registration_number },
       }),
       transformResponse: (response) =>

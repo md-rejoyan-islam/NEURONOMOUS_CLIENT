@@ -1,4 +1,4 @@
-import { ChangeEvent, TouchEvent, useEffect, useRef, WheelEvent } from 'react';
+import { ChangeEvent, TouchEvent, useEffect, useRef, WheelEvent } from "react";
 
 type Time = { h: number; m: number; s: number };
 
@@ -11,7 +11,7 @@ export default function Timer({
 }) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const formatValue = (val: number) => String(val).padStart(2, '0');
+  const formatValue = (val: number) => String(val).padStart(2, "0");
 
   const updateTime = (key: keyof Time, value: number) => {
     if (value >= 0 && value <= 99) {
@@ -29,7 +29,7 @@ export default function Timer({
   const handleWheel = (
     e: WheelEvent<HTMLInputElement>,
     key: keyof Time,
-    max: number
+    max: number,
   ) => {
     e.preventDefault();
     const step = e.deltaY > 0 ? 1 : -1;
@@ -65,9 +65,9 @@ export default function Timer({
     <div className="font-orbitron flex items-center justify-center">
       <div className="text-center">
         <div className="mb-6 flex justify-center space-x-8">
-          {(['h', 'm', 's'] as (keyof Time)[]).map((key, idx) => {
-            const max = key === 'h' ? 23 : 59;
-            const labels = ['Hours', 'Minutes', 'Seconds'];
+          {(["h", "m", "s"] as (keyof Time)[]).map((key, idx) => {
+            const max = key === "h" ? 23 : 59;
+            const labels = ["Hours", "Minutes", "Seconds"];
             const touch = handleTouch(key, max);
             return (
               <div key={key} className="flex flex-col items-center">
@@ -75,11 +75,11 @@ export default function Timer({
                   type="text"
                   value={formatValue(timer[key])}
                   className={
-                    'text-primary bg-primary/[0.01] flex size-16 appearance-none items-center justify-center rounded-md border text-center text-4xl font-bold sm:h-24 sm:w-24 sm:text-5xl xl:h-[140px] xl:w-[140px] xl:text-6xl'
+                    "text-primary bg-primary/[0.01] flex size-16 appearance-none items-center justify-center rounded-md border text-center text-4xl font-bold sm:h-24 sm:w-24 sm:text-5xl xl:h-[140px] xl:w-[140px] xl:text-6xl"
                   }
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     const val =
-                      parseInt(e.target.value.replace(/\D/g, '')) || 0;
+                      parseInt(e.target.value.replace(/\D/g, "")) || 0;
                     onSetTime({
                       ...timer,
                       [key]: formatValue(Math.min(max, Math.max(0, val))),

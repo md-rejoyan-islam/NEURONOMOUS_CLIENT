@@ -1,16 +1,16 @@
-'use client';
-import NormalTable from '@/components/table/normal-table';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+"use client";
+import NormalTable from "@/components/table/normal-table";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   useAddAttendanceRecordMutation,
   useDeleteAttendanceRecordMutation,
   useGetCourseByIdQuery,
-} from '@/queries/course';
-import { DoorClosedLocked, Trash2 } from 'lucide-react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { toast } from 'sonner';
+} from "@/queries/course";
+import { DoorClosedLocked, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 const Page = () => {
   const params = useParams();
@@ -19,18 +19,18 @@ const Page = () => {
 
   const { data: coursee, isLoading } = useGetCourseByIdQuery(
     { id: courseId },
-    { skip: !courseId }
+    { skip: !courseId },
   );
 
   const course = {
-    id: '001',
-    name: 'Introduction to Computer Science',
+    id: "001",
+    name: "Introduction to Computer Science",
     studentsEnrolled: 120,
     classTaken: 15,
-    courseCode: 'CSE101',
-    courseEnrollUrl: 'https://example.com/enroll',
-    lastUpdated: '2025-09-07T21:45:00Z',
-    session: '2023-2024',
+    courseCode: "CSE101",
+    courseEnrollUrl: "https://example.com/enroll",
+    lastUpdated: "2025-09-07T21:45:00Z",
+    session: "2023-2024",
     attendanceRate: 92, // in percentage
   };
 
@@ -38,16 +38,16 @@ const Page = () => {
   const handleDeleteAttendanceRecord = async (date: string) => {
     try {
       await deleteAttendanceRecord({ courseId: courseId, date }).unwrap();
-      toast.success('Attendance Record Deleted', {
+      toast.success("Attendance Record Deleted", {
         description: `Attendance record has been deleted successfully.`,
       });
       // refetch();
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to delete record', {
+      toast.error("Failed to delete record", {
         description:
-          error?.data?.message || 'Something went wrong. Please try again.',
+          error?.data?.message || "Something went wrong. Please try again.",
       });
     }
   };
@@ -57,23 +57,23 @@ const Page = () => {
   const handleAddRecord = async () => {
     // Get current date in DD-MM-YYYY format
     const d = new Date();
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // months are 0-based
     const year = d.getFullYear();
     const fdate = `${day}-${month}-${year}`;
 
     try {
       await addAttendanceRecord({ courseId: courseId, date: fdate }).unwrap();
 
-      toast.success('Attendance Record Added', {
+      toast.success("Attendance Record Added", {
         description: `Attendance record for ${fdate} has been added successfully.`,
       });
       // refetch();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to add record', {
+      toast.error("Failed to add record", {
         description:
-          error?.data?.message || 'Something went wrong. Please try again.',
+          error?.data?.message || "Something went wrong. Please try again.",
       });
     }
   };
@@ -154,14 +154,14 @@ const Page = () => {
               </h3>
               <p className="mt-1 text-sm font-semibold">
                 {coursee?.updatedAt
-                  ? new Date(coursee?.updatedAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
+                  ? new Date(coursee?.updatedAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })
-                  : 'N/A'}
+                  : "N/A"}
               </p>
             </div>
             <div className="">
@@ -169,12 +169,12 @@ const Page = () => {
                 Enroll Link
               </h3>
               <Link
-                href={coursee?.enroll_link || '#'}
+                href={coursee?.enroll_link || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-1 font-semibold text-blue-600 hover:underline"
               >
-                {coursee?.enroll_link ? 'Link' : 'N/A'}
+                {coursee?.enroll_link ? "Link" : "N/A"}
               </Link>
             </div>
             <div className="">
@@ -213,14 +213,14 @@ const Page = () => {
 
         <CardContent>
           <NormalTable
-            headers={['#', 'Date', 'Present', 'Absent', 'Rate(%)', 'Action']}
+            headers={["#", "Date", "Present", "Absent", "Rate(%)", "Action"]}
             isLoading={isLoading}
             noDataMessage="No attendance records found."
             data={
               coursee?.records.map((entry, index) => [
                 index + 1,
                 <Link
-                  key={'link-' + entry.date}
+                  key={"link-" + entry.date}
                   href={`/devices/attendance/${id}/courses/${coursee._id}/${entry.date}`}
                   className="font-medium text-blue-600 hover:underline"
                 >
@@ -232,7 +232,7 @@ const Page = () => {
                   })} */}
                 </Link>,
                 entry.present_students,
-                <span key={'absent-' + entry.date}>
+                <span key={"absent-" + entry.date}>
                   {coursee.studentsEnrolled - entry.present_students}
                 </span>,
                 (
@@ -241,7 +241,7 @@ const Page = () => {
                 ).toFixed(2),
                 <div
                   className="flex items-center gap-2"
-                  key={entry.date + '-actions'}
+                  key={entry.date + "-actions"}
                 >
                   <button
                     className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"

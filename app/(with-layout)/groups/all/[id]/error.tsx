@@ -1,7 +1,7 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { AlertTriangle, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+"use client";
+import { Button } from "@/components/ui/button";
+import { AlertTriangle, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const GroupError = () => {
   return (
@@ -13,7 +13,7 @@ const GroupError = () => {
           The requested group could not be found. It may have been deleted or
           does not exist.
         </p>
-        <Link href={'/groups'}>
+        <Link href={"/groups"}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Groups

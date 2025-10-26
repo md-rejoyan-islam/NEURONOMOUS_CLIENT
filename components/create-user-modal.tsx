@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { IAttendanceDevice, IDevice } from '@/lib/types';
-import { UserCreateInput, userCreateSchema } from '@/lib/validations';
-import { useAddUserToGroupWithDevicesMutation } from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { User2, UserPlus } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import DeviceAccess from './create-user/device-access';
-import InputField from './form/input-field';
-import PasswordField from './form/password-field';
-import TextField from './form/text-field';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+} from "@/components/ui/dialog";
+import { IAttendanceDevice, IDevice } from "@/lib/types";
+import { UserCreateInput, userCreateSchema } from "@/lib/validations";
+import { useAddUserToGroupWithDevicesMutation } from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { User2, UserPlus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import DeviceAccess from "./create-user/device-access";
+import InputField from "./form/input-field";
+import PasswordField from "./form/password-field";
+import TextField from "./form/text-field";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 interface CreateAdminModalProps {
   isOpen: boolean;
@@ -71,40 +71,40 @@ export function CreateUserModal({
   const onSubmit = async (data: UserCreateInput) => {
     try {
       if (selectedDevices.length === 0) {
-        return toast.error('Validation Error', {
+        return toast.error("Validation Error", {
           description:
-            'Please select at least one device for the user to control.',
+            "Please select at least one device for the user to control.",
         });
       }
 
       const clockDeviceIds = devices
-        .filter((d) => d.deviceType === 'clock')
+        .filter((d) => d.deviceType === "clock")
         .map((d) => d.device._id);
 
       const attendanceDeviceIds = devices
-        .filter((d) => d.deviceType === 'attendance')
+        .filter((d) => d.deviceType === "attendance")
         .map((d) => d.device._id);
 
       const selectedClockDeviceIds = selectedDevices.filter((id) =>
-        clockDeviceIds.includes(id)
+        clockDeviceIds.includes(id),
       );
 
       const selectedAttendanceDeviceIds = selectedDevices.filter((id) =>
-        attendanceDeviceIds.includes(id)
+        attendanceDeviceIds.includes(id),
       );
 
       const payload = {
         ...data,
-        phone: data.phone || '',
-        notes: data.notes || '',
+        phone: data.phone || "",
+        notes: data.notes || "",
         devices: [
           {
             deviceIds: selectedClockDeviceIds,
-            deviceType: 'clock' as const,
+            deviceType: "clock" as const,
           },
           {
             deviceIds: selectedAttendanceDeviceIds,
-            deviceType: 'attendance' as const,
+            deviceType: "attendance" as const,
           },
         ],
       };
@@ -118,15 +118,15 @@ export function CreateUserModal({
         groupUserRefetch?.();
         reset();
         onClose();
-        toast.success('User Created Successfully', {
+        toast.success("User Created Successfully", {
           description: `User ${data.first_name} ${data.last_name} has been created and assigned to the group.`,
         });
       }
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Login Failed', {
-        description: error?.data?.message || 'Internal server error.',
+      toast.error("Login Failed", {
+        description: error?.data?.message || "Internal server error.",
       });
     }
   };
@@ -168,7 +168,7 @@ export function CreateUserModal({
                     label="First Name"
                     name="first_name"
                     placeholder="Enter first name"
-                    props={{ ...register('first_name') }}
+                    props={{ ...register("first_name") }}
                     error={errors.first_name?.message}
                     disabled={isLoading}
                   />
@@ -176,7 +176,7 @@ export function CreateUserModal({
                     label="Last Name"
                     name="last_name"
                     placeholder="Enter last name"
-                    props={{ ...register('last_name') }}
+                    props={{ ...register("last_name") }}
                     error={errors.last_name?.message}
                     disabled={isLoading}
                   />
@@ -187,13 +187,13 @@ export function CreateUserModal({
                   placeholder="Enter email address"
                   type="email"
                   name="email"
-                  props={{ ...register('email') }}
+                  props={{ ...register("email") }}
                   error={errors.email?.message}
                   disabled={isLoading}
                 />
                 <PasswordField
                   placeholder="Enter password"
-                  props={{ ...register('password') }}
+                  props={{ ...register("password") }}
                   disabled={isLoading}
                   label="Password"
                   error={errors.password?.message}
@@ -201,7 +201,7 @@ export function CreateUserModal({
                 <InputField
                   label="Phone Number"
                   placeholder="Enter phone number"
-                  {...register('phone')}
+                  {...register("phone")}
                   error={errors.phone?.message}
                   disabled={isLoading}
                   isOptional={true}
@@ -210,7 +210,7 @@ export function CreateUserModal({
                 <TextField
                   label="Notes"
                   placeholder="Enter any notes"
-                  {...register('notes')}
+                  {...register("notes")}
                   disabled={isLoading}
                   error={errors.notes?.message}
                 />

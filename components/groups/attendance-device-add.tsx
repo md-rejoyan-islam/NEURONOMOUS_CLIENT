@@ -1,15 +1,15 @@
 import {
   AddAttendanceDeviceToGroupInput,
   addAttendanceDeviceToGroupSchema,
-} from '@/lib/validations';
-import { useAddAttendanceDeviceToGroupMutation } from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Wifi } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import InputField from '../form/input-field';
-import { Button } from '../ui/button';
+} from "@/lib/validations";
+import { useAddAttendanceDeviceToGroupMutation } from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, Wifi } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import InputField from "../form/input-field";
+import { Button } from "../ui/button";
 
 const AttendanceDeviceAdd = ({
   refetchAllDevices,
@@ -39,7 +39,7 @@ const AttendanceDeviceAdd = ({
       refetchAllDevices?.();
 
       if (response.success) {
-        toast.success('Device Added', {
+        toast.success("Device Added", {
           description: `Device ${data.deviceId} has been added successfully.`,
         });
         reset();
@@ -47,10 +47,10 @@ const AttendanceDeviceAdd = ({
       }
       // eslint-disable-next-line
     } catch (error: any) {
-      console.log('Error creating group:', error);
+      console.log("Error creating group:", error);
 
-      toast.error('Failed to add device', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Failed to add device", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     } finally {
       setSaving(false);
@@ -66,7 +66,7 @@ const AttendanceDeviceAdd = ({
           placeholder="Enter unique device ID"
           type="text"
           error={errors.deviceId?.message}
-          props={register('deviceId')}
+          props={register("deviceId")}
           disabled={isLoading}
           isOptional={false}
         />
@@ -82,8 +82,8 @@ const AttendanceDeviceAdd = ({
         </div>
         <ol className="text-muted-foreground list-inside list-decimal space-y-1 text-xs">
           <li>
-            Configure the device with ID:{' '}
-            <code className="bg-muted rounded px-1">{'[device-id]'}</code>
+            Configure the device with ID:{" "}
+            <code className="bg-muted rounded px-1">{"[device-id]"}</code>
           </li>
           <li>Connect the device to your network</li>
           <li>The device will appear online once connected</li>

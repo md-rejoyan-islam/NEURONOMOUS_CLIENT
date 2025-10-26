@@ -1,18 +1,18 @@
-import { analyticsApi } from '@/queries/analytics';
-import { attendanceDevicesApi } from '@/queries/attendance-device';
-import { authApi } from '@/queries/auth';
-import { contactApi } from '@/queries/contact';
-import { courseApi } from '@/queries/course';
-import { devicesApi } from '@/queries/devices';
-import { firmwareApi } from '@/queries/firmware';
-import { groupApi } from '@/queries/group';
-import { notificationsApi } from '@/queries/notifications';
-import { openApi } from '@/queries/open';
-import { studentApi } from '@/queries/student';
-import { summaryApi } from '@/queries/summary';
-import { usersApi } from '@/queries/users';
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
+import { analyticsApi } from "@/queries/analytics";
+import { attendanceDevicesApi } from "@/queries/attendance-device";
+import { authApi } from "@/queries/auth";
+import { contactApi } from "@/queries/contact";
+import { courseApi } from "@/queries/course";
+import { devicesApi } from "@/queries/devices";
+import { firmwareApi } from "@/queries/firmware";
+import { groupApi } from "@/queries/group";
+import { notificationsApi } from "@/queries/notifications";
+import { openApi } from "@/queries/open";
+import { studentApi } from "@/queries/student";
+import { summaryApi } from "@/queries/summary";
+import { usersApi } from "@/queries/users";
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 export const store = configureStore({
   reducer: {
@@ -33,7 +33,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
     }).concat(
       devicesApi.middleware,

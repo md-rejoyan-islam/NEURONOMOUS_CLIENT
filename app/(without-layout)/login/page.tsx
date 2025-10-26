@@ -1,33 +1,33 @@
-import LoginForm from '@/components/form/login-form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
+import LoginForm from "@/components/form/login-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
 const clientUrl =
-  process.env.NEXT_PUBLIC_CLIENT_URL || 'https://neuronomous.net';
+  process.env.NEXT_PUBLIC_CLIENT_URL || "https://neuronomous.net";
 
 export const metadata: Metadata = {
-  title: 'Login | Neuronomous IoT Platform',
+  title: "Login | Neuronomous IoT Platform",
   description:
-    'Access your Neuronomous account securely and manage your IoT devices.',
+    "Access your Neuronomous account securely and manage your IoT devices.",
   alternates: {
-    canonical: clientUrl + '/login',
+    canonical: clientUrl + "/login",
   },
   openGraph: {
-    title: 'Login | Neuronomous IoT Platform',
+    title: "Login | Neuronomous IoT Platform",
     description:
-      'Access your Neuronomous account securely and manage your IoT devices.',
+      "Access your Neuronomous account securely and manage your IoT devices.",
     images: [
       {
-        url: '/warning.png',
+        url: "/warning.png",
         width: 1200,
         height: 630,
-        alt: 'IoT Control Hub',
+        alt: "IoT Control Hub",
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
 };
 
@@ -36,9 +36,9 @@ export default function LoginPage() {
     <Card className="border-border/60 my-10 w-full max-w-md shadow-none">
       <CardHeader className="pb-4 text-center">
         <div className="mb-2 flex justify-center">
-          <Link href={'/'}>
+          <Link href={"/"}>
             <Image
-              src={'/logo.png'}
+              src={"/logo.png"}
               alt="Logo"
               width={60}
               height={60}
@@ -46,7 +46,7 @@ export default function LoginPage() {
             />
           </Link>
         </div>
-        <Link href={'/'}>
+        <Link href={"/"}>
           <CardTitle className="text-2xl font-bold md:text-3xl">
             Neuronomous
           </CardTitle>

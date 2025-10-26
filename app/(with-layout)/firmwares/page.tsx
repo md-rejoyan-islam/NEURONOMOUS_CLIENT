@@ -1,9 +1,9 @@
-import Firmware from '@/components/firmware/firmware';
-import { Metadata } from 'next';
+import Firmware from "@/components/firmware/firmware";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Firmware Management',
-  description: 'Manage and update firmware for your IoT devices',
+  title: "Firmware Management",
+  description: "Manage and update firmware for your IoT devices",
 };
 
 const FirmwarePage = async ({

@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 export default function CustomDesignServices() {
   const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
 
   const services = [
     {
-      title: 'Custom Smart Clocks',
+      title: "Custom Smart Clocks",
       description:
-        'Beautifully designed smart clocks with IoT integration, perfect for offices, homes, and educational institutions.',
-      features: ['Real-time sync', 'Custom branding', 'IoT connectivity'],
-      icon: '🕐',
+        "Beautifully designed smart clocks with IoT integration, perfect for offices, homes, and educational institutions.",
+      features: ["Real-time sync", "Custom branding", "IoT connectivity"],
+      icon: "🕐",
     },
     {
-      title: 'Enterprise IoT Devices',
+      title: "Enterprise IoT Devices",
       description:
-        'Tailored IoT solutions designed specifically for your business requirements and operational workflows.',
-      features: ['Custom hardware', 'API integration', 'Scalable architecture'],
-      icon: '⚙️',
+        "Tailored IoT solutions designed specifically for your business requirements and operational workflows.",
+      features: ["Custom hardware", "API integration", "Scalable architecture"],
+      icon: "⚙️",
     },
     {
-      title: 'Specialized Solutions',
+      title: "Specialized Solutions",
       description:
-        'From attendance systems to environmental monitoring, we build exactly what your business needs.',
-      features: ['Domain-specific', 'Real-time analytics', 'Cloud integration'],
-      icon: '🎯',
+        "From attendance systems to environmental monitoring, we build exactly what your business needs.",
+      features: ["Domain-specific", "Real-time analytics", "Cloud integration"],
+      icon: "🎯",
     },
   ];
 
@@ -54,7 +54,7 @@ export default function CustomDesignServices() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: i * 0.1 }}
-            whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
+            whileHover={{ y: -10, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
             className="bg-card order-border/40 hover:border-primary/40 rounded-2xl border p-8 transition-all dark:bg-[rgba(41,41,79,0.12)]"
           >
             <div className="mb-4 text-5xl">{service.icon}</div>

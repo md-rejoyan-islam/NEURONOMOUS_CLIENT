@@ -1,11 +1,11 @@
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, UserPlus } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, UserPlus } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: 'Create User',
-  description: 'Add a new user to control IoT devices',
+  title: "Create User",
+  description: "Add a new user to control IoT devices",
 };
 
 export default function CreateUserPage() {

@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
 import {
   useEnrollInCourseMutation,
   useGetEnrollmentCourseByIdQuery,
-} from '@/queries/open';
-import clsx from 'clsx';
-import { CircleCheckBig } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useState } from 'react';
+} from "@/queries/open";
+import clsx from "clsx";
+import { CircleCheckBig } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const Page = () => {
-  const [registrationNumber, setRegistrationNumber] = useState('');
+  const [registrationNumber, setRegistrationNumber] = useState("");
 
   const params = useParams();
   const courseId = params?.id as string;
@@ -22,7 +22,7 @@ const Page = () => {
   const [courseEnroll] = useEnrollInCourseMutation();
 
   const [message, setMessage] = useState<{
-    type: 'success' | 'error';
+    type: "success" | "error";
     text: string;
   } | null>(null);
 
@@ -46,7 +46,7 @@ const Page = () => {
       }
 
       setMessage({
-        type: 'success',
+        type: "success",
         text: `Welcome, ${response.data.student_name}. You are now enrolled in the course.`,
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,8 +54,8 @@ const Page = () => {
       console.log(error);
 
       setMessage({
-        type: 'error',
-        text: error?.data?.message || 'Could not enroll in the course.',
+        type: "error",
+        text: error?.data?.message || "Could not enroll in the course.",
       });
     }
   };
@@ -75,8 +75,8 @@ const Page = () => {
         <div
           id="registration-card"
           className={clsx(
-            'form-container bg-opacity-50 rounded-2xl border border-gray-700 bg-[#182434] p-8 text-white shadow-2xl',
-            message && message.type === 'success' && 'hidden'
+            "form-container bg-opacity-50 rounded-2xl border border-gray-700 bg-[#182434] p-8 text-white shadow-2xl",
+            message && message.type === "success" && "hidden",
           )}
         >
           {/* Header Section */}
@@ -142,7 +142,7 @@ const Page = () => {
         </div>
 
         {/* Success Message Card */}
-        {message && message.type === 'success' && (
+        {message && message.type === "success" && (
           <div
             id="success-message"
             className="message-card bg-opacity-20 mt-6 w-full max-w-md rounded-2xl border border-green-500 bg-green-500 p-6 text-center text-white shadow-2xl"
@@ -160,7 +160,7 @@ const Page = () => {
           </div>
         )}
         {/* Error Message Card */}
-        {message && message.type === 'error' && (
+        {message && message.type === "error" && (
           <div
             id="error-message"
             className="message-card bg-opacity-20 mt-6 w-full max-w-md rounded-2xl border border-red-500 bg-red-500 p-6 text-center text-white shadow-2xl"

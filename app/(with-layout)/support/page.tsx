@@ -1,19 +1,19 @@
-'use client';
-import { Button } from '@/components/ui/button';
+"use client";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { ContactFormInput, contactFormSchema } from '@/lib/validations';
-import { useProfileQuery } from '@/queries/auth';
-import { useSubmitContactFormMutation } from '@/queries/contact';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { ContactFormInput, contactFormSchema } from "@/lib/validations";
+import { useProfileQuery } from "@/queries/auth";
+import { useSubmitContactFormMutation } from "@/queries/contact";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Clock,
   HelpCircle,
@@ -23,9 +23,9 @@ import {
   MessageSquare,
   Phone,
   Send,
-} from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function SupportPage() {
   const [submitContactForm, { isLoading: isSubmitting }] =
@@ -35,51 +35,51 @@ export default function SupportPage() {
 
   const messages = [
     {
-      id: '1',
-      subject: 'Issue with device connectivity',
-      message: 'My IoT device is not connecting to the network.',
-      createdAt: '2024-10-01T10:00:00Z',
-      response: '',
+      id: "1",
+      subject: "Issue with device connectivity",
+      message: "My IoT device is not connecting to the network.",
+      createdAt: "2024-10-01T10:00:00Z",
+      response: "",
     },
     {
-      id: '2',
-      subject: 'Billing question',
-      message: 'I have a question about my latest invoice.',
-      createdAt: '2024-09-28T14:30:00Z',
+      id: "2",
+      subject: "Billing question",
+      message: "I have a question about my latest invoice.",
+      createdAt: "2024-09-28T14:30:00Z",
       response:
-        'We are looking into your billing question and will get back to you shortly.',
+        "We are looking into your billing question and will get back to you shortly.",
     },
     {
-      id: '3',
-      subject: 'Feature request for dashboard',
-      message: 'It would be great to have a dark mode option.',
-      createdAt: '2024-09-20T09:15:00Z',
+      id: "3",
+      subject: "Feature request for dashboard",
+      message: "It would be great to have a dark mode option.",
+      createdAt: "2024-09-20T09:15:00Z",
       response:
-        'Thank you for your suggestion! Dark mode has been added to our roadmap.',
+        "Thank you for your suggestion! Dark mode has been added to our roadmap.",
     },
   ];
 
   const form = useForm<ContactFormInput>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      name: user?.last_name + ' ' + user?.last_name,
+      name: user?.last_name + " " + user?.last_name,
       email: user?.email,
-      subject: '',
-      message: '',
+      subject: "",
+      message: "",
     },
   });
 
   const onSubmit = async (data: ContactFormInput) => {
     try {
       await submitContactForm(data).unwrap();
-      toast.success('Message sent successfully!', {
+      toast.success("Message sent successfully!", {
         description: "We'll get back to you within 24 hours.",
       });
       form.reset();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error('Failed to send message', {
-        description: error?.data?.message || 'Please try again later.',
+      toast.error("Failed to send message", {
+        description: error?.data?.message || "Please try again later.",
       });
     }
   };
@@ -154,7 +154,7 @@ export default function SupportPage() {
 
       <div>
         {/* Contact Form  + previous message*/}
-        {user?.role !== 'superadmin' && (
+        {user?.role !== "superadmin" && (
           <>
             {/* Contact Form  + message*/}
             <Card>
@@ -179,7 +179,7 @@ export default function SupportPage() {
                       <Input
                         id="name"
                         placeholder="Enter your full name"
-                        {...form.register('name')}
+                        {...form.register("name")}
                         disabled
                       />
                       {form.formState.errors.name && (
@@ -195,7 +195,7 @@ export default function SupportPage() {
                         type="email"
                         disabled
                         placeholder="Enter your email"
-                        {...form.register('email')}
+                        {...form.register("email")}
                       />
                       {form.formState.errors.email && (
                         <p className="text-sm text-red-600">
@@ -210,7 +210,7 @@ export default function SupportPage() {
                     <Input
                       id="subject"
                       placeholder="Brief description of your issue"
-                      {...form.register('subject')}
+                      {...form.register("subject")}
                     />
                     {form.formState.errors.subject && (
                       <p className="text-sm text-red-600">
@@ -225,7 +225,7 @@ export default function SupportPage() {
                       id="message"
                       placeholder="Describe your issue in detail..."
                       rows={6}
-                      {...form.register('message')}
+                      {...form.register("message")}
                     />
                     {form.formState.errors.message && (
                       <p className="text-sm text-red-600">
@@ -300,7 +300,7 @@ export default function SupportPage() {
         )}
 
         {/* messages  */}
-        {user?.role === 'superadmin' && (
+        {user?.role === "superadmin" && (
           <Card className="mt-8">
             <CardHeader>
               <CardTitle>Messages</CardTitle>
@@ -316,7 +316,7 @@ export default function SupportPage() {
                       <h4 className="font-medium">
                         {message.subject}
                         <span className="ml-2 text-sm text-gray-500">
-                          {'<'}abc@gmail.com{'>'}
+                          {"<"}abc@gmail.com{">"}
                         </span>
                       </h4>
                       <div>

@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import clsx from 'clsx';
-import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { ThemeToggle } from '../shared/theme-toggle';
+import clsx from "clsx";
+import { motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { ThemeToggle } from "../shared/theme-toggle";
 
 const HomepageHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <header
       className={clsx(
-        'fixed top-0 right-0 left-0 z-50 border-b border-slate-200 bg-white/75 backdrop-blur-md dark:border-slate-800/50 dark:bg-[#050816]/80',
-        isMenuOpen && 'bg-white/95 dark:bg-[#050816]/95'
+        "fixed top-0 right-0 left-0 z-50 border-b border-slate-200 bg-white/75 backdrop-blur-md dark:border-slate-800/50 dark:bg-[#050816]/80",
+        isMenuOpen && "bg-white/95 dark:bg-[#050816]/95",
       )}
     >
       <div className="relative z-50 container mx-auto flex max-w-7xl items-center justify-between p-4">
         <a href="#" className="flex items-center space-x-2">
           <Image
-            src={'/logo.png'}
+            src={"/logo.png"}
             alt="Logo"
             width={32}
             height={32}
@@ -56,11 +56,11 @@ const HomepageHeader = () => {
           </a>
         </nav>
         <div className="flex items-center space-x-2">
-          <Link href={'/login'} aria-label="Dashboard Login">
+          <Link href={"/login"} aria-label="Dashboard Login">
             <motion.span
               className="hidden rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white sm:inline-block"
               whileHover={{
-                boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)',
+                boxShadow: "0 4px 12px rgba(79, 70, 229, 0.3)",
               }}
             >
               Dashboard Login
@@ -80,8 +80,8 @@ const HomepageHeader = () => {
 
       <div
         className={clsx(
-          'absolute top-[104%] right-0 left-0 mx-auto flex w-[98vw] flex-col space-y-2 rounded-b-md bg-[#FDFEFE] px-4 pt-2 pb-4 transition-all duration-300 lg:hidden dark:bg-[#050816]',
-          isMenuOpen ? 'translate-y-0' : '-translate-y-[200%] opacity-0'
+          "absolute top-[104%] right-0 left-0 mx-auto flex w-[98vw] flex-col space-y-2 rounded-b-md bg-[#FDFEFE] px-4 pt-2 pb-4 transition-all duration-300 lg:hidden dark:bg-[#050816]",
+          isMenuOpen ? "translate-y-0" : "-translate-y-[200%] opacity-0",
         )}
       >
         <a
@@ -108,11 +108,11 @@ const HomepageHeader = () => {
         >
           Contact
         </a>
-        <Link href={'/login'} aria-label="Dashboard Login">
+        <Link href={"/login"} aria-label="Dashboard Login">
           <motion.span
             className="block w-full rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white sm:hidden"
             whileHover={{
-              boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)',
+              boxShadow: "0 4px 12px rgba(79, 70, 229, 0.3)",
             }}
           >
             Dashboard Login

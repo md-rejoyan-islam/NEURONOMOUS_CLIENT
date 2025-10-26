@@ -1,5 +1,5 @@
-import { getUserById } from '@/app/actions';
-import SingleUserComponent from '@/components/users/single-user-component';
+import { getUserById } from "@/app/actions";
+import SingleUserComponent from "@/components/users/single-user-component";
 
 export async function generateMetadata({
   params,
@@ -11,13 +11,13 @@ export async function generateMetadata({
   try {
     const data = await getUserById(id);
     return {
-      title: data.first_name + ' ' + data.last_name,
+      title: data.first_name + " " + data.last_name,
       description: data.description,
     };
   } catch {
     return {
-      title: 'User Not Found',
-      description: 'The requested user does not exist.',
+      title: "User Not Found",
+      description: "The requested user does not exist.",
     };
   }
 }

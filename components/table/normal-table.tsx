@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Table,
@@ -7,17 +7,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { Skeleton } from '../ui/skeleton';
-import Pagination from './table-pagination';
+} from "@/components/ui/table";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { Skeleton } from "../ui/skeleton";
+import Pagination from "./table-pagination";
 
 const NormalTable = ({
   headers,
   isLoading,
   data,
-  noDataMessage = 'No data available.',
+  noDataMessage = "No data available.",
   currentPage,
   itemsPerPage,
   totalItems,

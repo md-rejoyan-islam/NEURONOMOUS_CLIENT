@@ -1,13 +1,13 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { IDevice } from '@/lib/types';
-import { useRemoveDeviceFromGroupMutation } from '@/queries/group';
-import { Bell, Clock, Wifi, WifiOff } from 'lucide-react';
-import Link from 'next/link';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import DeleteConfirmationModal from '../modal/delete-confirmation-modal';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { IDevice } from "@/lib/types";
+import { useRemoveDeviceFromGroupMutation } from "@/queries/group";
+import { Bell, Clock, Wifi, WifiOff } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
+import DeleteConfirmationModal from "../modal/delete-confirmation-modal";
 
 const SingleGroupDevice = ({
   device,
@@ -25,16 +25,16 @@ const SingleGroupDevice = ({
         id: groupId,
         deviceId: device._id,
       }).unwrap();
-      toast.success('Device removed from group', {
+      toast.success("Device removed from group", {
         description: `Device ${device.name} has been removed from the group.`,
       });
       setOpenDeleteModal(false);
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to remove device', {
+      toast.error("Failed to remove device", {
         description:
           error?.data?.message ||
-          'An error occurred while removing the device.',
+          "An error occurred while removing the device.",
       });
     }
   };
@@ -55,17 +55,17 @@ const SingleGroupDevice = ({
               </Link>
             </div>
             <div className="ml-2 flex items-center gap-2">
-              {device.status === 'online' ? (
+              {device.status === "online" ? (
                 <Wifi className="h-4 w-4 text-green-500" />
               ) : (
                 <WifiOff className="h-4 w-4 text-red-500" />
               )}
               <Badge
-                variant={device.status === 'online' ? 'default' : 'destructive'}
+                variant={device.status === "online" ? "default" : "destructive"}
                 className={
-                  device.status === 'online'
-                    ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                    : ''
+                  device.status === "online"
+                    ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
+                    : ""
                 }
               >
                 {device.status}
@@ -86,7 +86,7 @@ const SingleGroupDevice = ({
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground text-sm">Mode:</span>
             <div className="flex items-center gap-1">
-              {device.mode === 'clock' ? (
+              {device.mode === "clock" ? (
                 <Clock className="h-4 w-4 text-blue-500" />
               ) : (
                 <Bell className="h-4 w-4 text-orange-500" />

@@ -4,8 +4,8 @@ export interface IUser {
   first_name: string;
   last_name: string;
   address?: string;
-  role: 'superadmin' | 'admin' | 'user';
-  status: 'active' | 'inactive';
+  role: "superadmin" | "admin" | "user";
+  status: "active" | "inactive";
   allowed_devices: string[];
   last_login: string;
   notes?: string;
@@ -19,8 +19,8 @@ export interface IFirmware {
   version: number;
   file: Buffer;
   size: string;
-  status: 'active' | 'inactive';
-  device_type: 'clock' | 'attendance';
+  status: "active" | "inactive";
+  device_type: "clock" | "attendance";
   description: string;
   createdAt: string;
   updatedAt: string;
@@ -64,13 +64,13 @@ export interface IAttendanceDevice {
   _id: string;
   id: string;
   mac_id: string | null;
-  status: 'online' | 'offline';
+  status: "online" | "offline";
   free_heap: number;
   firmware_version: string | null;
   last_seen: number;
   allowed_users: string[];
   // allowed_users?: {
-  role: 'admin' | 'user' | 'superadmin';
+  role: "admin" | "user" | "superadmin";
   //   _id: string;
   //   role: 'admin' | 'user' | 'superadmin';
   //   first_name: string;
@@ -97,7 +97,7 @@ export interface IAttendanceDevice {
 }
 
 export interface IAttendanceDeviceWithUsers
-  extends Omit<IAttendanceDevice, 'allowed_users'> {
+  extends Omit<IAttendanceDevice, "allowed_users"> {
   allowed_users: IUser[];
 }
 
@@ -112,16 +112,16 @@ export interface IDevice {
   _id: string;
   id: string;
   mac_id: string | null;
-  status: 'online' | 'offline';
-  mode: 'clock' | 'notice' | 'timer';
+  status: "online" | "offline";
+  mode: "clock" | "notice" | "timer";
   notice: {
     message: string | null;
     is_pending: boolean;
   };
   name: string | null;
   firmware_version: string | null;
-  type: 'single' | 'double';
-  scene: 'scene0' | 'scene1' | 'scene2' | null;
+  type: "single" | "double";
+  scene: "scene0" | "scene1" | "scene2" | null;
   free_heap: number;
   location: string | null;
   last_seen: number; // Unix timestamp in milliseconds
@@ -132,7 +132,7 @@ export interface IDevice {
     _id: string; // Unique ID for the stopwatch
     start_time: number; // Unix timestamp in milliseconds
     end_time: number; // Unix timestamp in milliseconds
-    count_type: 'up' | 'down'; // 'up' for count up, 'down' for count down
+    count_type: "up" | "down"; // 'up' for count up, 'down' for count down
   }[];
   scheduled_notices: {
     id: string; // Unique ID for the scheduled notice
@@ -146,7 +146,7 @@ export interface IDevice {
   available_firmwares: [{ _id: string; version: string }];
 }
 
-export interface IDeviceWithUsers extends Omit<IDevice, 'allowed_users'> {
+export interface IDeviceWithUsers extends Omit<IDevice, "allowed_users"> {
   allowed_users: IUser[];
 }
 

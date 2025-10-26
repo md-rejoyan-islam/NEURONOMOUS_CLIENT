@@ -1,6 +1,6 @@
-import { socketManager } from '@/lib/socket';
-import { useProfileQuery } from '@/queries/auth';
-import { useGetAllDevicesQuery } from '@/queries/devices';
+import { socketManager } from "@/lib/socket";
+import { useProfileQuery } from "@/queries/auth";
+import { useGetAllDevicesQuery } from "@/queries/devices";
 import {
   Bell,
   Clock,
@@ -9,24 +9,24 @@ import {
   Search,
   Wifi,
   WifiOff,
-} from 'lucide-react';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import SimpleSummaryCard from '../cards/simple-summary-card';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Input } from '../ui/input';
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import SimpleSummaryCard from "../cards/simple-summary-card";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Input } from "../ui/input";
 
-import BulkOperationModel from '../groups/bulk-operation-model';
+import BulkOperationModel from "../groups/bulk-operation-model";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from "../ui/select";
 
 const ClockDevicesView = ({
   query,
@@ -35,9 +35,9 @@ const ClockDevicesView = ({
 }) => {
   const { mode, status, search, type } = query || {};
   const queryString =
-    `${mode ? `mode=${mode}&` : ''}${status ? `status=${status}&` : ''}${
-      search ? `search=${search}&` : ''
-    }${type ? `type=${type}&` : ''}
+    `${mode ? `mode=${mode}&` : ""}${status ? `status=${status}&` : ""}${
+      search ? `search=${search}&` : ""
+    }${type ? `type=${type}&` : ""}
       `.slice(0, -1);
 
   const {
@@ -53,7 +53,7 @@ const ClockDevicesView = ({
     return acc + (device?.allowed_users?.length ? 1 : 0);
   }, 0);
 
-  const [searchTerm, setSearchTerm] = useState(query?.search || '');
+  const [searchTerm, setSearchTerm] = useState(query?.search || "");
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -62,9 +62,9 @@ const ClockDevicesView = ({
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     if (e.target.value) {
-      params.set('search', e.target.value);
+      params.set("search", e.target.value);
     } else {
-      params.delete('search');
+      params.delete("search");
     }
     router.push(`/devices?${params.toString()}`);
   };
@@ -79,34 +79,34 @@ const ClockDevicesView = ({
   });
 
   const handleSorting = (value: string) => {
-    if (value === 'all') {
-      params.delete('status');
-      params.delete('mode');
-      params.delete('type');
-    } else if (value === 'online') {
-      params.delete('mode');
-      params.delete('type');
-      params.set('status', 'online');
-    } else if (value === 'offline') {
-      params.delete('mode');
-      params.delete('type');
-      params.set('status', 'offline');
-    } else if (value === 'notice') {
-      params.delete('status');
-      params.delete('type');
-      params.set('mode', 'notice');
-    } else if (value === 'clock') {
-      params.delete('status');
-      params.delete('type');
-      params.set('mode', 'clock');
-    } else if (value === 'single') {
-      params.delete('status');
-      params.delete('mode');
-      params.set('type', 'single');
-    } else if (value === 'double') {
-      params.delete('status');
-      params.delete('mode');
-      params.set('type', 'double');
+    if (value === "all") {
+      params.delete("status");
+      params.delete("mode");
+      params.delete("type");
+    } else if (value === "online") {
+      params.delete("mode");
+      params.delete("type");
+      params.set("status", "online");
+    } else if (value === "offline") {
+      params.delete("mode");
+      params.delete("type");
+      params.set("status", "offline");
+    } else if (value === "notice") {
+      params.delete("status");
+      params.delete("type");
+      params.set("mode", "notice");
+    } else if (value === "clock") {
+      params.delete("status");
+      params.delete("type");
+      params.set("mode", "clock");
+    } else if (value === "single") {
+      params.delete("status");
+      params.delete("mode");
+      params.set("type", "single");
+    } else if (value === "double") {
+      params.delete("status");
+      params.delete("mode");
+      params.set("type", "double");
     }
     router.push(`/devices?${params.toString()}`);
   };
@@ -115,9 +115,9 @@ const ClockDevicesView = ({
     const socket = socketManager.connect();
     if (!socket) return;
     const handler = () => refetchAllDevices();
-    socket.on('device:status', handler);
+    socket.on("device:status", handler);
     return () => {
-      socket.off('device:status', handler);
+      socket.off("device:status", handler);
     };
     // eslint-disable-next-line
   }, []);
@@ -147,20 +147,20 @@ const ClockDevicesView = ({
         />
         <SimpleSummaryCard
           label="Online Devices"
-          value={filteredDevices.filter((d) => d.status === 'online').length}
+          value={filteredDevices.filter((d) => d.status === "online").length}
           icon={<Wifi className="h-6 w-6 text-green-600 dark:text-green-400" />}
           valueColor="text-green-600 dark:text-green-400"
         />
 
         <SimpleSummaryCard
           label="Notice Mode"
-          value={filteredDevices.filter((d) => d.mode === 'notice').length}
+          value={filteredDevices.filter((d) => d.mode === "notice").length}
           icon={
             <Bell className="h-6 w-6 text-orange-600 dark:text-orange-400" />
           }
           valueColor="text-orange-600 dark:text-orange-400"
         />
-        {user?.role === 'superadmin' && (
+        {user?.role === "superadmin" && (
           <SimpleSummaryCard
             label="Unused Devices"
             value={devices.length - usedDevices}
@@ -188,7 +188,7 @@ const ClockDevicesView = ({
                 handleSorting(value);
               }}
               disabled={isLoading}
-              defaultValue={status || mode || type || 'all'}
+              defaultValue={status || mode || type || "all"}
             >
               <SelectTrigger className="w-full text-sm sm:text-base">
                 <SelectValue placeholder="Filter devices" />
@@ -239,19 +239,19 @@ const ClockDevicesView = ({
                   </CardTitle>
                 </div>
                 <div className="ml-2 flex items-center gap-2">
-                  {device.status === 'online' ? (
+                  {device.status === "online" ? (
                     <Wifi className="h-4 w-4 text-green-500" />
                   ) : (
                     <WifiOff className="h-4 w-4 text-red-500" />
                   )}
                   <Badge
                     variant={
-                      device.status === 'online' ? 'default' : 'destructive'
+                      device.status === "online" ? "default" : "destructive"
                     }
                     className={
-                      device.status === 'online'
-                        ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                        : ''
+                      device.status === "online"
+                        ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
+                        : ""
                     }
                   >
                     {device.status}
@@ -264,7 +264,7 @@ const ClockDevicesView = ({
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-sm">Mode:</span>
                 <div className="flex items-center gap-1">
-                  {device.mode === 'clock' ? (
+                  {device.mode === "clock" ? (
                     <Clock className="h-4 w-4 text-blue-500" />
                   ) : (
                     <Bell className="h-4 w-4 text-orange-500" />
@@ -285,19 +285,19 @@ const ClockDevicesView = ({
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Last Timestamp:</span>
                 <span className="text-sm font-medium">
-                  {new Date(device.timestamp).toLocaleString() || 'N/A'}
+                  {new Date(device.timestamp).toLocaleString() || "N/A"}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Firmware Version:</span>
                 <span className="text-sm font-medium">
-                  {device.firmware_version || 'N/A'}
+                  {device.firmware_version || "N/A"}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Location:</span>
                 <span className="text-xs font-medium">
-                  {device.location || 'N/A'}
+                  {device.location || "N/A"}
                 </span>
               </div>
 
@@ -307,7 +307,7 @@ const ClockDevicesView = ({
                     Current Notice:
                   </p>
                   <p className="text-sm text-orange-700 dark:text-orange-300">
-                    {device.notice?.message || 'N/A'}
+                    {device.notice?.message || "N/A"}
                   </p>
                 </div>
               )}
@@ -327,8 +327,8 @@ const ClockDevicesView = ({
           <h3 className="mb-2 text-lg font-medium">No devices found</h3>
           <p className="text-muted-foreground">
             {searchTerm
-              ? 'Try adjusting your search terms.'
-              : 'Connect your IoT devices to get started.'}
+              ? "Try adjusting your search terms."
+              : "Connect your IoT devices to get started."}
           </p>
         </div>
       )}

@@ -1,10 +1,10 @@
-'use client';
-import NormalTable from '@/components/table/normal-table';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { useGetEnrolledStudentsByCourseIdQuery } from '@/queries/course';
-import { DoorClosedLocked } from 'lucide-react';
-import { useParams } from 'next/navigation';
+"use client";
+import NormalTable from "@/components/table/normal-table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useGetEnrolledStudentsByCourseIdQuery } from "@/queries/course";
+import { DoorClosedLocked } from "lucide-react";
+import { useParams } from "next/navigation";
 
 const Page = () => {
   const params = useParams();
@@ -16,7 +16,7 @@ const Page = () => {
     },
     {
       skip: !courseId,
-    }
+    },
   );
 
   if (isLoading) {
@@ -94,7 +94,7 @@ const Page = () => {
       <Card>
         <CardContent>
           <NormalTable
-            headers={['#', 'Student Name', 'Student ID', 'Session', 'Actions']}
+            headers={["#", "Student Name", "Student ID", "Session", "Actions"]}
             currentPage={1}
             itemsPerPage={10}
             isLoading={false}
@@ -107,7 +107,7 @@ const Page = () => {
                 student.name,
                 student.registration_number,
                 student.session,
-                'delete',
+                "delete",
               ]) || []
             }
           />

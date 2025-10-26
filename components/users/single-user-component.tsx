@@ -1,44 +1,44 @@
-'use client';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+"use client";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, Calendar, Edit3, Mail, Phone, User } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, Calendar, Edit3, Mail, Phone, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
-import InputField from '@/components/form/input-field';
-import TextField from '@/components/form/text-field';
-import UserSkeleton from '@/components/loading/user-skeleton';
-import { Textarea } from '@/components/ui/textarea';
-import UserDeviceAccess from '@/components/users/user-device-access';
-import { getRoleColor } from '@/lib/helper';
-import { UserUpdateInput, userUpdateSchema } from '@/lib/validations';
-import { useGetAllGroupDevicesQuery } from '@/queries/group';
+import InputField from "@/components/form/input-field";
+import TextField from "@/components/form/text-field";
+import UserSkeleton from "@/components/loading/user-skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import UserDeviceAccess from "@/components/users/user-device-access";
+import { getRoleColor } from "@/lib/helper";
+import { UserUpdateInput, userUpdateSchema } from "@/lib/validations";
+import { useGetAllGroupDevicesQuery } from "@/queries/group";
 import {
   useGetUserByIdQuery,
   useUpdateUserByIdMutation,
-} from '@/queries/users';
-import clsx from 'clsx';
-import Link from 'next/link';
-import { toast } from 'sonner';
+} from "@/queries/users";
+import clsx from "clsx";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function SingleUserComponent({ userId }: { userId: string }) {
   const { data: user, isLoading, error } = useGetUserByIdQuery(userId);
@@ -47,10 +47,10 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
     useUpdateUserByIdMutation();
 
   const { data: devices, refetch: refetchDevices } = useGetAllGroupDevicesQuery(
-    user?.group || '',
+    user?.group || "",
     {
-      skip: user?.role !== 'user' || !user?.group,
-    }
+      skip: user?.role !== "user" || !user?.group,
+    },
   );
 
   const {
@@ -69,16 +69,16 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
         data,
       }).unwrap();
 
-      toast.success('User updated', {
-        description: 'User information has been updated successfully.',
+      toast.success("User updated", {
+        description: "User information has been updated successfully.",
       });
       setIsOpen(false);
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update failed', {
+      toast.error("Update failed", {
         description:
-          error?.data?.message || 'Failed to update user information.',
+          error?.data?.message || "Failed to update user information.",
       });
     }
   };
@@ -135,8 +135,8 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
 
         <div
           className={clsx(
-            'grid grid-cols-1 gap-6',
-            user?.role === 'user' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'
+            "grid grid-cols-1 gap-6",
+            user?.role === "user" ? "lg:grid-cols-3" : "lg:grid-cols-2",
           )}
         >
           {/* Main Content */}
@@ -156,12 +156,12 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                       <CardTitle className="text-2xl">
                         {user?.first_name} {user?.last_name}
                       </CardTitle>
-                      <Badge className={getRoleColor(user?.role || 'user')}>
+                      <Badge className={getRoleColor(user?.role || "user")}>
                         {user?.role}
                       </Badge>
                       <Badge
                         variant={
-                          user?.status === 'active' ? 'default' : 'destructive'
+                          user?.status === "active" ? "default" : "destructive"
                         }
                       >
                         {user?.status}
@@ -201,7 +201,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                       id="address"
                       type="text"
                       disabled
-                      value={user?.address || ''}
+                      value={user?.address || ""}
                     />
                   </div>
                   <div className="space-y-2">
@@ -209,7 +209,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                     <Textarea
                       id="notes"
                       placeholder="Enter any notes"
-                      value={user?.notes || ''}
+                      value={user?.notes || ""}
                       disabled
                       className="h-24"
                     />
@@ -221,13 +221,13 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="text-muted-foreground flex items-center gap-2 text-sm">
                     <Phone className="h-4 w-4" />
-                    {user?.phone || 'No phone number'}
+                    {user?.phone || "No phone number"}
                   </div>
 
                   <div className="text-muted-foreground flex items-center gap-2 text-sm">
                     <Calendar className="h-4 w-4" />
-                    Joined{' '}
-                    {new Date(user?.createdAt || '').toLocaleDateString()}
+                    Joined{" "}
+                    {new Date(user?.createdAt || "").toLocaleDateString()}
                   </div>
                 </div>
               </CardContent>
@@ -235,7 +235,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
           </div>
 
           {/* Sidebar */}
-          {user?.role === 'user' && (
+          {user?.role === "user" && (
             <div className="space-y-6">
               {/* Quick Stats */}
               <Card>
@@ -257,11 +257,11 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                       {devices?.reduce(
                         (count, device) =>
                           device?.device?.allowed_users?.includes(
-                            user?._id || ''
+                            user?._id || "",
                           )
                             ? count + 1
                             : count,
-                        0
+                        0,
                       ) || 0}
                     </span>
                   </div>
@@ -271,7 +271,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                       Last Login
                     </span>
                     <span className="text-sm">
-                      {new Date(user?.last_login || '').toLocaleDateString()}
+                      {new Date(user?.last_login || "").toLocaleDateString()}
                     </span>
                   </div>
                 </CardContent>
@@ -279,7 +279,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
 
               <UserDeviceAccess
                 devices={devices || []}
-                userId={user?._id || ''}
+                userId={user?._id || ""}
                 refetchDevices={refetchDevices}
               />
             </div>
@@ -307,7 +307,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                   label="First Name"
                   name="first_name"
                   placeholder="Enter first name"
-                  props={{ ...register('first_name') }}
+                  props={{ ...register("first_name") }}
                   error={errors.first_name?.message}
                   disabled={isLoading}
                 />
@@ -315,7 +315,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                   label="Last Name"
                   name="last_name"
                   placeholder="Enter last name"
-                  props={{ ...register('last_name') }}
+                  props={{ ...register("last_name") }}
                   error={errors.last_name?.message}
                   disabled={isLoading}
                 />
@@ -326,7 +326,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                 placeholder="Enter email address"
                 type="email"
                 name="email"
-                props={{ ...register('email') }}
+                props={{ ...register("email") }}
                 error={errors.email?.message}
                 disabled={isLoading}
               />
@@ -334,7 +334,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                 label="Address"
                 placeholder="Enter your addres"
                 name="address"
-                props={{ ...register('address') }}
+                props={{ ...register("address") }}
                 error={errors.address?.message}
                 isOptional={true}
                 disabled={isLoading}
@@ -344,7 +344,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                 label="Phone Number"
                 name="phone"
                 placeholder="Enter phone number"
-                props={{ ...register('phone') }}
+                props={{ ...register("phone") }}
                 error={errors.phone?.message}
                 disabled={isLoading}
                 isOptional={true}
@@ -354,7 +354,7 @@ export default function SingleUserComponent({ userId }: { userId: string }) {
                 label="Notes"
                 name="notes"
                 placeholder="Enter any notes"
-                props={{ ...register('notes') }}
+                props={{ ...register("notes") }}
                 disabled={isLoading}
                 error={errors.notes?.message}
               />

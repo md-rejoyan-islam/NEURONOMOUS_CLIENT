@@ -1,5 +1,5 @@
-'use client';
-import { animate, easeOut, motion, useInView } from 'framer-motion';
+"use client";
+import { animate, easeOut, motion, useInView } from "framer-motion";
 import {
   ArrowRightLeft,
   ArrowUpCircle,
@@ -16,12 +16,12 @@ import {
   Target,
   UserCheck,
   Wifi,
-} from 'lucide-react';
-import Image from 'next/image';
+} from "lucide-react";
+import Image from "next/image";
 
-import { useEffect, useRef, useState } from 'react';
-import CustomDesignServices from './custom-design-services';
-import WhyChooseUs from './why-choose-us';
+import { useEffect, useRef, useState } from "react";
+import CustomDesignServices from "./custom-design-services";
+import WhyChooseUs from "./why-choose-us";
 
 type CounterProps = {
   from?: number;
@@ -34,7 +34,7 @@ type CounterProps = {
 function Counter({
   from = 0,
   to,
-  suffix = '',
+  suffix = "",
   duration = 2,
   className,
 }: CounterProps) {
@@ -46,9 +46,9 @@ function Counter({
     if (isInView) {
       const controls = animate(from, to, {
         duration,
-        ease: 'easeOut',
+        ease: "easeOut",
         onUpdate(value) {
-          if (String(to).includes('.')) {
+          if (String(to).includes(".")) {
             setDisplayValue(parseFloat(value.toFixed(1)));
           } else {
             setDisplayValue(Math.round(value));
@@ -107,7 +107,7 @@ const HomepageMenuItems = () => {
             variants={itemVariants}
             className="mb-4 text-4xl leading-tight font-extrabold sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            Smart IoT Solutions for{' '}
+            Smart IoT Solutions for{" "}
             <span className="bg-gradient-to-r from-indigo-500 to-teal-500 bg-clip-text text-transparent">
               Modern Enterprise
             </span>
@@ -184,24 +184,24 @@ const HomepageMenuItems = () => {
             {[
               {
                 icon: PackagePlus,
-                bg: 'bg-indigo-600/20',
-                color: 'text-indigo-400',
-                title: '1. Deploy Devices',
-                desc: 'Install our WiFi-enabled smart clocks and attendance terminals.',
+                bg: "bg-indigo-600/20",
+                color: "text-indigo-400",
+                title: "1. Deploy Devices",
+                desc: "Install our WiFi-enabled smart clocks and attendance terminals.",
               },
               {
                 icon: CloudCog,
-                bg: 'bg-teal-500/20',
-                color: 'text-teal-400',
-                title: '2. Connect to Cloud',
-                desc: 'Devices securely connect to our cloud server via MQTT.',
+                bg: "bg-teal-500/20",
+                color: "text-teal-400",
+                title: "2. Connect to Cloud",
+                desc: "Devices securely connect to our cloud server via MQTT.",
               },
               {
                 icon: LayoutDashboard,
-                bg: 'bg-pink-500/20',
-                color: 'text-pink-400',
-                title: '3. Manage with Ease',
-                desc: 'Use our dashboard to manage all your devices from anywhere.',
+                bg: "bg-pink-500/20",
+                color: "text-pink-400",
+                title: "3. Manage with Ease",
+                desc: "Use our dashboard to manage all your devices from anywhere.",
               },
             ].map((item) => (
               <motion.div
@@ -210,7 +210,7 @@ const HomepageMenuItems = () => {
                 whileHover={{
                   y: -5,
                   scale: 1.02,
-                  boxShadow: '0 10px 20px rgba(20, 184, 166, 0.1)',
+                  boxShadow: "0 10px 20px rgba(20, 184, 166, 0.1)",
                 }}
                 className="group flex flex-col items-center rounded-xl border border-slate-200 bg-white/60 p-8 text-center backdrop-blur-md transition-all duration-200 hover:border-[#14b8a6] dark:border-slate-600/30 dark:bg-slate-900/50 dark:hover:border-[#14b8a6]"
               >
@@ -254,7 +254,7 @@ const HomepageMenuItems = () => {
           <div className="relative mx-auto flex max-w-5xl flex-col items-center justify-between md:flex-row">
             <div
               className="absolute top-1/2 left-0 hidden h-px w-full -translate-y-1/2 md:block"
-              style={{ top: '56px' }}
+              style={{ top: "56px" }}
             >
               <svg width="100%" height="2">
                 <line
@@ -270,7 +270,7 @@ const HomepageMenuItems = () => {
             </div>
             <div
               className="absolute top-0 left-1/2 h-full w-px -translate-x-1/2 md:hidden"
-              style={{ height: 'calc(100% - 112px)', top: '56px' }}
+              style={{ height: "calc(100% - 112px)", top: "56px" }}
             >
               <svg width="2" height="100%">
                 <line
@@ -346,39 +346,39 @@ const HomepageMenuItems = () => {
             {[
               {
                 icon: Megaphone,
-                color: 'text-indigo-400',
-                title: 'Dynamic Notice Board',
-                desc: 'Instantly switch any smart clock to notice mode. Broadcast announcements to a single device or entire groups.',
+                color: "text-indigo-400",
+                title: "Dynamic Notice Board",
+                desc: "Instantly switch any smart clock to notice mode. Broadcast announcements to a single device or entire groups.",
               },
               {
                 icon: UserCheck,
-                color: 'text-teal-400',
-                title: 'Automated Attendance',
-                desc: 'Capture student attendance seamlessly with RFID cards. Data is instantly saved to your dashboard.',
+                color: "text-teal-400",
+                title: "Automated Attendance",
+                desc: "Capture student attendance seamlessly with RFID cards. Data is instantly saved to your dashboard.",
               },
               {
                 icon: BarChart3,
-                color: 'text-pink-400',
-                title: 'Centralized Dashboard',
-                desc: 'A single source of truth. View records, manage devices, and configure settings from one intuitive web interface.',
+                color: "text-pink-400",
+                title: "Centralized Dashboard",
+                desc: "A single source of truth. View records, manage devices, and configure settings from one intuitive web interface.",
               },
               {
                 icon: ArrowUpCircle,
-                color: 'text-yellow-400',
-                title: 'Over-the-Air Updates',
-                desc: 'Push firmware updates to your devices remotely. Ensure your hardware is always secure and running the latest features.',
+                color: "text-yellow-400",
+                title: "Over-the-Air Updates",
+                desc: "Push firmware updates to your devices remotely. Ensure your hardware is always secure and running the latest features.",
               },
               {
                 icon: PencilRuler,
-                color: 'text-green-400',
-                title: 'Manual Data Correction',
-                desc: 'Admins can easily view and manually edit attendance records to correct any errors or missed check-ins.',
+                color: "text-green-400",
+                title: "Manual Data Correction",
+                desc: "Admins can easily view and manually edit attendance records to correct any errors or missed check-ins.",
               },
               {
                 icon: Lock,
-                color: 'text-sky-400',
-                title: 'Secure & Reliable',
-                desc: 'Built on the ESP32 platform with robust WiFi and secure MQTT for a stable and responsive IoT network.',
+                color: "text-sky-400",
+                title: "Secure & Reliable",
+                desc: "Built on the ESP32 platform with robust WiFi and secure MQTT for a stable and responsive IoT network.",
               },
             ].map((feature) => {
               const Icon = feature.icon;
@@ -389,7 +389,7 @@ const HomepageMenuItems = () => {
                   whileHover={{
                     y: -5,
                     scale: 1.02,
-                    boxShadow: '0 10px 20px rgba(20, 184, 166, 0.1)',
+                    boxShadow: "0 10px 20px rgba(20, 184, 166, 0.1)",
                   }}
                   className="group rounded-lg border border-slate-200 bg-white/60 p-6 backdrop-blur-md hover:border-[#14b8a6] dark:border-slate-700/50 dark:bg-slate-900/50 dark:hover:border-[#14b8a6]"
                 >
@@ -626,7 +626,7 @@ const HomepageMenuItems = () => {
               className="inline-block rounded-full bg-indigo-600 px-8 py-3 text-lg font-bold text-white transition hover:bg-indigo-700 md:px-10 md:py-4 md:text-xl"
               whileHover={{
                 y: -3,
-                boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)',
+                boxShadow: "0 4px 12px rgba(79, 70, 229, 0.3)",
               }}
             >
               Contact Sales

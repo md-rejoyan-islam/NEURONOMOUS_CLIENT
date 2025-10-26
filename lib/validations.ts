@@ -1,104 +1,104 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // Auth schemas
 export const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export const createCourseSchema = z.object({
-  course: z.string('Course is required').min(2, 'Select a course'),
-  instructor: z.string().min(2, 'Instructor is required'),
-  session: z.string().min(4, 'Session must be at least 4 characters'),
+  course: z.string("Course is required").min(2, "Select a course"),
+  instructor: z.string().min(2, "Instructor is required"),
+  session: z.string().min(4, "Session must be at least 4 characters"),
 });
 
 export const createCourseForDepartmentSchema = z.object({
-  name: z.string().min(2, 'Course name must be at least 2 characters'),
-  code: z.string().min(2, 'Course code must be at least 2 characters'),
+  name: z.string().min(2, "Course name must be at least 2 characters"),
+  code: z.string().min(2, "Course code must be at least 2 characters"),
   department: z
     .string({
       error: (iss) => {
         if (!iss.input) {
-          return 'Department is required.';
+          return "Department is required.";
         } else if (typeof iss.input !== iss.expected) {
-          return 'Department must be a string.';
+          return "Department must be a string.";
         }
-        return 'Invalid department.';
+        return "Invalid department.";
       },
     })
-    .min(2, 'Department must be at least 2 characters'),
+    .min(2, "Department must be at least 2 characters"),
 });
 export const editStudentInDepartmentSchema = z.object({
-  name: z.string().min(2, 'Course name must be at least 2 characters'),
-  email: z.email('Invalid email address'),
+  name: z.string().min(2, "Course name must be at least 2 characters"),
+  email: z.email("Invalid email address"),
   registration_number: z
     .string()
-    .min(2, 'Registration number must be at least 2 characters'),
+    .min(2, "Registration number must be at least 2 characters"),
   session: z
     .string()
-    .regex(/^\d{4}-\d{4}$/, 'Session must follow the format YYYY-YYYY')
+    .regex(/^\d{4}-\d{4}$/, "Session must follow the format YYYY-YYYY")
     .refine((val) => {
-      const years = val.split('-').map(Number);
+      const years = val.split("-").map(Number);
       return years[1] === years[0] + 1;
-    }, 'Session years must be consecutive'),
-  rfid: z.string().min(2, 'RFID must be at least 2 characters'),
+    }, "Session years must be consecutive"),
+  rfid: z.string().min(2, "RFID must be at least 2 characters"),
 });
 
 export const userCreateSchema = z.object({
-  first_name: z.string().min(2, 'First name must be at least 2 characters'),
-  last_name: z.string().min(2, 'Last name must be at least 2 characters'),
-  email: z.email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  first_name: z.string().min(2, "First name must be at least 2 characters"),
+  last_name: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   phone: z.string().optional(),
   notes: z.string().optional(),
 });
 
 export const registerSchema = z.object({
-  firstName: z.string().min(2, 'First name must be at least 2 characters'),
-  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  role: z.enum(['admin', 'superAdmin', 'user']),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  role: z.enum(["admin", "superAdmin", "user"]),
 });
 
 export const changePasswordSchema = z
   .object({
-    newPassword: z.string().min(6, 'Password must be at least 6 characters'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    newPassword: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ['confirmPassword'],
+    path: ["confirmPassword"],
   });
 
 export const authChangePasswordSchema = z.object({
   newPassword: z
     .string()
-    .min(6, 'Password must be at least 6 characters')
+    .min(6, "Password must be at least 6 characters")
     .refine((val) => val.length >= 6, {
-      message: 'Password must be at least 6 characters',
+      message: "Password must be at least 6 characters",
     }),
-  currentPassword: z.string().min(1, 'Please enter your current password'),
+  currentPassword: z.string().min(1, "Please enter your current password"),
 });
 
 export const forgotPasswordSchema = z.object({
-  email: z.email('Invalid email address'),
+  email: z.email("Invalid email address"),
 });
 
 export const resetPasswordSchema = z
   .object({
-    resetCode: z.string().min(6, 'Reset code must be 6 digits'),
-    newPassword: z.string().min(6, 'Password must be at least 6 characters'),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    resetCode: z.string().min(6, "Reset code must be 6 digits"),
+    newPassword: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ['confirmPassword'],
+    path: ["confirmPassword"],
   });
 
 export const profileUpdateSchema = z.object({
-  first_name: z.string().min(2, 'First name must be at least 2 characters'),
-  last_name: z.string().min(2, 'Last name must be at least 2 characters'),
+  first_name: z.string().min(2, "First name must be at least 2 characters"),
+  last_name: z.string().min(2, "Last name must be at least 2 characters"),
   phone: z.string().optional(),
   address: z.string().optional(),
   notes: z.string().optional(),
@@ -108,24 +108,24 @@ export const profileUpdateSchema = z.object({
 export const deviceSchema = z.object({
   id: z.string(),
   name: z.string(),
-  status: z.enum(['online', 'offline']),
+  status: z.enum(["online", "offline"]),
   last_seen: z.string(),
-  mode: z.enum(['clock', 'notice']),
+  mode: z.enum(["clock", "notice"]),
   current_notice: z.string().nullable(),
   location: z.string(),
   uptime: z.number(),
   free_heap: z.number(),
   duration: z.number().nullable(),
   font: z.string(),
-  time_format: z.enum(['12h', '24h']),
+  time_format: z.enum(["12h", "24h"]),
 });
 
 export const deviceUpdateSchema = z.object({
-  mode: z.enum(['clock', 'notice']),
+  mode: z.enum(["clock", "notice"]),
   notice: z.string().optional(),
   duration: z.number().optional(),
   font: z.string().optional(),
-  time_format: z.enum(['12h', '24h']).optional(),
+  time_format: z.enum(["12h", "24h"]).optional(),
 });
 
 // User schemas
@@ -134,41 +134,41 @@ export const userSchema = z.object({
   email: z.string().email(),
   firstName: z.string(),
   lastName: z.string(),
-  role: z.enum(['admin', 'superAdmin', 'user']),
-  status: z.enum(['active', 'inactive', 'banned']),
+  role: z.enum(["admin", "superAdmin", "user"]),
+  status: z.enum(["active", "inactive", "banned"]),
   createdAt: z.string(),
   lastLogin: z.string(),
   deviceAccess: z.array(z.string()),
 });
 
 export const userUpdateSchema = z.object({
-  first_name: z.string().min(2, 'First name must be at least 2 characters'),
-  last_name: z.string().min(2, 'Last name must be at least 2 characters'),
-  email: z.email('Invalid email address'),
+  first_name: z.string().min(2, "First name must be at least 2 characters"),
+  last_name: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.email("Invalid email address"),
   phone: z.string().optional(),
   notes: z.string().optional(),
   address: z.string().optional(),
 });
 
 export const createUserSchema = z.object({
-  first_name: z.string().min(2, 'First name must be at least 2 characters'),
-  last_name: z.string().min(2, 'Last name must be at least 2 characters'),
-  email: z.email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  first_name: z.string().min(2, "First name must be at least 2 characters"),
+  last_name: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 
   // role: z.enum(["superadmin", "user", "admin"]),
   department: z.string().optional(),
   phoneNumber: z.string().optional(),
   notes: z.string().optional(),
-  deviceAccess: z.array(z.string()).min(1, 'Select at least one device'),
+  deviceAccess: z.array(z.string()).min(1, "Select at least one device"),
 });
 
 export const groupSchema = z.object({
-  group_name: z.string().min(2, 'Group name must be at least 2 characters'),
+  group_name: z.string().min(2, "Group name must be at least 2 characters"),
   group_description: z
     .string()
-    .min(10, 'Group description must be at least 10 characters'),
-  group_eiin: z.string().min(2, 'Group EIIN must be at least 2 characters'),
+    .min(10, "Group description must be at least 10 characters"),
+  group_eiin: z.string().min(2, "Group EIIN must be at least 2 characters"),
 });
 
 export const addDeviceToGroupSchema = z.object({
@@ -176,52 +176,52 @@ export const addDeviceToGroupSchema = z.object({
     .string({
       error: (iss) => {
         if (!iss.input) {
-          return 'Device ID is required.';
+          return "Device ID is required.";
         } else if (typeof iss.input !== iss.expected) {
-          return 'Device ID must be a string.';
+          return "Device ID must be a string.";
         }
-        return 'Invalid device ID.';
+        return "Invalid device ID.";
       },
     })
-    .min(4, 'Device ID must be at least 4 characters long'),
+    .min(4, "Device ID must be at least 4 characters long"),
   name: z
     .string({
       error: (iss) => {
         if (!iss.input) {
-          return 'Device name is required.';
+          return "Device name is required.";
         } else if (typeof iss.input !== iss.expected) {
-          return 'Device name must be a string.';
+          return "Device name must be a string.";
         }
-        return 'Invalid device name.';
+        return "Invalid device name.";
       },
     })
-    .min(4, 'Device name must be at least 4 characters long'),
+    .min(4, "Device name must be at least 4 characters long"),
   location: z
     .string({
       error: (iss) => {
         if (!iss.input) {
-          return 'Location is required.';
+          return "Location is required.";
         } else if (typeof iss.input !== iss.expected) {
-          return 'Location must be a string.';
+          return "Location must be a string.";
         }
-        return 'Invalid location.';
+        return "Invalid location.";
       },
     })
-    .min(4, 'Location must be at least 4 characters long'),
+    .min(4, "Location must be at least 4 characters long"),
 });
 export const addAttendanceDeviceToGroupSchema = z.object({
   deviceId: z
     .string({
       error: (iss) => {
         if (!iss.input) {
-          return 'Device ID is required.';
+          return "Device ID is required.";
         } else if (typeof iss.input !== iss.expected) {
-          return 'Device ID must be a string.';
+          return "Device ID must be a string.";
         }
-        return 'Invalid device ID.';
+        return "Invalid device ID.";
       },
     })
-    .min(4, 'Device ID must be at least 4 characters long'),
+    .min(4, "Device ID must be at least 4 characters long"),
 });
 
 export const createGroupWithAdminSchema = createUserSchema
@@ -232,18 +232,18 @@ export const createGroupWithAdminSchema = createUserSchema
     password: true,
   })
   .extend({
-    role: z.literal('admin'),
-    group_name: z.string().min(2, 'Group name must be at least 2 characters'),
-    group_eiin: z.string().min(2, 'Group EIIN must be at least 2 characters'),
+    role: z.literal("admin"),
+    group_name: z.string().min(2, "Group name must be at least 2 characters"),
+    group_eiin: z.string().min(2, "Group EIIN must be at least 2 characters"),
     group_description: z
       .string()
-      .min(10, 'Group description must be at least 10 characters'),
+      .min(10, "Group description must be at least 10 characters"),
   });
 
 // Notification schemas
 export const notificationSchema = z.object({
   id: z.string(),
-  type: z.enum(['info', 'warning', 'success', 'error']),
+  type: z.enum(["info", "warning", "success", "error"]),
   title: z.string(),
   message: z.string(),
   timestamp: z.string(),
@@ -251,8 +251,8 @@ export const notificationSchema = z.object({
 });
 
 export const sendNoticeSchema = z.object({
-  message: z.string().min(1, 'Message is required'),
-  devices: z.array(z.string()).min(1, 'Select at least one device'),
+  message: z.string().min(1, "Message is required"),
+  devices: z.array(z.string()).min(1, "Select at least one device"),
   endDate: z.date().optional(),
   endTime: z.string().optional(),
 });
@@ -260,67 +260,67 @@ export const sendNoticeSchema = z.object({
 export const firmwareSchema = z.object({
   version: z
     .string()
-    .min(1, 'Version is required')
-    .regex(/^\d+\.\d+\.\d+$/, 'Version must be in format x.x.x (e.g., 2.1.0)'),
-  description: z.string().min(1, 'Description is required'),
-  device_type: z.enum(['clock', 'attendance'], {
+    .min(1, "Version is required")
+    .regex(/^\d+\.\d+\.\d+$/, "Version must be in format x.x.x (e.g., 2.1.0)"),
+  description: z.string().min(1, "Description is required"),
+  device_type: z.enum(["clock", "attendance"], {
     error: (iss) => {
       if (!iss.input) {
-        return 'Device type is required.';
+        return "Device type is required.";
       } else if (typeof iss.input !== iss.expected) {
         return 'Device type must be either "clock" or "attendance".';
       }
-      return 'Invalid device type.';
+      return "Invalid device type.";
     },
   }),
   file: z
     .any()
-    .refine((file) => file instanceof File, 'File is required')
+    .refine((file) => file instanceof File, "File is required")
     .refine(
-      (file) => file?.name?.endsWith('.bin'),
-      'Only .bin files are allowed'
+      (file) => file?.name?.endsWith(".bin"),
+      "Only .bin files are allowed",
     )
     .refine((file) => {
       return file?.size <= 5 * 1024 * 1024;
-    }, 'File size must be less than 5 MB'),
+    }, "File size must be less than 5 MB"),
 });
 
 export const studentsUploadSchema = z.object({
   file: z
     .any()
-    .refine((file) => file instanceof File, 'File is required')
+    .refine((file) => file instanceof File, "File is required")
     .refine(
-      (file) => file?.name?.endsWith('.json'),
-      'Only .json files are allowed'
+      (file) => file?.name?.endsWith(".json"),
+      "Only .json files are allowed",
     )
     .refine((file) => {
       return file?.size <= 10 * 1024 * 1024;
-    }, 'File size must be less than 10 MB'),
+    }, "File size must be less than 10 MB"),
 });
 
 // New validation schemas
 export const contactFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  subject: z.string().min(1, 'Subject is required'),
-  priority: z.enum(['low', 'medium', 'high', 'urgent']),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  subject: z.string().min(1, "Subject is required"),
+  priority: z.enum(["low", "medium", "high", "urgent"]),
   category: z.enum([
-    'technical',
-    'billing',
-    'feature-request',
-    'bug-report',
-    'other',
+    "technical",
+    "billing",
+    "feature-request",
+    "bug-report",
+    "other",
   ]),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
+  message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
 export const logFilterSchema = z.object({
-  level: z.enum(['error', 'warning', 'info']).optional(),
+  level: z.enum(["error", "warning", "info"]).optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   search: z.string().optional(),
-  sortBy: z.enum(['timestamp', 'level', 'message']).optional(),
-  sortOrder: z.enum(['asc', 'desc']).optional(),
+  sortBy: z.enum(["timestamp", "level", "message"]).optional(),
+  sortOrder: z.enum(["asc", "desc"]).optional(),
 });
 
 // Type exports

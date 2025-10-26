@@ -1,10 +1,10 @@
-import GroupComponent from '@/components/groups/group-component';
-import { FolderOpen } from 'lucide-react';
-import type { Metadata } from 'next';
+import GroupComponent from "@/components/groups/group-component";
+import { FolderOpen } from "lucide-react";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Groups Management',
-  description: 'Manage and monitor all device groups for better organization',
+  title: "Groups Management",
+  description: "Manage and monitor all device groups for better organization",
 };
 
 export default async function GroupPage({
@@ -29,7 +29,7 @@ export default async function GroupPage({
           </p>
         </div>
       </div>
-      <GroupComponent search={search || ''} />
+      <GroupComponent search={search || ""} />
     </div>
   );
 }

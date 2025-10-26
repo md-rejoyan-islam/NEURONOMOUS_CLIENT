@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -7,52 +7,52 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Check, DoorClosedLocked, Download, X } from 'lucide-react';
+} from "@/components/ui/table";
+import { Check, DoorClosedLocked, Download, X } from "lucide-react";
 
 const Page = () => {
   const data = {
-    courseId: 'CSE101',
-    courseName: 'Introduction to Computer Science',
+    courseId: "CSE101",
+    courseName: "Introduction to Computer Science",
     totalClasses: 30,
     classDates: [
-      '2025-09-02',
-      '2025-09-04',
-      '2025-09-06',
-      '2025-09-08',
-      '2025-09-10',
+      "2025-09-02",
+      "2025-09-04",
+      "2025-09-06",
+      "2025-09-08",
+      "2025-09-10",
     ],
     attendanceRecords: [
       {
-        registation: '2023001',
-        studentName: 'Alice Johnson',
-        attendDates: ['2025-09-02', '2025-09-04', '2025-09-06'],
+        registation: "2023001",
+        studentName: "Alice Johnson",
+        attendDates: ["2025-09-02", "2025-09-04", "2025-09-06"],
       },
       {
-        registation: '2023002',
-        studentName: 'Bob Smith',
-        attendDates: ['2025-09-02', '2025-09-04', '2025-09-06', '2025-09-08'],
+        registation: "2023002",
+        studentName: "Bob Smith",
+        attendDates: ["2025-09-02", "2025-09-04", "2025-09-06", "2025-09-08"],
       },
       {
-        registation: '2023003',
-        studentName: 'Charlie Brown',
-        attendDates: ['2025-09-02', '2025-09-04'],
+        registation: "2023003",
+        studentName: "Charlie Brown",
+        attendDates: ["2025-09-02", "2025-09-04"],
       },
       {
-        registation: '2023004',
-        studentName: 'Diana Prince',
+        registation: "2023004",
+        studentName: "Diana Prince",
         attendDates: [
-          '2025-09-02',
-          '2025-09-04',
-          '2025-09-06',
-          '2025-09-08',
-          '2025-09-10',
+          "2025-09-02",
+          "2025-09-04",
+          "2025-09-06",
+          "2025-09-08",
+          "2025-09-10",
         ],
       },
       {
-        registation: '2023005',
-        studentName: 'Ethan Hunt',
-        attendDates: ['2025-09-02', '2025-09-04', '2025-09-06'],
+        registation: "2023005",
+        studentName: "Ethan Hunt",
+        attendDates: ["2025-09-02", "2025-09-04", "2025-09-06"],
       },
     ],
   };
@@ -143,9 +143,9 @@ const Page = () => {
                 <TableHead>Percentage(%)</TableHead>
                 {data.classDates.map((date) => (
                   <TableHead key={date}>
-                    {new Date(date).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
+                    {new Date(date).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
                     })}
                   </TableHead>
                 ))}
@@ -154,10 +154,10 @@ const Page = () => {
             <TableBody>
               {data.attendanceRecords.map((record, index) => {
                 const attendCount = data.classDates.filter((date) =>
-                  record.attendDates.includes(date)
+                  record.attendDates.includes(date),
                 ).length;
                 const attendancePercentage = Math.round(
-                  (attendCount / data.classDates.length) * 100
+                  (attendCount / data.classDates.length) * 100,
                 );
                 return (
                   <TableRow key={record.registation}>

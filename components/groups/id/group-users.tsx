@@ -1,40 +1,40 @@
-'use client';
-import { ChangePasswordModal } from '@/components/change-password-modal';
-import InputField from '@/components/form/input-field';
-import PasswordField from '@/components/form/password-field';
-import TextField from '@/components/form/text-field';
-import NormalTable from '@/components/table/normal-table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+"use client";
+import { ChangePasswordModal } from "@/components/change-password-modal";
+import InputField from "@/components/form/input-field";
+import PasswordField from "@/components/form/password-field";
+import TextField from "@/components/form/text-field";
+import NormalTable from "@/components/table/normal-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { getRoleColor, getStatusColor } from '@/lib/helper';
-import { IUser } from '@/lib/types';
-import { UserCreateInput, userCreateSchema } from '@/lib/validations';
-import { useProfileQuery } from '@/queries/auth';
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { getRoleColor, getStatusColor } from "@/lib/helper";
+import { IUser } from "@/lib/types";
+import { UserCreateInput, userCreateSchema } from "@/lib/validations";
+import { useProfileQuery } from "@/queries/auth";
 import {
   useAddUserToGroupMutation,
   useGetAllUsersInGroupQuery,
-} from '@/queries/group';
+} from "@/queries/group";
 import {
   useBanUserByIdMutation,
   useDeleteUserMutation,
   useUnbanUserByIdMutation,
-} from '@/queries/users';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@/queries/users";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertTriangle,
   KeyRound,
@@ -46,12 +46,12 @@ import {
   UserCheck,
   UserPlus,
   UserX,
-} from 'lucide-react';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const GroupUsers = ({
   _id,
@@ -66,7 +66,7 @@ const GroupUsers = ({
 }) => {
   const [createUserModalOpen, setCreateUserModalOpen] =
     useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [deletingUser, setDeletingUser] = useState<IUser | null>(null);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
@@ -91,11 +91,11 @@ const GroupUsers = ({
   } = useGetAllUsersInGroupQuery(
     {
       id: _id,
-      query: `page=${page}&limit=${limit}${search ? `&search=${search}` : ''}`,
+      query: `page=${page}&limit=${limit}${search ? `&search=${search}` : ""}`,
     },
     {
       skip: !_id,
-    }
+    },
   );
   const users = group?.members || [];
 
@@ -103,11 +103,11 @@ const GroupUsers = ({
     setSearchTerm(value);
     const query = new URLSearchParams(Array.from(searchParams.entries()));
     if (value) {
-      query.set('search', value);
+      query.set("search", value);
     } else {
-      query.delete('search');
+      query.delete("search");
     }
-    query.delete('page');
+    query.delete("page");
     const timer = setTimeout(() => {
       router.push(`${window.location.pathname}?${query.toString()}`);
     }, 500);
@@ -131,7 +131,7 @@ const GroupUsers = ({
         },
       }).unwrap();
 
-      toast.success('User Created', {
+      toast.success("User Created", {
         description: `User ${data.first_name} ${data.last_name} has been created successfully.`,
       });
       setCreateUserModalOpen(false);
@@ -140,34 +140,34 @@ const GroupUsers = ({
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to create user', {
-        description: error?.data?.message || 'Invalid input data.',
+      toast.error("Failed to create user", {
+        description: error?.data?.message || "Invalid input data.",
       });
     }
   };
 
   const handleStatusChange = async (
     userId: string,
-    newStatus: 'active' | 'inactive'
+    newStatus: "active" | "inactive",
   ) => {
     try {
-      if (newStatus === 'inactive') {
+      if (newStatus === "inactive") {
         await banUserById(userId).unwrap();
       } else {
         await unbanUserById(userId).unwrap();
       }
 
       const user = users?.find((u) => u._id === userId);
-      toast.success('User Status Updated', {
+      toast.success("User Status Updated", {
         description: `${user?.first_name} ${user?.last_name} has been ${
-          newStatus === 'active' ? 'activated' : 'banned'
+          newStatus === "active" ? "activated" : "banned"
         }.`,
       });
       refetch?.();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update Failed', {
-        description: error?.data?.message || 'Failed to update user status.',
+      toast.error("Update Failed", {
+        description: error?.data?.message || "Failed to update user status.",
       });
     }
   };
@@ -177,7 +177,7 @@ const GroupUsers = ({
 
     try {
       await deleteUser(deletingUser._id).unwrap();
-      toast.success('User Deleted', {
+      toast.success("User Deleted", {
         description: `${deletingUser.first_name} ${deletingUser.last_name} has been deleted.`,
       });
       setDeletingUser(null);
@@ -187,8 +187,8 @@ const GroupUsers = ({
       //   );
       // eslint-disable-next-line
     } catch (error: any) {
-      toast('Delete Failed', {
-        description: error?.data?.message || 'Failed to delete user.',
+      toast("Delete Failed", {
+        description: error?.data?.message || "Failed to delete user.",
       });
     }
   };
@@ -199,12 +199,12 @@ const GroupUsers = ({
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -247,20 +247,20 @@ const GroupUsers = ({
         <CardContent>
           <NormalTable
             headers={[
-              '#',
-              'Name',
-              'Email',
-              'Role',
-              'Status',
-              'CreatedAt',
-              'Last Login',
-              'Actions',
+              "#",
+              "Name",
+              "Email",
+              "Role",
+              "Status",
+              "CreatedAt",
+              "Last Login",
+              "Actions",
             ]}
             isLoading={isUserLoading}
             noDataMessage="No users found."
             data={users?.map((user, index) => [
               index + 1,
-              <Link href={`/users/${user._id}`} key={'link'}>
+              <Link href={`/users/${user._id}`} key={"link"}>
                 {user.first_name} {user.last_name}
               </Link>,
               <div className="flex items-center gap-2" key={user.email}>
@@ -269,18 +269,18 @@ const GroupUsers = ({
               </div>,
               <Badge
                 className={getRoleColor(user.role)}
-                key={'role-' + user._id}
+                key={"role-" + user._id}
               >
                 <Shield className="mr-1 h-3 w-3" />
-                {user.role === 'superadmin'
-                  ? 'Super Admin'
-                  : user.role === 'admin'
-                    ? 'Admin'
-                    : 'User'}
+                {user.role === "superadmin"
+                  ? "Super Admin"
+                  : user.role === "admin"
+                    ? "Admin"
+                    : "User"}
               </Badge>,
               <Badge
                 className={getStatusColor(user.status)}
-                key={'status-' + user._id}
+                key={"status-" + user._id}
               >
                 {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
               </Badge>,
@@ -288,7 +288,7 @@ const GroupUsers = ({
               formatDate(user.last_login),
               formatDate(user.createdAt),
 
-              <DropdownMenu key={'dropdown-' + user._id}>
+              <DropdownMenu key={"dropdown-" + user._id}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
                     <MoreHorizontal className="h-4 w-4" />
@@ -303,14 +303,14 @@ const GroupUsers = ({
                     <KeyRound className="mr-2 h-4 w-4" />
                     Change Password
                   </DropdownMenuItem>
-                  {user.status === 'active' ? (
+                  {user.status === "active" ? (
                     <DropdownMenuItem
-                      onClick={() => handleStatusChange(user._id, 'inactive')}
+                      onClick={() => handleStatusChange(user._id, "inactive")}
                       className="cursor-pointer text-red-600"
                       disabled={
-                        user.role === 'superadmin' ||
-                        (user.role === 'admin' &&
-                          currentUser?.role !== 'superadmin')
+                        user.role === "superadmin" ||
+                        (user.role === "admin" &&
+                          currentUser?.role !== "superadmin")
                       }
                     >
                       <UserX className="mr-2 h-4 w-4" />
@@ -318,7 +318,7 @@ const GroupUsers = ({
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem
-                      onClick={() => handleStatusChange(user._id, 'active')}
+                      onClick={() => handleStatusChange(user._id, "active")}
                       className="cursor-pointer text-green-600"
                     >
                       <UserCheck className="mr-2 h-4 w-4" />
@@ -329,7 +329,7 @@ const GroupUsers = ({
                     onClick={() => setDeletingUser(user)}
                     className="cursor-pointer text-red-600"
                     disabled={
-                      user.role === 'superadmin' || user.role === 'admin'
+                      user.role === "superadmin" || user.role === "admin"
                     }
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
@@ -368,7 +368,7 @@ const GroupUsers = ({
           </DialogHeader>
           <div className="py-4">
             <p className="text-muted-foreground text-sm">
-              Are you sure you want to delete{' '}
+              Are you sure you want to delete{" "}
               <strong>
                 {deletingUser?.first_name} {deletingUser?.last_name}
               </strong>
@@ -386,7 +386,7 @@ const GroupUsers = ({
               disabled={isDeleteLoading || isBanLoading || isUnbanLoading}
             >
               <Trash2 className="mr-2 h-4 w-4" />
-              {isDeleteLoading ? 'Deleting...' : 'Delete'}
+              {isDeleteLoading ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -415,7 +415,7 @@ const GroupUsers = ({
                   placeholder="Enter first name"
                   isOptional={false}
                   error={errors.first_name?.message}
-                  props={{ ...register('first_name') }}
+                  props={{ ...register("first_name") }}
                 />
                 <InputField
                   name="lastName"
@@ -423,7 +423,7 @@ const GroupUsers = ({
                   placeholder="Enter last name"
                   isOptional={false}
                   error={errors.last_name?.message}
-                  props={{ ...register('last_name') }}
+                  props={{ ...register("last_name") }}
                 />
               </div>
               <InputField
@@ -432,14 +432,14 @@ const GroupUsers = ({
                 placeholder="Enter email address"
                 isOptional={false}
                 error={errors.email?.message}
-                props={{ ...register('email') }}
+                props={{ ...register("email") }}
               />
 
               <PasswordField
                 label="Password"
                 placeholder="Enter password"
                 error={errors.password?.message}
-                props={{ ...register('password') }}
+                props={{ ...register("password") }}
               />
 
               <InputField
@@ -448,7 +448,7 @@ const GroupUsers = ({
                 placeholder="Enter phone number"
                 isOptional={true}
                 error={errors.phone?.message}
-                props={{ ...register('phone') }}
+                props={{ ...register("phone") }}
               />
 
               <TextField
@@ -456,7 +456,7 @@ const GroupUsers = ({
                 label="Notes"
                 placeholder="Additional notes about the user..."
                 error={errors.notes?.message}
-                props={{ ...register('notes') }}
+                props={{ ...register("notes") }}
               />
             </div>
             <DialogFooter className="mt-3">
@@ -466,7 +466,7 @@ const GroupUsers = ({
                 disabled={isAddUserLoading}
               >
                 <UserPlus className="mr-2 h-4 w-4" />
-                {isAddUserLoading ? 'Creating...' : 'Create User'}
+                {isAddUserLoading ? "Creating..." : "Create User"}
               </Button>
             </DialogFooter>
           </form>

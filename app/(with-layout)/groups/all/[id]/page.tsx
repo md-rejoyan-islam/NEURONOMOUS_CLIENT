@@ -1,5 +1,5 @@
-import { getGroupById } from '@/app/actions';
-import SingleGroupComponent from '@/components/groups/single-group-component';
+import { getGroupById } from "@/app/actions";
+import SingleGroupComponent from "@/components/groups/single-group-component";
 
 export async function generateMetadata({
   params,
@@ -15,8 +15,8 @@ export async function generateMetadata({
     };
   } catch {
     return {
-      title: 'Group Not Found',
-      description: 'The requested group does not exist.',
+      title: "Group Not Found",
+      description: "The requested group does not exist.",
     };
   }
 }
@@ -27,7 +27,7 @@ const SingleGroupPage = async ({
 }: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{
-    deviceType?: 'clock' | 'attendance';
+    deviceType?: "clock" | "attendance";
     search?: string;
   }>;
 }) => {
@@ -36,8 +36,8 @@ const SingleGroupPage = async ({
   return (
     <SingleGroupComponent
       _id={id}
-      deviceType={deviceType || 'clock'}
-      search={search || ''}
+      deviceType={deviceType || "clock"}
+      search={search || ""}
     />
   );
 };

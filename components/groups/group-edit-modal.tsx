@@ -1,19 +1,19 @@
-import InputField from '@/components//form/input-field';
+import InputField from "@/components//form/input-field";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components//ui/dialog';
-import TextField from '@/components/form/text-field';
-import { Button } from '@/components/ui/button';
-import { GroupInput, groupSchema } from '@/lib/validations';
-import { useUpdateGroupByIdMutation } from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Edit, Plus } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "@/components//ui/dialog";
+import TextField from "@/components/form/text-field";
+import { Button } from "@/components/ui/button";
+import { GroupInput, groupSchema } from "@/lib/validations";
+import { useUpdateGroupByIdMutation } from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Edit, Plus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const GroupEditModal = ({
   _id,
@@ -56,18 +56,18 @@ const GroupEditModal = ({
         },
       }).unwrap();
       if (response.success) {
-        toast.success('Group Updated', {
+        toast.success("Group Updated", {
           description: `Group ${data.group_name} has been updated successfully.`,
         });
         reset();
-        setValue('group_name', data.group_name);
-        setValue('group_description', data.group_description);
+        setValue("group_name", data.group_name);
+        setValue("group_description", data.group_description);
         setIsModalOpen(false);
       }
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Group Update Failed', {
-        description: error?.data?.message || 'Failed to update group.',
+      toast.error("Group Update Failed", {
+        description: error?.data?.message || "Failed to update group.",
       });
     }
   };
@@ -76,9 +76,9 @@ const GroupEditModal = ({
     setIsModalOpen(false);
     reset();
     setGroup({
-      _id: '',
-      name: '',
-      description: '',
+      _id: "",
+      name: "",
+      description: "",
     });
   };
   return (
@@ -107,7 +107,7 @@ const GroupEditModal = ({
               placeholder="Enter group name"
               type="text"
               error={errors.group_name?.message}
-              props={register('group_name')}
+              props={register("group_name")}
               isOptional={false}
               name="groupName"
               disabled={isLoading}
@@ -117,7 +117,7 @@ const GroupEditModal = ({
               placeholder="Enter group EIIN"
               type="text"
               error={errors.group_eiin?.message}
-              props={register('group_eiin')}
+              props={register("group_eiin")}
               isOptional={false}
               name="groupEiin"
               disabled={isLoading}
@@ -127,7 +127,7 @@ const GroupEditModal = ({
               name="groupDescription"
               label="Description"
               placeholder="Brief description of this group..."
-              props={register('group_description')}
+              props={register("group_description")}
               error={errors.group_description?.message}
               disabled={isLoading}
             />

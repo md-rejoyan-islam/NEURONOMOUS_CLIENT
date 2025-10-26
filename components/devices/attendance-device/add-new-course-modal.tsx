@@ -1,5 +1,5 @@
-import InputField from '@/components/form/input-field';
-import { Button } from '@/components/ui/button';
+import InputField from "@/components/form/input-field";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -8,23 +8,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { CourseInput, createCourseSchema } from '@/lib/validations';
-import { useCreateCourseMutation } from '@/queries/course';
-import { useGetDepartmentCoursesQuery } from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "@/components/ui/select";
+import { CourseInput, createCourseSchema } from "@/lib/validations";
+import { useCreateCourseMutation } from "@/queries/course";
+import { useGetDepartmentCoursesQuery } from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const AddCourseModel = ({
   isLoading,
@@ -46,9 +46,9 @@ const AddCourseModel = ({
     },
     {
       skip: !groupId,
-    }
+    },
   );
-  console.log(courses, ' courses');
+  console.log(courses, " courses");
 
   const {
     register,
@@ -78,7 +78,7 @@ const AddCourseModel = ({
       refetch();
 
       setOpen(false);
-      toast.success('Course Created', {
+      toast.success("Course Created", {
         description: `Course has been assigned successfully.`,
       });
       reset();
@@ -86,8 +86,8 @@ const AddCourseModel = ({
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to assign teacher', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Failed to assign teacher", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     }
   };
@@ -122,7 +122,7 @@ const AddCourseModel = ({
               error={errors.session?.message}
               isOptional={false}
               props={{
-                ...register('session'),
+                ...register("session"),
               }}
               type="text"
             />
@@ -132,7 +132,7 @@ const AddCourseModel = ({
               </Label>
               <Select
                 onValueChange={(value) => {
-                  setValue('course', value);
+                  setValue("course", value);
                 }}
               >
                 <SelectTrigger className="w-full">

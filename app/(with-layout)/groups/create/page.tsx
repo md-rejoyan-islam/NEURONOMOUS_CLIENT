@@ -1,9 +1,9 @@
-import GroupCreate from '@/components/groups/create-group';
-import { Metadata } from 'next';
+import GroupCreate from "@/components/groups/create-group";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Create Group with Admin',
-  description: 'Create a new group along with an admin user',
+  title: "Create Group with Admin",
+  description: "Create a new group along with an admin user",
 };
 
 const CreateGroupPage = () => {

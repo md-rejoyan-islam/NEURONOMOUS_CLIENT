@@ -1,10 +1,10 @@
-import UsersComponent from '@/components/users/users-component';
-import { Users } from 'lucide-react';
-import type { Metadata } from 'next';
+import UsersComponent from "@/components/users/users-component";
+import { Users } from "lucide-react";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Users Management',
-  description: 'Manage users and their permissions within the application',
+  title: "Users Management",
+  description: "Manage users and their permissions within the application",
 };
 
 const UsersPage = () => {

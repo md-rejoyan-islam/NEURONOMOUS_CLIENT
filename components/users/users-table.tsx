@@ -1,10 +1,10 @@
-'use client';
+"use client";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -12,16 +12,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { getRoleColor, getStatusColor } from '@/lib/helper';
-import { IUser } from '@/lib/types';
-import { useProfileQuery } from '@/queries/auth';
-import { useGetAllGroupDevicesQuery } from '@/queries/group';
+} from "@/components/ui/table";
+import { getRoleColor, getStatusColor } from "@/lib/helper";
+import { IUser } from "@/lib/types";
+import { useProfileQuery } from "@/queries/auth";
+import { useGetAllGroupDevicesQuery } from "@/queries/group";
 import {
   useBanUserByIdMutation,
   useDeleteUserMutation,
   useUnbanUserByIdMutation,
-} from '@/queries/users';
+} from "@/queries/users";
 import {
   AlertTriangle,
   KeyRound,
@@ -34,23 +34,23 @@ import {
   UserCheck,
   Users,
   UserX,
-} from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { ChangePasswordModal } from '../change-password-modal';
-import { CreateUserModal } from '../create-user-modal';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { ChangePasswordModal } from "../change-password-modal";
+import { CreateUserModal } from "../create-user-modal";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog';
-import { Input } from '../ui/input';
+} from "../ui/dialog";
+import { Input } from "../ui/input";
 
 const UsersTable = ({
   users = [],
@@ -63,7 +63,7 @@ const UsersTable = ({
 }) => {
   const { data: user } = useProfileQuery();
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<IUser[]>(users);
 
   const { data: currentUser } = useProfileQuery();
@@ -79,29 +79,29 @@ const UsersTable = ({
 
   const handleStatusChange = async (
     userId: string,
-    newStatus: 'active' | 'inactive'
+    newStatus: "active" | "inactive",
   ) => {
     try {
-      if (newStatus === 'inactive') {
+      if (newStatus === "inactive") {
         await banUserById(userId).unwrap();
       } else {
         await unbanUserById(userId).unwrap();
       }
 
       const user = users.find((u) => u._id === userId);
-      toast.success('User Status Updated', {
+      toast.success("User Status Updated", {
         description: `${user?.first_name} ${user?.last_name} has been ${
-          newStatus === 'active' ? 'activated' : 'banned'
+          newStatus === "active" ? "activated" : "banned"
         }.`,
       });
       refetch?.();
       setFilteredUsers((prev) =>
-        prev.map((u) => (u._id === userId ? { ...u, status: newStatus } : u))
+        prev.map((u) => (u._id === userId ? { ...u, status: newStatus } : u)),
       );
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update Failed', {
-        description: error?.data?.message || 'Failed to update user status.',
+      toast.error("Update Failed", {
+        description: error?.data?.message || "Failed to update user status.",
       });
     }
   };
@@ -111,18 +111,18 @@ const UsersTable = ({
 
     try {
       await deleteUser(deletingUser._id).unwrap();
-      toast.success('User Deleted', {
+      toast.success("User Deleted", {
         description: `${deletingUser.first_name} ${deletingUser.last_name} has been deleted.`,
       });
       setDeletingUser(null);
       refetch?.();
       setFilteredUsers((prev) =>
-        prev.filter((user) => user._id !== deletingUser?._id)
+        prev.filter((user) => user._id !== deletingUser?._id),
       );
       // eslint-disable-next-line
     } catch (error: any) {
-      toast('Delete Failed', {
-        description: error?.data?.message || 'Failed to delete user.',
+      toast("Delete Failed", {
+        description: error?.data?.message || "Failed to delete user.",
       });
     }
   };
@@ -133,12 +133,12 @@ const UsersTable = ({
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -162,12 +162,12 @@ const UsersTable = ({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   // Get all group devices
   const { data: allGroupDevices } = useGetAllGroupDevicesQuery(
-    user?.group || '',
+    user?.group || "",
     {
-      skip: user?.role !== 'admin' || !user?.group,
-    }
+      skip: user?.role !== "admin" || !user?.group,
+    },
   );
-  console.log('allgroup', allGroupDevices);
+  console.log("allgroup", allGroupDevices);
 
   useEffect(() => {
     setFilteredUsers(users);
@@ -184,7 +184,7 @@ const UsersTable = ({
             </CardTitle>
 
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
-              {user?.role === 'admin' && (
+              {user?.role === "admin" && (
                 <Button
                   onClick={() => setIsCreateModalOpen(true)}
                   className="w-full sm:w-auto"
@@ -245,11 +245,11 @@ const UsersTable = ({
                       <TableCell>
                         <Badge className={getRoleColor(user.role)}>
                           <Shield className="mr-1 h-3 w-3" />
-                          {user.role === 'superadmin'
-                            ? 'Super Admin'
-                            : user.role === 'admin'
-                              ? 'Admin'
-                              : 'User'}
+                          {user.role === "superadmin"
+                            ? "Super Admin"
+                            : user.role === "admin"
+                              ? "Admin"
+                              : "User"}
                         </Badge>
                       </TableCell>
 
@@ -282,16 +282,16 @@ const UsersTable = ({
                               <KeyRound className="mr-2 h-4 w-4" />
                               Change Password
                             </DropdownMenuItem>
-                            {user.status === 'active' ? (
+                            {user.status === "active" ? (
                               <DropdownMenuItem
                                 onClick={() =>
-                                  handleStatusChange(user._id, 'inactive')
+                                  handleStatusChange(user._id, "inactive")
                                 }
                                 className="cursor-pointer text-red-600"
                                 disabled={
-                                  user.role === 'superadmin' ||
-                                  (user.role === 'admin' &&
-                                    currentUser?.role !== 'superadmin')
+                                  user.role === "superadmin" ||
+                                  (user.role === "admin" &&
+                                    currentUser?.role !== "superadmin")
                                 }
                               >
                                 <UserX className="mr-2 h-4 w-4" />
@@ -300,7 +300,7 @@ const UsersTable = ({
                             ) : (
                               <DropdownMenuItem
                                 onClick={() =>
-                                  handleStatusChange(user._id, 'active')
+                                  handleStatusChange(user._id, "active")
                                 }
                                 className="cursor-pointer text-green-600"
                               >
@@ -312,8 +312,8 @@ const UsersTable = ({
                               onClick={() => setDeletingUser(user)}
                               className="cursor-pointer text-red-600"
                               disabled={
-                                user.role === 'superadmin' ||
-                                user.role === 'admin'
+                                user.role === "superadmin" ||
+                                user.role === "admin"
                               }
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
@@ -336,8 +336,8 @@ const UsersTable = ({
               <h3 className="mb-2 text-lg font-medium">No users found</h3>
               <p className="text-muted-foreground">
                 {searchTerm
-                  ? 'Try adjusting your search terms.'
-                  : 'No users available.'}
+                  ? "Try adjusting your search terms."
+                  : "No users available."}
               </p>
             </div>
           )}
@@ -349,7 +349,7 @@ const UsersTable = ({
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         devices={allGroupDevices || []}
-        groupId={user?.group || ''}
+        groupId={user?.group || ""}
         groupUserRefetch={groupUserRefetch}
       />
 
@@ -375,7 +375,7 @@ const UsersTable = ({
           </DialogHeader>
           <div className="py-4">
             <p className="text-muted-foreground text-sm">
-              Are you sure you want to delete{' '}
+              Are you sure you want to delete{" "}
               <strong>
                 {deletingUser?.first_name} {deletingUser?.last_name}
               </strong>

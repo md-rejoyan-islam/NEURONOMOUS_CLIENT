@@ -1,4 +1,4 @@
-import GroupUsers from '@/components/groups/id/group-users';
+import GroupUsers from "@/components/groups/id/group-users";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,13 +6,13 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Metadata } from 'next';
-import Link from 'next/link';
+} from "@/components/ui/breadcrumb";
+import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: 'Group Users',
-  description: 'List of users in the group',
+  title: "Group Users",
+  description: "List of users in the group",
 };
 
 const GroupUsersPage = async ({
@@ -24,9 +24,9 @@ const GroupUsersPage = async ({
 }) => {
   const { id: _id } = await params;
   const searchQuery = await searchParams;
-  const page = searchQuery.page || '1';
-  const search = searchQuery.search || '';
-  const limit = searchQuery.limit || '10';
+  const page = searchQuery.page || "1";
+  const search = searchQuery.search || "";
+  const limit = searchQuery.limit || "10";
 
   return (
     <div className="space-y-4 p-2 sm:p-6">

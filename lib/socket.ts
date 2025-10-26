@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
 const socketUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV !== 'production'
+  process.env.NEXT_PUBLIC_NODE_ENV !== "production"
     ? process.env.NEXT_PUBLIC_API_URL
-    : '/';
+    : "/";
 
 class SocketManager {
   private socket: Socket | null = null;
@@ -32,18 +32,18 @@ class SocketManager {
           timeout: 5000, // 5 second timeout
         });
 
-        this.socket.on('connect', () => {
-          console.log('Socket connected:', this.socket?.id);
+        this.socket.on("connect", () => {
+          console.log("Socket connected:", this.socket?.id);
         });
 
-        this.socket.on('disconnect', (reason) => {
-          console.log('Socket disconnectedd:', reason);
+        this.socket.on("disconnect", (reason) => {
+          console.log("Socket disconnectedd:", reason);
           window.location.reload();
         });
 
-        this.socket.off('session:invalidate');
-        this.socket.on('session:invalidate', () => {
-          console.log('Session invalidated due to new login. Reloading...');
+        this.socket.off("session:invalidate");
+        this.socket.on("session:invalidate", () => {
+          console.log("Session invalidated due to new login. Reloading...");
           window.location.reload();
           // window.location.href = '/login'; // Redirect to login page
 
@@ -56,14 +56,14 @@ class SocketManager {
         //   window.location.reload();
         // });
 
-        this.socket.on('connect_error', (error) => {
+        this.socket.on("connect_error", (error) => {
           console.warn(
-            'Socket connection failed (this is expected in development):',
-            error.message
+            "Socket connection failed (this is expected in development):",
+            error.message,
           );
         });
       } catch (error) {
-        console.warn('Failed to initialize socket connection:', error);
+        console.warn("Failed to initialize socket connection:", error);
         this.socket = null;
       }
     }
@@ -90,7 +90,7 @@ class SocketManager {
     if (this.socket && this.socket.connected) {
       this.socket.emit(event, data);
     } else {
-      console.log('Socket not connected. Event not sent:', event);
+      console.log("Socket not connected. Event not sent:", event);
     }
   }
 

@@ -1,31 +1,31 @@
-'use client';
+"use client";
 
-import { useProfileQuery } from '@/queries/auth';
-import { useGetAllDevicesQuery } from '@/queries/devices';
+import { useProfileQuery } from "@/queries/auth";
+import { useGetAllDevicesQuery } from "@/queries/devices";
 
-import { Clock, DoorClosedLocked, UserCheck } from 'lucide-react';
-import AddDeviceModal from '../groups/add-device-modal';
-import DeviceSkeleton from '../loading/device-skeleton';
+import { Clock, DoorClosedLocked, UserCheck } from "lucide-react";
+import AddDeviceModal from "../groups/add-device-modal";
+import DeviceSkeleton from "../loading/device-skeleton";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import AttendanceDevicesView from './attendance-devices-view';
-import ClockDevicesView from './clock-devices-view';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import AttendanceDevicesView from "./attendance-devices-view";
+import ClockDevicesView from "./clock-devices-view";
 
 export default function DevicesComponent({
   query,
-  dType = 'clock',
+  dType = "clock",
 }: {
   query?: { mode?: string; status?: string; search?: string; type?: string };
-  dType?: 'clock' | 'attendance';
+  dType?: "clock" | "attendance";
 }) {
   const { mode, status, search, type } = query || {};
-  const [deviceType, setDeviceType] = useState<'clock' | 'attendance'>(dType);
+  const [deviceType, setDeviceType] = useState<"clock" | "attendance">(dType);
   const queryString =
-    `${mode ? `mode=${mode}&` : ''}${status ? `status=${status}&` : ''}${
-      search ? `search=${search}&` : ''
-    }${type ? `type=${type}&` : ''}
+    `${mode ? `mode=${mode}&` : ""}${status ? `status=${status}&` : ""}${
+      search ? `search=${search}&` : ""
+    }${type ? `type=${type}&` : ""}
       `.slice(0, -1);
 
   const { refetch: refetchAllDevices, isLoading } = useGetAllDevicesQuery({
@@ -36,13 +36,13 @@ export default function DevicesComponent({
 
   const router = useRouter();
 
-  const handleDeviceTypeChange = (deviceType: 'clock' | 'attendance') => {
+  const handleDeviceTypeChange = (deviceType: "clock" | "attendance") => {
     const params = new URLSearchParams();
-    if (mode) params.append('mode', mode);
-    if (status) params.append('status', status);
-    if (search) params.append('search', search);
-    if (type) params.append('type', type);
-    params.append('deviceType', deviceType);
+    if (mode) params.append("mode", mode);
+    if (status) params.append("status", status);
+    if (search) params.append("search", search);
+    if (type) params.append("type", type);
+    params.append("deviceType", deviceType);
     setDeviceType(deviceType);
     router.replace(`/devices?${params.toString()}`);
   };
@@ -64,7 +64,7 @@ export default function DevicesComponent({
             Monitor and control all your IoT devices from one place.
           </p>
         </div>
-        {user?.role === 'admin' && user?.group && (
+        {user?.role === "admin" && user?.group && (
           <div>
             <AddDeviceModal
               groupId={user?.group}
@@ -78,7 +78,7 @@ export default function DevicesComponent({
         <Tabs
           defaultValue={deviceType}
           onValueChange={(value) =>
-            handleDeviceTypeChange(value as 'clock' | 'attendance')
+            handleDeviceTypeChange(value as "clock" | "attendance")
           }
         >
           <TabsList className="w-full sm:w-fit">

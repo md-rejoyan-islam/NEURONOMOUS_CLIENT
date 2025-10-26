@@ -1,15 +1,15 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Firmware {
   _id: string;
   version: number;
-  type: 'single' | 'double';
+  type: "single" | "double";
   file: Buffer;
   description: string;
 }
 export interface FirmwareCreateInput {
   version: number;
-  type: 'single' | 'double';
+  type: "single" | "double";
   file: Buffer;
   description: string;
 }
@@ -42,32 +42,32 @@ interface IGroupSummary {
 }
 
 export const summaryApi = createApi({
-  reducerPath: 'summaryApi',
+  reducerPath: "summaryApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/proxy/api/v1',
+    baseUrl: "/api/proxy/api/v1",
   }),
   // keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
-  tagTypes: ['Summary'],
+  tagTypes: ["Summary"],
   endpoints: (builder) => ({
     getDashboardPageSummary: builder.query<IDashboardSummary, void>({
       query: () => ({
-        url: '/summary/dashboard',
-        method: 'GET',
+        url: "/summary/dashboard",
+        method: "GET",
       }),
       transformResponse: (response: ISuccessResponse<IDashboardSummary>) =>
         response.data,
-      providesTags: ['Summary'],
+      providesTags: ["Summary"],
     }),
     downloadClocksSummary: builder.mutation<{ success: boolean }, void>({
       query: () => ({
         url: `/summary/download/clock-devices`,
-        method: 'GET',
+        method: "GET",
         responseHandler: async (response) => {
           const blob = await response.blob();
           const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
+          const link = document.createElement("a");
           link.href = url;
-          link.download = 'clock_devices_summary.csv';
+          link.download = "clock_devices_summary.csv";
           document.body.appendChild(link);
           link.click();
           link.remove();
@@ -80,13 +80,13 @@ export const summaryApi = createApi({
     downloadAttendancesSummary: builder.mutation<{ success: boolean }, void>({
       query: () => ({
         url: `/summary/download/attendance-devices`,
-        method: 'GET',
+        method: "GET",
         responseHandler: async (response) => {
           const blob = await response.blob();
           const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
+          const link = document.createElement("a");
           link.href = url;
-          link.download = 'attendance_devices_summary.csv';
+          link.download = "attendance_devices_summary.csv";
           document.body.appendChild(link);
           link.click();
           link.remove();
@@ -99,13 +99,13 @@ export const summaryApi = createApi({
     downloadStudentsSummary: builder.mutation<{ success: boolean }, void>({
       query: () => ({
         url: `/summary/download/students`,
-        method: 'GET',
+        method: "GET",
         responseHandler: async (response) => {
           const blob = await response.blob();
           const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
+          const link = document.createElement("a");
           link.href = url;
-          link.download = 'students_summary.csv';
+          link.download = "students_summary.csv";
           document.body.appendChild(link);
           link.click();
           link.remove();
@@ -117,12 +117,12 @@ export const summaryApi = createApi({
     }),
     getAllGroupSummaries: builder.query<IGroupSummary, void>({
       query: () => ({
-        url: '/summary/all-groups',
-        method: 'GET',
+        url: "/summary/all-groups",
+        method: "GET",
       }),
       transformResponse: (response: ISuccessResponse<IGroupSummary>) =>
         response.data,
-      providesTags: ['Summary'],
+      providesTags: ["Summary"],
     }),
   }),
 });

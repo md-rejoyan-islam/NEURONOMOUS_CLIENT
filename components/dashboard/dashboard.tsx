@@ -1,16 +1,16 @@
-'use client';
-import SimpleSummaryCard from '@/components/cards/simple-summary-card';
-import ActiveClockDevice from '@/components/dashboard/active-clock-device';
-import ActiveUsers from '@/components/dashboard/active-users';
-import TimeDateShow from '@/components/dashboard/time-date.show';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+"use client";
+import SimpleSummaryCard from "@/components/cards/simple-summary-card";
+import ActiveClockDevice from "@/components/dashboard/active-clock-device";
+import ActiveUsers from "@/components/dashboard/active-users";
+import TimeDateShow from "@/components/dashboard/time-date.show";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   useDownloadAttendancesSummaryMutation,
   useDownloadClocksSummaryMutation,
   useDownloadStudentsSummaryMutation,
   useGetDashboardPageSummaryQuery,
-} from '@/queries/summary';
+} from "@/queries/summary";
 import {
   AlertTriangle,
   ArrowDown,
@@ -19,17 +19,17 @@ import {
   Component,
   User,
   Users,
-} from 'lucide-react';
-import { toast } from 'sonner';
-import CardSkeleton from '../loading/card-skeleton';
-import { Skeleton } from '../ui/skeleton';
+} from "lucide-react";
+import { toast } from "sonner";
+import CardSkeleton from "../loading/card-skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 export default function Dashboard() {
   const { data, isLoading, error } = useGetDashboardPageSummaryQuery(
     undefined,
     {
       pollingInterval: 30000, // Poll every 30 seconds
-    }
+    },
   );
 
   const [downloadStudentsSummary] = useDownloadStudentsSummaryMutation();
@@ -40,30 +40,30 @@ export default function Dashboard() {
     try {
       await downloadStudentsSummary().unwrap();
 
-      toast.success('Download successful', {
+      toast.success("Download successful", {
         description: `Students summary has been downloaded.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Download failed', {
+      toast.error("Download failed", {
         description:
           error?.data?.message ||
-          'Failed to download students summary. Please try again.',
+          "Failed to download students summary. Please try again.",
       });
     }
   };
   const handleDownloadClocks = async () => {
     try {
       await downloadClocksSummary().unwrap();
-      toast.success('Download successful', {
+      toast.success("Download successful", {
         description: `Clock devices summary has been downloaded.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Download failed', {
+      toast.error("Download failed", {
         description:
           error?.data?.message ||
-          'Failed to download clock devices summary. Please try again.',
+          "Failed to download clock devices summary. Please try again.",
       });
     }
   };
@@ -71,15 +71,15 @@ export default function Dashboard() {
     try {
       await downloadattendancesSummary().unwrap();
 
-      toast.success('Download successful', {
+      toast.success("Download successful", {
         description: `Attendance devices summary has been downloaded.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Download failed', {
+      toast.error("Download failed", {
         description:
           error?.data?.message ||
-          'Failed to download attendance devices summary. Please try again.',
+          "Failed to download attendance devices summary. Please try again.",
       });
     }
   };
@@ -130,7 +130,7 @@ export default function Dashboard() {
       <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-2xl font-bold sm:text-3xl">
-            Welcome back, {data?.first_name + ' ' + data?.last_name}
+            Welcome back, {data?.first_name + " " + data?.last_name}
           </h1>
           <p className="text-muted-foreground mt-1">
             Here{"'"}s what{"'"}s happening with your IoT system today.
@@ -142,7 +142,7 @@ export default function Dashboard() {
       {/* System Overview */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2">
         <ActiveClockDevice />
-        {data?.role !== 'user' && <ActiveUsers usersList={data?.users || []} />}
+        {data?.role !== "user" && <ActiveUsers usersList={data?.users || []} />}
 
         {/* <SimpleSummaryCard
           label="Attendance Performance"
@@ -167,7 +167,7 @@ export default function Dashboard() {
           valueColor="text-primary"
         />
 
-        {data?.role === 'superadmin' && (
+        {data?.role === "superadmin" && (
           <SimpleSummaryCard
             label="Total Groups"
             value={data?.totalGroups || 0}
@@ -176,7 +176,7 @@ export default function Dashboard() {
           />
         )}
 
-        {data?.role !== 'user' && (
+        {data?.role !== "user" && (
           <SimpleSummaryCard
             label="Total Users"
             value={data?.totalUsers || 0}
@@ -184,7 +184,7 @@ export default function Dashboard() {
             valueColor="text-primary"
           />
         )}
-        {data?.role !== 'user' && (
+        {data?.role !== "user" && (
           <SimpleSummaryCard
             label="Total Students"
             value={data?.totalStudents || 0}
@@ -194,9 +194,9 @@ export default function Dashboard() {
         )}
       </section>
 
-      {data?.role !== 'user' && <hr />}
+      {data?.role !== "user" && <hr />}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {data?.role === 'superadmin' && (
+        {data?.role === "superadmin" && (
           <>
             <Card>
               <CardContent>
@@ -207,7 +207,7 @@ export default function Dashboard() {
                 <p className="text-muted-foreground mb-4 text-xs">
                   Download a summary report of all registered clock devices.
                 </p>
-                <Button variant={'outline'} onClick={handleDownloadClocks}>
+                <Button variant={"outline"} onClick={handleDownloadClocks}>
                   <ArrowDown className="text-primary animate-bounce" />
                   Download
                 </Button>
@@ -223,7 +223,7 @@ export default function Dashboard() {
                   Download a summary report of all registered attendance
                   devices.
                 </p>
-                <Button variant={'outline'} onClick={handleDownloadAttendance}>
+                <Button variant={"outline"} onClick={handleDownloadAttendance}>
                   <ArrowDown className="text-primary animate-bounce" />
                   Download
                 </Button>
@@ -231,7 +231,7 @@ export default function Dashboard() {
             </Card>
           </>
         )}
-        {data?.role !== 'user' && (
+        {data?.role !== "user" && (
           <Card>
             <CardContent>
               <p className="text-primary pb-2 font-medium">Students Report</p>
@@ -239,7 +239,7 @@ export default function Dashboard() {
               <p className="text-muted-foreground mb-4 text-xs">
                 Download a summary report of all registered students.
               </p>
-              <Button variant={'outline'} onClick={handleDownloadStudent}>
+              <Button variant={"outline"} onClick={handleDownloadStudent}>
                 <ArrowDown className="text-primary animate-bounce" />
                 Download
               </Button>

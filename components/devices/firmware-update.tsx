@@ -1,16 +1,16 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { socketManager } from '@/lib/socket';
-import { useUpdateDeviceFirmwareMutation } from '@/queries/devices';
-import { Cog, Download } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { Progress } from '../ui/progress';
+} from "@/components/ui/dialog";
+import { socketManager } from "@/lib/socket";
+import { useUpdateDeviceFirmwareMutation } from "@/queries/devices";
+import { Cog, Download } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Progress } from "../ui/progress";
 
 const FirmwareUpdate = ({
   version,
@@ -40,8 +40,8 @@ const FirmwareUpdate = ({
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update Failed', {
-        description: error?.data?.message || 'Failed to send notice.',
+      toast.error("Update Failed", {
+        description: error?.data?.message || "Failed to send notice.",
       });
     }
   };
@@ -58,8 +58,8 @@ const FirmwareUpdate = ({
     if (!socket) return;
     const handler = (message: { status: string }) => {
       const { status } = message;
-      const messageValue = status.split(': ')[1];
-      const value = +messageValue?.split('%')[0];
+      const messageValue = status.split(": ")[1];
+      const value = +messageValue?.split("%")[0];
 
       // if (messageValue === 'Started') {
       //   setUpdateMessage('Starting update...');
@@ -67,23 +67,23 @@ const FirmwareUpdate = ({
 
       if (+value >= 0 && +value <= 100) {
         setFailedUpdate(false);
-        setUpdateMessage('');
+        setUpdateMessage("");
         setProgress(+value);
-      } else if (messageValue === 'Rebooting') {
+      } else if (messageValue === "Rebooting") {
         setFailedUpdate(false);
         setProgress(100);
-        setUpdateMessage('Rebooting device...');
+        setUpdateMessage("Rebooting device...");
         setTimeout(() => {
           setIsOpenProcess(false);
           setUpdateMessage(null);
           setProgress(0);
-          toast.success('Firmware updated successfully', {
+          toast.success("Firmware updated successfully", {
             description: `Device ${id} has been updated to version ${version}.`,
           });
         }, 5000);
-      } else if (messageValue === 'Failed') {
+      } else if (messageValue === "Failed") {
         setFailedUpdate(true);
-        setUpdateMessage('Update failed. Please try again.');
+        setUpdateMessage("Update failed. Please try again.");
         setIsOpenProcess(false);
 
         // setProgress(0);

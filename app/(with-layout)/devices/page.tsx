@@ -1,9 +1,9 @@
-import DevicesComponent from '@/components/devices/devices-component';
-import type { Metadata } from 'next';
+import DevicesComponent from "@/components/devices/devices-component";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Devices Management',
-  description: 'Manage your IoT devices efficiently',
+  title: "Devices Management",
+  description: "Manage your IoT devices efficiently",
 };
 
 const DevicesPage = async ({
@@ -14,7 +14,7 @@ const DevicesPage = async ({
     status?: string;
     search?: string;
     type?: string;
-    deviceType?: 'clock' | 'attendance';
+    deviceType?: "clock" | "attendance";
   }>;
 }) => {
   const { mode, status, search, type, deviceType } = await searchParams;

@@ -1,7 +1,7 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { AlertTriangle, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+"use client";
+import { Button } from "@/components/ui/button";
+import { AlertTriangle, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const Error = () => {
   return (
@@ -12,7 +12,7 @@ const Error = () => {
         <p className="text-muted-foreground mb-4">
           The requested device could not be found.
         </p>
-        <Link href={'/devices'}>
+        <Link href={"/devices"}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Devices

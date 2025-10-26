@@ -1,9 +1,9 @@
-'use client';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import { IDevice } from '@/lib/types';
+"use client";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { IDevice } from "@/lib/types";
 
 const DeviceSelect = ({
   devices,
@@ -29,8 +29,8 @@ const DeviceSelect = ({
         <Label>Select Devices</Label>
         <Button variant="outline" size="sm" onClick={handleSelectAll}>
           {selectedDevices.length === devices.length
-            ? 'Deselect All'
-            : 'Select All'}
+            ? "Deselect All"
+            : "Select All"}
         </Button>
       </div>
 
@@ -56,11 +56,11 @@ const DeviceSelect = ({
                 </div>
               </div>
               <Badge
-                variant={device.status === 'online' ? 'default' : 'secondary'}
+                variant={device.status === "online" ? "default" : "secondary"}
                 className={`text-xs ${
-                  device.status === 'online'
-                    ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                    : ''
+                  device.status === "online"
+                    ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
+                    : ""
                 }`}
               >
                 {device.status}

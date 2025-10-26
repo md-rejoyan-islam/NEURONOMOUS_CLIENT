@@ -1,7 +1,7 @@
-'use client';
-import NormalTable from '@/components/table/normal-table';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+"use client";
+import NormalTable from "@/components/table/normal-table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -9,15 +9,15 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { useGetAllCoursesQuery } from '@/queries/course';
+} from "@/components/ui/select";
+import { useGetAllCoursesQuery } from "@/queries/course";
 
-import { DoorClosedLocked } from 'lucide-react';
-import Link from 'next/link';
+import { DoorClosedLocked } from "lucide-react";
+import Link from "next/link";
 
 const Page = () => {
-  const { data } = useGetAllCoursesQuery('');
-  console.log(data, ' all courses');
+  const { data } = useGetAllCoursesQuery("");
+  console.log(data, " all courses");
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -72,14 +72,14 @@ const Page = () => {
         <CardContent>
           <NormalTable
             headers={[
-              '#',
-              'Course Name',
-              'Course Code',
-              'Session',
-              'Performance',
-              'Classes Taken',
-              'Instructor',
-              'Last Updated',
+              "#",
+              "Course Name",
+              "Course Code",
+              "Session",
+              "Performance",
+              "Classes Taken",
+              "Instructor",
+              "Last Updated",
             ]}
             isLoading={false}
             data={
@@ -87,7 +87,7 @@ const Page = () => {
                 index + 1,
                 <Link
                   key={course._id}
-                  href={'/devices/attendance/001/courses/' + course._id}
+                  href={"/devices/attendance/001/courses/" + course._id}
                   className="text-blue-600 hover:underline"
                 >
                   {course.name}
@@ -99,10 +99,10 @@ const Page = () => {
                 <p key={course.instructor}>
                   {course.instructor} ({course.instructor_email})
                 </p>,
-                new Date(course.updatedAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
+                new Date(course.updatedAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
                 }),
               ]) || []
             }

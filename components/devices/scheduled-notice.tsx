@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -6,12 +6,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { IScheduledNotice } from '@/lib/types';
-import { useCancelScheduledNoticeMutation } from '@/queries/devices';
-import { format } from 'date-fns';
-import { AlertTriangle, Bell, Trash } from 'lucide-react';
-import { toast } from 'sonner';
+} from "@/components/ui/table";
+import { IScheduledNotice } from "@/lib/types";
+import { useCancelScheduledNoticeMutation } from "@/queries/devices";
+import { format } from "date-fns";
+import { AlertTriangle, Bell, Trash } from "lucide-react";
+import { toast } from "sonner";
 
 const ScheduledNotice = ({
   id,
@@ -24,14 +24,14 @@ const ScheduledNotice = ({
   const cancelScheduledNoticeHandler = async (noticeId: string) => {
     try {
       await cancelScheduledNotice({ id, noticeId }).unwrap();
-      toast.success('Scheduled Notice Cancelled', {
-        description: 'The scheduled notice has been cancelled successfully.',
+      toast.success("Scheduled Notice Cancelled", {
+        description: "The scheduled notice has been cancelled successfully.",
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Cancellation Failed', {
+      toast.error("Cancellation Failed", {
         description:
-          error?.data?.message || 'Failed to cancel scheduled notice.',
+          error?.data?.message || "Failed to cancel scheduled notice.",
       });
     }
   };
@@ -72,14 +72,14 @@ const ScheduledNotice = ({
                         <div>{notice.notice}</div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
-                        {format(new Date(notice.start_time), 'PPPpp')}
+                        {format(new Date(notice.start_time), "PPPpp")}
                         {/* {format(
                             new Date(notice.start_time),
                             "yyyy-MM-dd hh:mm:ss a"
                           )} */}
                       </TableCell>
                       <TableCell>
-                        {format(new Date(notice.end_time), 'PPPpp')}
+                        {format(new Date(notice.end_time), "PPPpp")}
                       </TableCell>
 
                       <TableCell className="text-muted-foreground hidden text-sm md:table-cell">

@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import InputField from '@/components/form/input-field';
-import PasswordField from '@/components/form/password-field';
-import TextField from '@/components/form/text-field';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import InputField from "@/components/form/input-field";
+import PasswordField from "@/components/form/password-field";
+import TextField from "@/components/form/text-field";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   CreateGroupWithAdminInput,
   createGroupWithAdminSchema,
-} from '@/lib/validations';
-import { useAddAdminWithGroupMutation } from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FolderPlus, Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "@/lib/validations";
+import { useAddAdminWithGroupMutation } from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FolderPlus, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const GroupCreate = () => {
   const router = useRouter();
@@ -26,7 +26,7 @@ const GroupCreate = () => {
   } = useForm<CreateGroupWithAdminInput>({
     resolver: zodResolver(createGroupWithAdminSchema),
     defaultValues: {
-      role: 'admin',
+      role: "admin",
     },
   });
 
@@ -34,15 +34,15 @@ const GroupCreate = () => {
   const onSubmit = async (data: CreateGroupWithAdminInput) => {
     try {
       await addAdminWithGroup(data).unwrap();
-      toast.success('Group Created', {
+      toast.success("Group Created", {
         description: `Group ${data.group_name} has been created with admin ${data.first_name} ${data.last_name}.`,
       });
-      router.push('/groups/all');
+      router.push("/groups/all");
       reset();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Group Creation Failed', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Group Creation Failed", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     }
   };
@@ -67,7 +67,7 @@ const GroupCreate = () => {
             placeholder="Enter group name"
             type="text"
             error={errors.group_name?.message}
-            props={register('group_name')}
+            props={register("group_name")}
             isOptional={false}
             name="groupName"
             disabled={isLoading}
@@ -77,7 +77,7 @@ const GroupCreate = () => {
             placeholder="Enter group EIIN"
             type="text"
             error={errors.group_eiin?.message}
-            props={register('group_eiin')}
+            props={register("group_eiin")}
             isOptional={false}
             name="groupEiin"
             disabled={isLoading}
@@ -87,7 +87,7 @@ const GroupCreate = () => {
             name="groupDescription"
             placeholder="Brief description of this group..."
             label="Description"
-            props={register('group_description')}
+            props={register("group_description")}
             error={errors.group_description?.message}
             disabled={isLoading}
           />
@@ -98,7 +98,7 @@ const GroupCreate = () => {
               placeholder="Enter first name"
               type="text"
               error={errors.first_name?.message}
-              props={register('first_name')}
+              props={register("first_name")}
               isOptional={false}
               name="first_name"
               disabled={isLoading}
@@ -108,7 +108,7 @@ const GroupCreate = () => {
               placeholder="Enter last name"
               type="text"
               error={errors.last_name?.message}
-              props={register('last_name')}
+              props={register("last_name")}
               isOptional={false}
               name="last_name"
               disabled={isLoading}
@@ -119,7 +119,7 @@ const GroupCreate = () => {
             placeholder="Enter admin email"
             type="email"
             error={errors.email?.message}
-            props={register('email')}
+            props={register("email")}
             isOptional={false}
             disabled={isLoading}
             name="email"
@@ -129,7 +129,7 @@ const GroupCreate = () => {
             label="Password"
             placeholder="Enter admin password"
             error={errors.password?.message}
-            props={register('password')}
+            props={register("password")}
             disabled={isLoading}
           />
 

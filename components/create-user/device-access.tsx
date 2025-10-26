@@ -1,11 +1,11 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import { IAttendanceDevice, IDevice } from '@/lib/types';
-import { TableIcon } from 'lucide-react';
-import { Badge } from '../ui/badge';
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { IAttendanceDevice, IDevice } from "@/lib/types";
+import { TableIcon } from "lucide-react";
+import { Badge } from "../ui/badge";
 const DeviceAccess = ({
   selectedDevices,
   devices,
@@ -22,15 +22,15 @@ const DeviceAccess = ({
 }) => {
   const clockDevices = devices
     .filter(
-      (d): d is { deviceType: 'clock'; device: IDevice } =>
-        d.deviceType === 'clock'
+      (d): d is { deviceType: "clock"; device: IDevice } =>
+        d.deviceType === "clock",
     )
     .map(({ device }) => device);
 
   const attendanceDevices = devices
     .filter(
-      (d): d is { deviceType: 'attendance'; device: IAttendanceDevice } =>
-        d.deviceType === 'attendance'
+      (d): d is { deviceType: "attendance"; device: IAttendanceDevice } =>
+        d.deviceType === "attendance",
     )
     .map(({ device }) => device);
 
@@ -52,8 +52,8 @@ const DeviceAccess = ({
             onClick={handleSelectAllDevices}
           >
             {selectedDevices.length === devices.length
-              ? 'Deselect All'
-              : 'Select All'}
+              ? "Deselect All"
+              : "Select All"}
           </Button>
         </div>
 
@@ -77,12 +77,12 @@ const DeviceAccess = ({
                   </div>
                   <Badge
                     variant={
-                      device.status === 'online' ? 'default' : 'secondary'
+                      device.status === "online" ? "default" : "secondary"
                     }
                     className={`mt-1 text-xs ${
-                      device.status === 'online'
-                        ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                        : ''
+                      device.status === "online"
+                        ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
+                        : ""
                     }`}
                   >
                     {device.status}
@@ -109,12 +109,12 @@ const DeviceAccess = ({
 
                   <Badge
                     variant={
-                      device.status === 'online' ? 'default' : 'secondary'
+                      device.status === "online" ? "default" : "secondary"
                     }
                     className={`mt-1 text-xs ${
-                      device.status === 'online'
-                        ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                        : ''
+                      device.status === "online"
+                        ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
+                        : ""
                     }`}
                   >
                     {device.status}
@@ -128,7 +128,7 @@ const DeviceAccess = ({
         <hr />
 
         <div className="text-muted-foreground bg-muted/50 rounded-lg p-3 text-sm">
-          <strong>{selectedDevices.length}</strong> of{' '}
+          <strong>{selectedDevices.length}</strong> of{" "}
           <strong>{devices.length}</strong> devices selected
         </div>
       </CardContent>

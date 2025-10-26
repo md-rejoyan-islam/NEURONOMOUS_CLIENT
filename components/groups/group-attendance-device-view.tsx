@@ -1,4 +1,4 @@
-import { IAttendanceDeviceWithUsers } from '@/lib/types';
+import { IAttendanceDeviceWithUsers } from "@/lib/types";
 import {
   BoxesIcon,
   Mail,
@@ -7,16 +7,16 @@ import {
   Wifi,
   WifiOff,
   WifiPen,
-} from 'lucide-react';
-import Link from 'next/link';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
-import { Card, CardContent } from '../ui/card';
-import { Skeleton } from '../ui/skeleton';
+} from "lucide-react";
+import Link from "next/link";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
 
 const GroupAttendanceDeviceView = ({
   filteredDevices,
-  searchTerm = '',
+  searchTerm = "",
   isLoading,
 }: {
   filteredDevices: IAttendanceDeviceWithUsers[];
@@ -56,7 +56,7 @@ const GroupAttendanceDeviceView = ({
                           <h3 className="font-semibold">
                             {(device.allowed_users?.length &&
                               device.allowed_users[0]?.first_name) ||
-                              'Instructor not assigned'}
+                              "Instructor not assigned"}
                           </h3>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
                             Device Id: {device.id}
@@ -64,21 +64,21 @@ const GroupAttendanceDeviceView = ({
                         </div>
                       </div>
                       <div className="ml-2 flex items-center gap-2">
-                        {device.status === 'online' ? (
+                        {device.status === "online" ? (
                           <Wifi className="h-4 w-4 text-green-500" />
                         ) : (
                           <WifiOff className="h-4 w-4 text-red-500" />
                         )}
                         <Badge
                           variant={
-                            device.status === 'online'
-                              ? 'default'
-                              : 'destructive'
+                            device.status === "online"
+                              ? "default"
+                              : "destructive"
                           }
                           className={
-                            device.status === 'online'
-                              ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-                              : ''
+                            device.status === "online"
+                              ? "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
+                              : ""
                           }
                         >
                           {device.status}
@@ -90,11 +90,11 @@ const GroupAttendanceDeviceView = ({
                         <Mail className="text-primary mr-2 h-4 w-4" />
                         {(device.allowed_users?.length &&
                           device.allowed_users[0]?.email) ||
-                          'No Instructor Email'}
+                          "No Instructor Email"}
                       </div>
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <School className="text-primary mr-2 h-4 w-4" />
-                        {device.group?.name || 'No Group Assigned'}
+                        {device.group?.name || "No Group Assigned"}
                       </div>
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <WifiPen className="text-primary mr-2 h-4 w-4" />
@@ -129,8 +129,8 @@ const GroupAttendanceDeviceView = ({
               <h3 className="mb-2 text-lg font-medium">No devices found</h3>
               <p className="text-muted-foreground">
                 {searchTerm
-                  ? 'Try adjusting your search terms.'
-                  : 'Connect your IoT devices to get started.'}
+                  ? "Try adjusting your search terms."
+                  : "Connect your IoT devices to get started."}
               </p>
             </div>
           )}

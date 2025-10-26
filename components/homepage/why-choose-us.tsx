@@ -1,57 +1,57 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 export default function WhyChooseUs() {
   const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
 
   const benefits = [
     {
-      title: 'Expert Customization',
+      title: "Expert Customization",
       description:
-        'Every device is custom-built to match your exact specifications and business requirements.',
-      icon: '🎨',
+        "Every device is custom-built to match your exact specifications and business requirements.",
+      icon: "🎨",
     },
     {
-      title: 'Proven Reliability',
+      title: "Proven Reliability",
       description:
-        '99.9% uptime guarantee with 24/7 technical support and maintenance.',
-      icon: '✅',
+        "99.9% uptime guarantee with 24/7 technical support and maintenance.",
+      icon: "✅",
     },
     {
-      title: 'Scalable Solutions',
+      title: "Scalable Solutions",
       description:
-        'Start small and scale up. Our solutions grow with your business needs.',
-      icon: '📈',
+        "Start small and scale up. Our solutions grow with your business needs.",
+      icon: "📈",
     },
     {
-      title: 'Future-Proof Technology',
+      title: "Future-Proof Technology",
       description:
-        'Built with the latest IoT standards and cloud integration for long-term viability.',
-      icon: '🚀',
+        "Built with the latest IoT standards and cloud integration for long-term viability.",
+      icon: "🚀",
     },
     {
-      title: 'Dedicated Support',
+      title: "Dedicated Support",
       description:
-        'Personal account managers and technical teams dedicated to your success.',
-      icon: '👥',
+        "Personal account managers and technical teams dedicated to your success.",
+      icon: "👥",
     },
     {
-      title: 'Competitive Pricing',
+      title: "Competitive Pricing",
       description:
-        'Premium quality at transparent, competitive rates with flexible payment options.',
-      icon: '💰',
+        "Premium quality at transparent, competitive rates with flexible payment options.",
+      icon: "💰",
     },
   ];
 
   const promises = [
-    'Custom design tailored to your vision',
-    'On-time delivery and installation',
-    'Comprehensive training and documentation',
-    'Ongoing technical support and updates',
-    'Quality assurance and testing',
-    'Seamless integration with existing systems',
+    "Custom design tailored to your vision",
+    "On-time delivery and installation",
+    "Comprehensive training and documentation",
+    "Ongoing technical support and updates",
+    "Quality assurance and testing",
+    "Seamless integration with existing systems",
   ];
 
   return (

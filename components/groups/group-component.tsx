@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import GroupEditModal from '@/components/groups/group-edit-modal';
-import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import GroupEditModal from "@/components/groups/group-edit-modal";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
   useDeleteGroupByIdMutation,
   useGetAllGroupsQuery,
-} from '@/queries/group';
-import { useGetAllGroupSummariesQuery } from '@/queries/summary';
+} from "@/queries/group";
+import { useGetAllGroupSummariesQuery } from "@/queries/summary";
 import {
   AlarmClock,
   Calculator,
@@ -14,23 +14,23 @@ import {
   FolderOpen,
   Settings,
   Trash2,
-} from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import SimpleSummaryCard from '../cards/simple-summary-card';
-import TableSkeleton from '../loading/table-skeleton';
-import NormalTable from '../table/normal-table';
-import { Badge } from '../ui/badge';
-import { Input } from '../ui/input';
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import SimpleSummaryCard from "../cards/simple-summary-card";
+import TableSkeleton from "../loading/table-skeleton";
+import NormalTable from "../table/normal-table";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
 
 const GroupComponent = ({ search }: { search: string }) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>(search);
 
   const { data: groups = [], isLoading } = useGetAllGroupsQuery(
-    `search=${searchTerm}`
+    `search=${searchTerm}`,
   );
 
   const { data } = useGetAllGroupSummariesQuery();
@@ -41,13 +41,13 @@ const GroupComponent = ({ search }: { search: string }) => {
     try {
       deleteGroup(id).unwrap();
 
-      toast.success('Group Deleted', {
+      toast.success("Group Deleted", {
         description: `Group  has been deleted.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Group Deletion Failed', {
-        description: error?.data?.message || 'Could not delete the group.',
+      toast.error("Group Deletion Failed", {
+        description: error?.data?.message || "Could not delete the group.",
       });
     }
   };
@@ -135,13 +135,13 @@ const GroupComponent = ({ search }: { search: string }) => {
             itemsPerPage={10}
             totalItems={groups.length}
             headers={[
-              '#',
-              'Name',
-              'EIIN',
-              'Devices',
-              'Users',
-              'Created',
-              'Actions',
+              "#",
+              "Name",
+              "EIIN",
+              "Devices",
+              "Users",
+              "Created",
+              "Actions",
             ]}
             isLoading={isLoading}
             data={groups.map((group, index) => [
@@ -153,18 +153,18 @@ const GroupComponent = ({ search }: { search: string }) => {
               </Link>,
               group.eiin,
               <div key="devices" className="flex flex-wrap items-center gap-1">
-                <Badge variant={'outline'}>{group.clock || 0} clock</Badge>
-                <Badge variant={'outline'}>
+                <Badge variant={"outline"}>{group.clock || 0} clock</Badge>
+                <Badge variant={"outline"}>
                   {group.attendance || 0} attendance
                 </Badge>
               </div>,
               <>
                 {group.users}
-                {group.users > 0 ? ' users' : ' user'}
+                {group.users > 0 ? " users" : " user"}
               </>,
               new Date(group.createdAt).toLocaleDateString(),
 
-              <div className="flex items-center gap-2" key={'actions'}>
+              <div className="flex items-center gap-2" key={"actions"}>
                 <GroupEditModal
                   name={group.name}
                   description={group.description}

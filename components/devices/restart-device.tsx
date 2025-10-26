@@ -1,16 +1,16 @@
-import { Button } from '@/components/ui/button';
-import { useDeviceRestartByIdMutation } from '@/queries/devices';
-import clsx from 'clsx';
-import { RotateCcw } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { Button } from "@/components/ui/button";
+import { useDeviceRestartByIdMutation } from "@/queries/devices";
+import clsx from "clsx";
+import { RotateCcw } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog';
+} from "../ui/dialog";
 
 const RestartDevice = ({ id, isActive }: { id: string; isActive: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,21 +21,21 @@ const RestartDevice = ({ id, isActive }: { id: string; isActive: boolean }) => {
     try {
       await deviceRestart({ deviceId: id }).unwrap();
 
-      toast.success('Device Restarted', {
+      toast.success("Device Restarted", {
         description: `Device is restarting.`,
       });
       setIsOpen(false);
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Restart Failed', {
-        description: error?.data?.message || 'Failed to restart device.',
+      toast.error("Restart Failed", {
+        description: error?.data?.message || "Failed to restart device.",
       });
     }
   };
   return (
     <>
       <Button
-        size={'sm'}
+        size={"sm"}
         variant="destructive"
         onClick={() => setIsOpen(true)}
         className="group h-fit w-fit px-0 py-1.5 text-[12px]"
@@ -43,8 +43,8 @@ const RestartDevice = ({ id, isActive }: { id: string; isActive: boolean }) => {
       >
         <RotateCcw
           className={clsx(
-            isLoadingRestart ? 'animate-spin' : '',
-            'group-hover:animate-spin'
+            isLoadingRestart ? "animate-spin" : "",
+            "group-hover:animate-spin",
           )}
         />
         Restart
@@ -72,8 +72,8 @@ const RestartDevice = ({ id, isActive }: { id: string; isActive: boolean }) => {
             <Button onClick={handleDeviceRestart} disabled={isLoadingRestart}>
               <RotateCcw
                 className={clsx(
-                  isLoadingRestart ? 'animate-spin' : '',
-                  'h-4 w-4'
+                  isLoadingRestart ? "animate-spin" : "",
+                  "h-4 w-4",
                 )}
               />
               Restart Device

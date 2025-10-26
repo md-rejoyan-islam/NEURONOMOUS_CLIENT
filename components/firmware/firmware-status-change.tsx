@@ -1,12 +1,12 @@
-import { Switch } from '@/components/ui/switch';
-import { useFirmwareStatusChangeMutation } from '@/queries/firmware';
-import { toast } from 'sonner';
+import { Switch } from "@/components/ui/switch";
+import { useFirmwareStatusChangeMutation } from "@/queries/firmware";
+import { toast } from "sonner";
 
 const FirmwareStatusChange = ({
   status,
   id,
 }: {
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   id: string;
 }) => {
   const [statusChange, { isLoading }] = useFirmwareStatusChangeMutation();
@@ -15,17 +15,17 @@ const FirmwareStatusChange = ({
     try {
       await statusChange({
         id,
-        status: status === 'active' ? 'inactive' : 'active',
+        status: status === "active" ? "inactive" : "active",
       }).unwrap();
 
-      toast.success('Status changed.', {
-        description: `Firmware ${id} status has been changed to ${status === 'active' ? 'inactive' : 'active'}.`,
+      toast.success("Status changed.", {
+        description: `Firmware ${id} status has been changed to ${status === "active" ? "inactive" : "active"}.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Download failed', {
+      toast.error("Download failed", {
         description:
-          error?.data?.message || 'Failed to change status. Please try again.',
+          error?.data?.message || "Failed to change status. Please try again.",
       });
     }
   };
@@ -34,7 +34,7 @@ const FirmwareStatusChange = ({
     <div>
       <Switch
         className="before:width-9 cursor-pointer before:mt-2!"
-        checked={status === 'active'}
+        checked={status === "active"}
         onClick={handleStatusChange}
         disabled={isLoading}
       />

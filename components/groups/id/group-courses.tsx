@@ -1,33 +1,33 @@
-'use client';
-import InputField from '@/components/form/input-field';
-import NormalTable from '@/components/table/normal-table';
-import { AlertDialogHeader } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
+"use client";
+import InputField from "@/components/form/input-field";
+import NormalTable from "@/components/table/normal-table";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   CreateCourseForDepartmentInput,
   createCourseForDepartmentSchema,
-} from '@/lib/validations';
+} from "@/lib/validations";
 import {
   useCreateCourseForDepartmentMutation,
   useEditCourseInDepartmentMutation,
   useGetDepartmentCoursesQuery,
   useRemoveCourseForDepartmentMutation,
-} from '@/queries/group';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@/queries/group";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BookOpenText,
   NotebookPen,
   PackagePlus,
   Trash2,
   UserPlus,
-} from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const GroupCourses = ({
   _id,
@@ -41,8 +41,8 @@ const GroupCourses = ({
   limit: string;
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [modalType, setModalType] = useState<"create" | "edit">("create");
   const [editCourseId, setEditCourseId] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -53,7 +53,7 @@ const GroupCourses = ({
     },
     {
       skip: !_id,
-    }
+    },
   );
   const [createCourse, { isLoading: isCreateLoading }] =
     useCreateCourseForDepartmentMutation();
@@ -77,14 +77,14 @@ const GroupCourses = ({
 
   const onSubmit = async (data: CreateCourseForDepartmentInput) => {
     try {
-      if (modalType === 'edit' && editCourseId) {
+      if (modalType === "edit" && editCourseId) {
         await editCourse({
           courseId: editCourseId,
           groupId: String(_id),
           name: data.name,
           code: data.code,
         }).unwrap();
-        toast.success('Course Updated', {
+        toast.success("Course Updated", {
           description: `Course ${data.name} has been updated successfully.`,
         });
         setIsOpen(false);
@@ -98,7 +98,7 @@ const GroupCourses = ({
         groupId: data.department,
       }).unwrap();
 
-      toast.success('Course Created', {
+      toast.success("Course Created", {
         description: `Course ${data.name} has been created successfully.`,
       });
       setIsOpen(false);
@@ -106,21 +106,21 @@ const GroupCourses = ({
 
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to assign teacher', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Failed to assign teacher", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     }
   };
   const handleRemoveCourse = async (courseId: string) => {
     try {
       await removeCourse({ groupId: String(_id), courseId }).unwrap();
-      toast.success('Course Removed', {
+      toast.success("Course Removed", {
         description: `Course has been removed from the group successfully.`,
       });
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Failed to remove course', {
-        description: error?.data?.message || 'Invalid email or password.',
+      toast.error("Failed to remove course", {
+        description: error?.data?.message || "Invalid email or password.",
       });
     }
   };
@@ -128,11 +128,11 @@ const GroupCourses = ({
     setSearchTerm(value);
     const params = new URLSearchParams(searchParams);
     if (!value) {
-      params.delete('search');
+      params.delete("search");
     } else {
-      params.set('search', value);
+      params.set("search", value);
     }
-    params.set('page', '1'); // Reset to first page on new search
+    params.set("page", "1"); // Reset to first page on new search
     const timeoutId = setTimeout(() => {
       router.push(`/groups/all/${_id}/courses?${params.toString()}`);
     }, 500);
@@ -151,7 +151,7 @@ const GroupCourses = ({
             className="w-full sm:w-auto"
             onClick={() => {
               setIsOpen(true);
-              setModalType('create');
+              setModalType("create");
               setEditCourseId(null);
               reset();
             }}
@@ -184,7 +184,7 @@ const GroupCourses = ({
       <Card>
         <CardContent className="px-2 sm:px-6">
           <NormalTable
-            headers={['# ', 'Course Name', 'Course Code', 'Action']}
+            headers={["# ", "Course Name", "Course Code", "Action"]}
             isLoading={isLoading}
             noDataMessage="No courses found."
             currentPage={groupCourses?.pagination.page}
@@ -203,9 +203,9 @@ const GroupCourses = ({
                   <button
                     className="cursor-pointer rounded-md bg-blue-100/60 p-2 text-blue-500 hover:bg-blue-200 dark:bg-blue-200/10 dark:hover:bg-blue-200/20"
                     onClick={() => {
-                      setModalType('edit');
-                      setValue('name', course.name);
-                      setValue('code', course.code);
+                      setModalType("edit");
+                      setValue("name", course.name);
+                      setValue("code", course.code);
                       setEditCourseId(course._id);
                       setIsOpen(true);
                     }}
@@ -233,7 +233,7 @@ const GroupCourses = ({
           <AlertDialogHeader className="">
             <DialogTitle className="flex items-center gap-2">
               <PackagePlus className="h-5 w-5 text-green-600" />
-              {modalType === 'create' ? 'Create New Course' : 'Edit Course'}
+              {modalType === "create" ? "Create New Course" : "Edit Course"}
             </DialogTitle>
           </AlertDialogHeader>
 
@@ -245,7 +245,7 @@ const GroupCourses = ({
               error={errors.name?.message}
               isOptional={false}
               props={{
-                ...register('name'),
+                ...register("name"),
               }}
               type="text"
             />
@@ -256,7 +256,7 @@ const GroupCourses = ({
               error={errors.code?.message}
               isOptional={false}
               props={{
-                ...register('code'),
+                ...register("code"),
               }}
               type="text"
             />
@@ -267,13 +267,13 @@ const GroupCourses = ({
                 className="w-full"
                 disabled={isCreateLoading || isEditLoading}
               >
-                {modalType === 'create'
+                {modalType === "create"
                   ? isCreateLoading
-                    ? 'Creating...'
-                    : 'Create Course'
+                    ? "Creating..."
+                    : "Create Course"
                   : isEditLoading
-                    ? 'Updating...'
-                    : 'Update Course'}
+                    ? "Updating..."
+                    : "Update Course"}
               </Button>
             </div>
           </form>

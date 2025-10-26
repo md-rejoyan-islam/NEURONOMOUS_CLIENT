@@ -4,9 +4,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { AlertTriangle, Trash2 } from 'lucide-react';
-import { Button } from '../ui/button';
+} from "@/components/ui/dialog";
+import { AlertTriangle, Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
 
 const DeleteConfirmationModal = ({
   isOpen,

@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
-import { useProfileQuery } from '@/queries/auth';
-import { LogOut, Menu, Settings, Zap } from 'lucide-react';
-import Link from 'next/link';
-import { redirect, usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import navigationItems from '../navigation-items';
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { useProfileQuery } from "@/queries/auth";
+import { LogOut, Menu, Settings, Zap } from "lucide-react";
+import Link from "next/link";
+import { redirect, usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import navigationItems from "../navigation-items";
 
 export function MobileDrawer() {
   const { data: user } = useProfileQuery();
@@ -24,24 +24,24 @@ export function MobileDrawer() {
   const router = useRouter();
 
   const isActive = (path: string) =>
-    pathname.split('/')[1] === path.split('/')[1];
+    pathname.split("/")[1] === path.split("/")[1];
 
   const filteredItems = navigationItems.filter(
-    (item) => user && item.roles.includes(user.role)
+    (item) => user && item.roles.includes(user.role),
   );
 
   const handleLogout = () => {
     setOpen(false);
-    router.push('/login');
+    router.push("/login");
   };
 
   if (
     user &&
     navigationItems.some(
-      (item) => item.href === pathname && !item.roles.includes(user.role)
+      (item) => item.href === pathname && !item.roles.includes(user.role),
     )
   ) {
-    redirect('/');
+    redirect("/");
   }
 
   return (
@@ -72,10 +72,10 @@ export function MobileDrawer() {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors',
+                      "flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors",
                       isActive(item.href)
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:bg-primary/10 hover:text-foreground'
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-primary/10 hover:text-foreground",
                     )}
                     onClick={() => setOpen(false)}
                   >
@@ -92,10 +92,10 @@ export function MobileDrawer() {
             <Link
               href="/profile"
               className={cn(
-                'mb-2 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors',
-                isActive('/profile')
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                "mb-2 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors",
+                isActive("/profile")
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
               onClick={() => setOpen(false)}
             >

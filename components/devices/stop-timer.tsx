@@ -1,9 +1,9 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { useStopStopWatchMutation } from '@/queries/devices';
-import { ShieldCheck } from 'lucide-react';
-import { toast } from 'sonner';
-import { Button } from '../ui/button';
-import { Label } from '../ui/label';
+import { Card, CardContent } from "@/components/ui/card";
+import { useStopStopWatchMutation } from "@/queries/devices";
+import { ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 
 const StopTimer = ({
   stopwatchId,
@@ -23,14 +23,14 @@ const StopTimer = ({
         stopwatchId,
       }).unwrap();
 
-      toast.success('Timer Stopped and Clock Mode Enabled', {
+      toast.success("Timer Stopped and Clock Mode Enabled", {
         description: `Device mode changed to clock.`,
       });
       // refetch();
       // eslint-disable-next-line
     } catch (error: any) {
-      toast.error('Update Failed', {
-        description: error?.data?.message || 'Failed to update device mode.',
+      toast.error("Update Failed", {
+        description: error?.data?.message || "Failed to update device mode.",
       });
     }
   };
@@ -50,7 +50,7 @@ const StopTimer = ({
             </p>
           </div>
           <Button disabled={isLoading} onClick={handleStopSubmit}>
-            {isLoading ? 'Stopping...' : 'Stop Timer'}
+            {isLoading ? "Stopping..." : "Stop Timer"}
           </Button>
         </div>
       </CardContent>

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { logout } from '@/app/actions';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { logout } from "@/app/actions";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,16 +10,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { socketManager } from '@/lib/socket';
-import { useLogoutMutation, useProfileQuery } from '@/queries/auth';
-import { useGetNotificationsQuery } from '@/queries/notifications';
-import { Bell, LogOut, Search, User, User2 } from 'lucide-react';
-import Link from 'next/link';
-import { toast } from 'sonner';
-import { MobileDrawer } from './layout/mobile-drawer';
-import { ThemeToggle } from './theme-toggle';
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { socketManager } from "@/lib/socket";
+import { useLogoutMutation, useProfileQuery } from "@/queries/auth";
+import { useGetNotificationsQuery } from "@/queries/notifications";
+import { Bell, LogOut, Search, User, User2 } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { MobileDrawer } from "./layout/mobile-drawer";
+import { ThemeToggle } from "./theme-toggle";
 
 export function DashboardHeader() {
   const { data: user } = useProfileQuery();
@@ -31,8 +31,8 @@ export function DashboardHeader() {
   const handleLogout = async () => {
     clientLogout();
     await logout();
-    toast.success('Logged out', {
-      description: 'You have been logged out successfully.',
+    toast.success("Logged out", {
+      description: "You have been logged out successfully.",
     });
 
     const socket = socketManager.connect();
@@ -45,22 +45,22 @@ export function DashboardHeader() {
   };
 
   const formatTime = (timestamp: string) => {
-    return new Date(timestamp).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(timestamp).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'success':
-        return '✅';
-      case 'warning':
-        return '⚠️';
-      case 'error':
-        return '❌';
+      case "success":
+        return "✅";
+      case "warning":
+        return "⚠️";
+      case "error":
+        return "❌";
       default:
-        return 'ℹ️';
+        return "ℹ️";
     }
   };
 

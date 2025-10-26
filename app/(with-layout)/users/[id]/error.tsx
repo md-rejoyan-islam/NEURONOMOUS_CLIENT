@@ -1,7 +1,7 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, XCircle } from 'lucide-react';
-import Link from 'next/link';
+"use client";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, XCircle } from "lucide-react";
+import Link from "next/link";
 const UserErrorPage = () => {
   return (
     <div className="flex h-full items-center justify-center">
