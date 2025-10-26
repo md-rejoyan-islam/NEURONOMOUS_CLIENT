@@ -76,8 +76,13 @@ const TeacherAssignModel = ({
         id: groupId,
         payload: {
           ...data,
-          deviceType: 'attendance',
-          deviceIds: [deviceId],
+
+          devices: [
+            {
+              deviceType: 'attendance',
+              deviceIds: [deviceId],
+            },
+          ],
         },
       }).unwrap();
       if (result.success) {
