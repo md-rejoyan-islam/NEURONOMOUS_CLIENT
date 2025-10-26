@@ -1,4 +1,4 @@
-import { IAttendanceDevice } from '@/lib/types';
+import { IAttendanceDeviceWithUsers } from '@/lib/types';
 import {
   BoxesIcon,
   Mail,
@@ -19,7 +19,7 @@ const GroupAttendanceDeviceView = ({
   searchTerm = '',
   isLoading,
 }: {
-  filteredDevices: IAttendanceDevice[];
+  filteredDevices: IAttendanceDeviceWithUsers[];
   searchTerm?: string;
   isLoading: boolean;
 }) => {

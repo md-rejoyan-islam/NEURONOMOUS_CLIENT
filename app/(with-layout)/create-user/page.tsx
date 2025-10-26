@@ -1,4 +1,3 @@
-import CreateUserFrom from '@/components/form/create-user-from';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -33,7 +32,7 @@ export default function CreateUserPage() {
         </div>
       </div>
 
-      <CreateUserFrom />
+      {/* <CreateUserFrom /> */}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import {
   IAttendanceDevice,
+  IAttendanceDeviceWithUsers,
   IDevice,
   IGroup,
   IGroupWithPopulatedData,
@@ -570,7 +571,7 @@ export const groupApi = createApi({
       ],
     }),
     getAttendanceDevicesInGroup: builder.query<
-      IAttendanceDevice[],
+      IAttendanceDeviceWithUsers[],
       {
         id: string;
         search?: string;
@@ -581,7 +582,7 @@ export const groupApi = createApi({
         method: 'GET',
       }),
       transformResponse: (response) =>
-        (response as ISuccessResponse<IAttendanceDevice[]>).data,
+        (response as ISuccessResponse<IAttendanceDeviceWithUsers[]>).data,
       providesTags: (result, error, arg) => [
         { type: 'Group', id: arg.id },
         'Device',

@@ -68,13 +68,15 @@ export interface IAttendanceDevice {
   free_heap: number;
   firmware_version: string | null;
   last_seen: number;
-  allowed_users?: {
-    _id: string;
-    role: 'admin' | 'user' | 'superadmin';
-    first_name: string;
-    last_name: string;
-    email: string;
-  }[];
+  allowed_users: string[];
+  // allowed_users?: {
+  role: 'admin' | 'user' | 'superadmin';
+  //   _id: string;
+  //   role: 'admin' | 'user' | 'superadmin';
+  //   first_name: string;
+  //   last_name: string;
+  //   email: string;
+  // }[];
   group: {
     _id: string;
     name: string;
@@ -92,6 +94,11 @@ export interface IAttendanceDevice {
     completedClasses: number;
     updatedAt: string;
   }[];
+}
+
+export interface IAttendanceDeviceWithUsers
+  extends Omit<IAttendanceDevice, 'allowed_users'> {
+  allowed_users: IUser[];
 }
 
 export interface IPagination {
@@ -137,6 +144,10 @@ export interface IDevice {
   time_format?: string;
   group?: string;
   available_firmwares: [{ _id: string; version: string }];
+}
+
+export interface IDeviceWithUsers extends Omit<IDevice, 'allowed_users'> {
+  allowed_users: IUser[];
 }
 
 export interface IScheduledNotice {

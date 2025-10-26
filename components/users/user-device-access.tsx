@@ -7,13 +7,14 @@ import {
 } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { getStatusColor, getStatusIcon } from '@/lib/helper';
-import { IDevice } from '@/lib/types';
+import { IAttendanceDevice, IDevice } from '@/lib/types';
 import {
   useGiveDeviceAccessToUserMutation,
   useRevolkDeviceAccessFromUserMutation,
 } from '@/queries/devices';
 
 import { MapPin } from 'lucide-react';
+import { Label } from 'recharts';
 import { toast } from 'sonner';
 
 const UserDeviceAccess = ({
@@ -21,12 +22,37 @@ const UserDeviceAccess = ({
   userId,
   refetchDevices,
 }: {
-  devices: IDevice[];
+  devices: {
+    deviceType: string;
+    device: IDevice | IAttendanceDevice;
+  }[];
   userId: string;
   refetchDevices: () => void;
 }) => {
   const [revolkDeviceAccess] = useRevolkDeviceAccessFromUserMutation();
   const [giveDeviceAccessToUsers] = useGiveDeviceAccessToUserMutation();
+
+  const clockDevices = devices
+    .filter(
+      (
+        d
+      ): d is {
+        deviceType: 'clock';
+        device: IDevice;
+      } => d.deviceType === 'clock'
+    )
+    .map(({ device }) => device);
+
+  const attendanceDevices = devices
+    .filter(
+      (
+        d
+      ): d is {
+        deviceType: 'attendance';
+        device: IAttendanceDevice;
+      } => d.deviceType === 'attendance'
+    )
+    .map(({ device }) => device);
 
   const handleDeviceAccessToggle = async (id: string, status: boolean) => {
     try {
@@ -68,7 +94,8 @@ const UserDeviceAccess = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {devices?.map((device) => (
+          <Label className="text-sm font-medium">Clock Devices</Label>
+          {clockDevices?.map((device) => (
             <div
               key={device._id}
               className="flex items-center justify-between rounded-lg border p-4"
@@ -85,6 +112,42 @@ const UserDeviceAccess = ({
                     <MapPin className="h-3 w-3" />
                     {device.location}
                     <span className="mx-1">•</span>
+                    {getStatusIcon(device.status)}
+                    <span className="capitalize">{device.status}</span>
+                  </div>
+                </div>
+              </div>
+              <Switch
+                className="cursor-pointer"
+                checked={device.allowed_users?.includes(userId)}
+                onCheckedChange={() =>
+                  handleDeviceAccessToggle(
+                    device._id,
+                    device.allowed_users?.includes(userId)
+                  )
+                }
+              />
+            </div>
+          ))}
+
+          <Label className="text-sm font-medium">Attendance Devices</Label>
+          {attendanceDevices?.map((device) => (
+            <div
+              key={device._id}
+              className="flex items-center justify-between rounded-lg border p-4"
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`h-3 w-3 rounded-full ${getStatusColor(
+                    device.status
+                  )}`}
+                />
+                <div>
+                  <div className="font-medium">{device.id}</div>
+                  <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                    {/* <MapPin className="h-3 w-3" /> */}
+                    {/* {device.location}
+                    <span className="mx-1">•</span> */}
                     {getStatusIcon(device.status)}
                     <span className="capitalize">{device.status}</span>
                   </div>

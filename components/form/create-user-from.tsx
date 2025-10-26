@@ -88,17 +88,17 @@ const CreateUserFrom = () => {
         deviceType: 'clock' as const,
       };
 
-      const result = await createUserWithDevices({
-        id: selectedGroup?._id || '',
-        payload,
-      }).unwrap();
+      // const result = await createUserWithDevices({
+      //   id: selectedGroup?._id || '',
+      //   payload,
+      // }).unwrap();
 
-      if (result?.success) {
-        toast.success('User Created Successfully', {
-          description: `User ${data.first_name} ${data.last_name} has been created and assigned to the group ${selectedGroup?.name}.`,
-        });
-        router.push('/users');
-      }
+      // if (result?.success) {
+      //   toast.success('User Created Successfully', {
+      //     description: `User ${data.first_name} ${data.last_name} has been created and assigned to the group ${selectedGroup?.name}.`,
+      //   });
+      //   router.push('/users');
+      // }
 
       // eslint-disable-next-line
     } catch (error: any) {

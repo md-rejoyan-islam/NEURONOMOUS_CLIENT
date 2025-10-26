@@ -1,4 +1,4 @@
-import { IAttendanceDevice, IDevice } from '@/lib/types';
+import { IAttendanceDeviceWithUsers, IDevice } from '@/lib/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 interface ISuccessResponse<T> {
@@ -16,7 +16,7 @@ export const attendanceDevicesApi = createApi({
   tagTypes: ['Attendance'],
   endpoints: (builder) => ({
     getAllAttendanceDevices: builder.query<
-      IAttendanceDevice[],
+      IAttendanceDeviceWithUsers[],
       { query?: string }
     >({
       query: ({ query }) => ({
@@ -24,7 +24,7 @@ export const attendanceDevicesApi = createApi({
         method: 'GET',
       }),
       transformResponse: (response) =>
-        (response as ISuccessResponse<IAttendanceDevice[]>).data,
+        (response as ISuccessResponse<IAttendanceDeviceWithUsers[]>).data,
       providesTags: (result) =>
         result
           ? [
@@ -33,13 +33,16 @@ export const attendanceDevicesApi = createApi({
             ]
           : ['Attendance'],
     }),
-    getAttendanceDeviceById: builder.query<IAttendanceDevice, { id: string }>({
+    getAttendanceDeviceById: builder.query<
+      IAttendanceDeviceWithUsers,
+      { id: string }
+    >({
       query: ({ id }) => ({
         url: `/attendance-devices/${id}`,
         method: 'GET',
       }),
       transformResponse: (response) =>
-        (response as ISuccessResponse<IAttendanceDevice>).data,
+        (response as ISuccessResponse<IAttendanceDeviceWithUsers>).data,
       providesTags: (result, error, { id }) =>
         result ? [{ type: 'Attendance', id }] : ['Attendance'],
     }),
