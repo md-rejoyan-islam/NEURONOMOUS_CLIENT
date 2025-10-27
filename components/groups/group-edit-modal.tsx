@@ -33,7 +33,6 @@ const GroupEditModal = ({
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
   } = useForm<GroupInput>({
     resolver: zodResolver(groupSchema),
     defaultValues: {
@@ -60,8 +59,7 @@ const GroupEditModal = ({
           description: `Group ${data.group_name} has been updated successfully.`,
         });
         reset();
-        setValue("group_name", data.group_name);
-        setValue("group_description", data.group_description);
+
         setIsModalOpen(false);
       }
       // eslint-disable-next-line
@@ -70,6 +68,12 @@ const GroupEditModal = ({
         description: error?.data?.message || "Failed to update group.",
       });
     }
+  };
+
+  const handleOpenModal = () => {
+    setGroup({ _id, name, description });
+    reset();
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
@@ -86,7 +90,7 @@ const GroupEditModal = ({
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => handleOpenModal()}
         className="bg-primary/5 hover:bg-primary/10 h-8 w-8 p-2 dark:text-white/70 dark:hover:text-white"
       >
         <Edit className="h-4 w-4" />

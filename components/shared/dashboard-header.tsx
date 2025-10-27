@@ -11,13 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { socketManager } from "@/lib/socket";
 import { useLogoutMutation, useProfileQuery } from "@/queries/auth";
 import { useGetNotificationsQuery } from "@/queries/notifications";
-import { Bell, LogOut, Search, User, User2 } from "lucide-react";
+import { Bell, LogOut, User, User2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import TimeDateShow from "../dashboard/time-date.show";
 import { MobileDrawer } from "./layout/mobile-drawer";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -65,17 +65,13 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="bg-card/50 supports-[backdrop-filter]:bg-card/50 h-16 border-b backdrop-blur">
+    <header className="bg-card/50 supports-backdrop-filter:bg-card/50 h-16 border-b backdrop-blur">
       <div className="flex h-full items-center justify-between px-4 sm:px-6">
         {/* Mobile Menu & Search */}
-        <div className="flex max-w-md flex-1 items-center gap-4">
+        <div className="flex max-w-md flex-1  items-center gap-4">
           <MobileDrawer />
-          <div className="relative hidden w-full sm:block">
-            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
-            <Input
-              placeholder="Search systems..."
-              className="bg-background/50 pl-10"
-            />
+          <div className="relative   w-full sm:block">
+            <TimeDateShow />
           </div>
         </div>
 

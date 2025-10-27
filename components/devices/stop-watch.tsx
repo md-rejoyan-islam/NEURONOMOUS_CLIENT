@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { IDevice } from "@/lib/types";
 import { useStartStopWatchMutation } from "@/queries/devices";
+import clsx from "clsx";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -24,11 +25,12 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
 
   const [startStopWatch] = useStartStopWatchMutation();
   const [timerStartOption, setTimerStartOption] = useState<"now" | "schedule">(
-    "now",
+    "now"
   );
 
   const handleStartStopWatch = async () => {
     const start = new Date();
+    console.log(timer);
 
     const durationMs = (timer.h * 3600 + timer.m * 60 + timer.s) * 1000;
     const gmt6Offset = 6 * 60 * 60 * 1000;
@@ -48,7 +50,9 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
         await startStopWatch({ deviceId: device._id, data }).unwrap();
         setTimer({ h: 0, m: 0, s: 0 });
         return toast.success("Stopwatch Started", {
-          description: `Stopwatch started in ${mode === "up" ? "Count Up" : "Count Down"} mode.`,
+          description: `Stopwatch started in ${
+            mode === "up" ? "Count Up" : "Count Down"
+          } mode.`,
         });
       }
 
@@ -66,7 +70,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
               date.getDate(),
               parseInt(time.split(":")[0], 10),
               parseInt(time.split(":")[1], 10),
-              parseInt(time.split(":")[2], 10),
+              parseInt(time.split(":")[2], 10)
             ).getTime() + gmt6Offset
           : null;
 
@@ -94,7 +98,9 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
       setTimer({ h: 0, m: 0, s: 0 });
       await startStopWatch({ deviceId: device._id, data }).unwrap();
       toast.success("Scheduled Stopwatch Set", {
-        description: `Stopwatch scheduled to start in ${mode === "up" ? "Count Up" : "Count Down"} mode.`,
+        description: `Stopwatch scheduled to start in ${
+          mode === "up" ? "Count Up" : "Count Down"
+        } mode.`,
       });
 
       // eslint-disable-next-line
@@ -113,18 +119,36 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
             <Timer onSetTime={setTimer} timer={timer} />
           </div>
           <div className="flex items-center justify-center gap-6 pt-4">
-            <p>Count Down</p>
+            <p
+              className={clsx(
+                "",
+                mode === "down"
+                  ? "text-primary font-bold"
+                  : "text-muted-foreground"
+              )}
+            >
+              Count Down
+            </p>
             <div className="mt-1">
               <Switch
                 className="scale-125 cursor-pointer"
                 onCheckedChange={(checked) => setMode(checked ? "up" : "down")}
               />
             </div>
-            <p>Count Up</p>
+            <p
+              className={clsx(
+                "",
+                mode === "up"
+                  ? "text-primary font-bold"
+                  : "text-muted-foreground"
+              )}
+            >
+              Count Up
+            </p>
           </div>
         </div>
         <div className="">
-          <div className="bg-primary/[0.01] mb-6 rounded-xl p-6">
+          <div className="bg-primary/1 mb-6 rounded-xl p-6">
             <h3 className="mb-4 font-semibold">Choose Timer Start Option</h3>
             <div className="flex flex-col space-y-4">
               <div className="flex items-center">

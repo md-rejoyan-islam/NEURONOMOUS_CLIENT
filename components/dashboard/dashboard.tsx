@@ -2,7 +2,6 @@
 import SimpleSummaryCard from "@/components/cards/simple-summary-card";
 import ActiveClockDevice from "@/components/dashboard/active-clock-device";
 import ActiveUsers from "@/components/dashboard/active-users";
-import TimeDateShow from "@/components/dashboard/time-date.show";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -29,7 +28,7 @@ export default function Dashboard() {
     undefined,
     {
       pollingInterval: 30000, // Poll every 30 seconds
-    },
+    }
   );
 
   const [downloadStudentsSummary] = useDownloadStudentsSummaryMutation();
@@ -136,7 +135,6 @@ export default function Dashboard() {
             Here{"'"}s what{"'"}s happening with your IoT system today.
           </p>
         </div>
-        <TimeDateShow />
       </section>
 
       {/* System Overview */}

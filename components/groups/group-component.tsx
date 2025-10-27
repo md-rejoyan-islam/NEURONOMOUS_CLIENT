@@ -30,7 +30,7 @@ const GroupComponent = ({ search }: { search: string }) => {
   const [searchTerm, setSearchTerm] = useState<string>(search);
 
   const { data: groups = [], isLoading } = useGetAllGroupsQuery(
-    `search=${searchTerm}`,
+    `search=${searchTerm}`
   );
 
   const { data } = useGetAllGroupSummariesQuery();
@@ -91,7 +91,7 @@ const GroupComponent = ({ search }: { search: string }) => {
         />
         <SimpleSummaryCard
           label="Used Attendance Devices"
-          value={data?.attendanceUsed ?? 0}
+          value={data?.attendancesUsed ?? 0}
           icon={
             <Calculator className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           }
@@ -169,7 +169,7 @@ const GroupComponent = ({ search }: { search: string }) => {
                   name={group.name}
                   description={group.description}
                   _id={group._id}
-                  eiin={group.eiin} // to be added later
+                  eiin={group.eiin}
                 />
                 <button
                   className="cursor-pointer rounded-md bg-red-100 p-2 text-red-500 hover:bg-red-200 dark:bg-red-200/10 dark:hover:bg-red-200/20"

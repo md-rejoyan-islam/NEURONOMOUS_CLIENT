@@ -34,10 +34,9 @@ const ClockDevicesView = ({
   query?: { mode?: string; status?: string; search?: string; type?: string };
 }) => {
   const { mode, status, search, type } = query || {};
-  const queryString =
-    `${mode ? `mode=${mode}&` : ""}${status ? `status=${status}&` : ""}${
-      search ? `search=${search}&` : ""
-    }${type ? `type=${type}&` : ""}
+  const queryString = `${mode ? `mode=${mode}&` : ""}${
+    status ? `status=${status}&` : ""
+  }${search ? `search=${search}&` : ""}${type ? `type=${type}&` : ""}
       `.slice(0, -1);
 
   const {
@@ -261,6 +260,20 @@ const ClockDevicesView = ({
             </CardHeader>
 
             <CardContent className="space-y-4">
+              {user?.role === "superadmin" && (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Id:</span>
+                    <span className="text-sm font-medium">{device.id}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Free Heap:</span>
+                    <span className="text-sm font-medium">
+                      {device.free_heap || "N/A"}
+                    </span>
+                  </div>
+                </>
+              )}
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-sm">Mode:</span>
                 <div className="flex items-center gap-1">
@@ -294,12 +307,14 @@ const ClockDevicesView = ({
                   {device.firmware_version || "N/A"}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Location:</span>
-                <span className="text-xs font-medium">
-                  {device.location || "N/A"}
-                </span>
-              </div>
+              {user?.role !== "superadmin" && (
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Location:</span>
+                  <span className="text-xs font-medium">
+                    {device.location || "N/A"}
+                  </span>
+                </div>
+              )}
 
               {device.notice && (
                 <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-500/30 dark:bg-orange-900/20">

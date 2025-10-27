@@ -2,6 +2,7 @@ export interface IUser {
   _id: string;
   email: string;
   first_name: string;
+  password: string;
   last_name: string;
   address?: string;
   role: "superadmin" | "admin" | "user";

@@ -48,7 +48,7 @@ export const store = configureStore({
       attendanceDevicesApi.middleware,
       courseApi.middleware,
       openApi.middleware,
-      studentApi.middleware
+      studentApi.middleware,
     ),
 });
 

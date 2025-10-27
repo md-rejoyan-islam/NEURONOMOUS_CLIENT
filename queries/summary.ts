@@ -37,7 +37,7 @@ interface IDashboardSummary {
 interface IGroupSummary {
   totalGroups: number;
   clocksUsed: number;
-  attendanceUsed: number;
+  attendancesUsed: number;
   totalUsers: number;
 }
 

@@ -13,7 +13,7 @@ const GroupError = () => {
           The requested group could not be found. It may have been deleted or
           does not exist.
         </p>
-        <Link href={"/groups"}>
+        <Link href={"/groups/all"}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Groups

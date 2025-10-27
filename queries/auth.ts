@@ -1,65 +1,21 @@
-import { IUser } from "@/lib/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { tagTypes } from "./tags";
+import { ISuccessResponse, IUser } from "./../lib/types";
 
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  success: boolean;
-  data: {
-    user: {
-      _id: string;
-      first_name: string;
-      last_name: string;
-      email: string;
-      role: "superAdmin" | "admin" | "user";
-      status: "active" | "inactive";
-      phone?: string;
-      last_login?: string;
-    };
-    accessToken: string;
-    refreshToken: string;
-  };
-}
-
-export interface ChangePasswordRequest {
-  newPassword: string;
-  currentPassword: string;
-}
-
-export interface AdminChangePasswordRequest {
-  userId: string;
-  newPassword: string;
-}
-
-export interface ForgotPasswordRequest {
-  email: string;
-}
-
-export interface ResetPasswordRequest {
-  email: string;
-  resetCode: number;
-  newPassword: string;
-}
+type LoginResponse = ISuccessResponse<{
+  user: IUser;
+  accessToken: string;
+  refreshToken: string;
+}>;
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/proxy/api/v1",
-    // responseHandler: async (response) => {
-    //   if (response.status === 301) {
-    //     window.location.reload();
-    //   }
-    //   return response.json();
-    // },
   }),
   keepUnusedDataFor: 0, // Data will be kept in the cache for 0 seconds
-  tagTypes,
+  tagTypes: ["Auth"],
   endpoints: (builder) => ({
-    login: builder.mutation<LoginResponse, LoginRequest>({
+    login: builder.mutation<LoginResponse, Pick<IUser, "email" | "password">>({
       query: ({ email, password }) => ({
         url: "/auth/login",
         method: "POST",
@@ -73,20 +29,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
-    // getUserPermissionDevices: builder.query<
-    //   Pick<IDevice, "_id" | "id" | "name">[],
-    //   void
-    // >({
-    //   query: () => ({
-    //     url: "/auth/devices-permission",
-    //     method: "GET",
-    //   }),
-    //   transformResponse: (response: {
-    //     data: Pick<IDevice, "_id" | "id" | "name">[];
-    //   }) => response.data,
-    //   providesTags: ["Auth"],
-    // }),
-    forgotPassword: builder.mutation<void, ForgotPasswordRequest>({
+    forgotPassword: builder.mutation<void, Pick<IUser, "email">>({
       query: (data) => ({
         url: "/auth/forgot-password",
         method: "POST",
@@ -94,8 +37,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
-
-    resetPassword: builder.mutation<void, ResetPasswordRequest>({
+    resetPassword: builder.mutation<void, Pick<IUser, "email">>({
       query: (data) => ({
         url: "/auth/reset-password",
         method: "POST",
@@ -120,7 +62,10 @@ export const authApi = createApi({
       invalidatesTags: ["Auth"],
       transformResponse: (response: { data: IUser }) => response.data,
     }),
-    changePassword: builder.mutation<void, ChangePasswordRequest>({
+    changePassword: builder.mutation<
+      void,
+      { newPassword: string; currentPassword: string }
+    >({
       query: (payload) => ({
         url: `/auth/change-password`,
         method: "PATCH",

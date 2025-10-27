@@ -28,13 +28,13 @@ export function DashboardSidebar({ className }: { className?: string }) {
   // pathname.split('/')[1] === path.split('/')[1];
 
   const filteredItems = navigationItems.filter(
-    (item) => user && item.roles.includes(user.role),
+    (item) => user && item.roles.includes(user.role)
   );
 
   if (
     user &&
     navigationItems.some(
-      (item) => item.href === pathname && !item.roles.includes(user.role),
+      (item) => item.href === pathname && !item.roles.includes(user.role)
     )
   ) {
     redirect("/");
@@ -45,7 +45,7 @@ export function DashboardSidebar({ className }: { className?: string }) {
       className={cn(
         "bg-card relative hidden h-full flex-col border-r transition-all duration-300 md:flex",
         collapsed ? "w-16" : "w-64",
-        className,
+        className
       )}
     >
       {/* Header */}
@@ -94,7 +94,7 @@ export function DashboardSidebar({ className }: { className?: string }) {
                       collapsed && "px-2",
                       isActive(item.href) &&
                         "bg-primary/10 text-primary hover:bg-primary/20",
-                      collapsed && "w-10",
+                      collapsed && "w-10"
                     )}
                   >
                     <Icon className="h-4 w-4 flex-shrink-0" />
@@ -114,18 +114,18 @@ export function DashboardSidebar({ className }: { className?: string }) {
                         isSubItemActive(item.href) &&
                           "bg-primary/10 text-primary hover:bg-primary/20",
                         // 'text-primary hover:text-primary/80 bg-transparent shadow-none hover:bg-transparent',
-                        collapsed && "w-10",
+                        collapsed && "w-10"
                       )}
                     >
                       <div className="flex items-center gap-3">
-                        <User className="h-4 w-4 flex-shrink-0" />
+                        <User className="h-4 w-4 shrink-0" />
                         {!collapsed && <span>{item.name}</span>}
                       </div>
                       <ChevronsUpDown />
                     </Button>
                   </CollapsibleTrigger>
                   <CollapsibleContent className="">
-                    <div className="border-primary/20 ml-5 space-y-1 border-l px-1 py-2 text-sm">
+                    <div className="border-primary/20  space-y-1 border-l  py-2 text-sm">
                       {item.collapse?.map((subItem) => {
                         const SubIcon = subItem.icon;
                         return (
@@ -143,7 +143,7 @@ export function DashboardSidebar({ className }: { className?: string }) {
                                 collapsed && "px-2",
                                 isActive(subItem.href) &&
                                   "text-primary hover:text-primary/80 bg-transparent shadow-none hover:bg-transparent",
-                                collapsed && "w-10",
+                                collapsed && "w-10"
                               )}
                             >
                               <SubIcon className="h-4 w-4 flex-shrink-0" />

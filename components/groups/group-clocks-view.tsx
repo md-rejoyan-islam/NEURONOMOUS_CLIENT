@@ -42,11 +42,13 @@ const GroupClocksView = ({
               <div className="text-muted-foreground mb-4">
                 <BoxesIcon className="mx-auto h-16 w-16" />
               </div>
-              <h3 className="mb-2 text-lg font-medium">No devices found</h3>
+              <h3 className="mb-2 text-lg font-medium">
+                No clock devices found
+              </h3>
               <p className="text-muted-foreground">
                 {searchTerm
                   ? "Try adjusting your search terms."
-                  : "Connect your IoT devices to get started."}
+                  : "Connect your first clock device to get started."}
               </p>
             </div>
           )}
