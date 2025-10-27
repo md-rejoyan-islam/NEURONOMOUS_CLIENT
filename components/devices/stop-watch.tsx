@@ -25,7 +25,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
 
   const [startStopWatch] = useStartStopWatchMutation();
   const [timerStartOption, setTimerStartOption] = useState<"now" | "schedule">(
-    "now"
+    "now",
   );
 
   const handleStartStopWatch = async () => {
@@ -70,7 +70,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
               date.getDate(),
               parseInt(time.split(":")[0], 10),
               parseInt(time.split(":")[1], 10),
-              parseInt(time.split(":")[2], 10)
+              parseInt(time.split(":")[2], 10),
             ).getTime() + gmt6Offset
           : null;
 
@@ -124,7 +124,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
                 "",
                 mode === "down"
                   ? "text-primary font-bold"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               Count Down
@@ -140,7 +140,7 @@ const StopWatchNew = ({ device }: { device: IDevice }) => {
                 "",
                 mode === "up"
                   ? "text-primary font-bold"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               Count Up

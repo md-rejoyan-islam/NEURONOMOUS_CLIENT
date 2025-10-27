@@ -28,7 +28,7 @@ export default function Dashboard() {
     undefined,
     {
       pollingInterval: 30000, // Poll every 30 seconds
-    }
+    },
   );
 
   const [downloadStudentsSummary] = useDownloadStudentsSummaryMutation();

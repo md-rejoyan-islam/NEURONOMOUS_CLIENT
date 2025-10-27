@@ -30,7 +30,7 @@ const GroupComponent = ({ search }: { search: string }) => {
   const [searchTerm, setSearchTerm] = useState<string>(search);
 
   const { data: groups = [], isLoading } = useGetAllGroupsQuery(
-    `search=${searchTerm}`
+    `search=${searchTerm}`,
   );
 
   const { data } = useGetAllGroupSummariesQuery();

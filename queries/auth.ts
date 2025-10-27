@@ -37,7 +37,14 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
-    resetPassword: builder.mutation<void, Pick<IUser, "email">>({
+    resetPassword: builder.mutation<
+      void,
+      {
+        email: string;
+        resetCode: number;
+        newPassword: string;
+      }
+    >({
       query: (data) => ({
         url: "/auth/reset-password",
         method: "POST",
